@@ -646,8 +646,10 @@ Today we will show a little on the workflow: "Sequences Analysis"
 To get started:
 
 ```{r}
+
 source("http://bioconductor.org/workflows.R")
 workflowInstall("sequencing")
+
 ```
 
 
