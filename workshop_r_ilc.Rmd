@@ -56,12 +56,14 @@ The root folder of a project is the folder where all the files of the project li
 than load the package by executing:
 ```{r, rprojroot_load}
 library(rprojroot)
+root <- find_root_file(criterion = is_rstudio_project)
 ```
 
 ### Knitr options and defining the root of the project
 ```{r, knitr_setup}
+require("knitr") || utils::install.packages("knitr")
+library(knitr)
 knitr::opts_chunk$set(echo = TRUE)
-root <- find_root_file(criterion = is_rstudio_project)
 knitr::opts_knit$set(root.dir = root)
 ```
 
@@ -70,23 +72,20 @@ It is important to adapt a standard for your project structure. The code below w
 
 ## Installing required packages
 ```{r}
-#############################
+
 # load packages at startup
-# can be sourced by ".Rprofile"
-#############################
 
 # install packrat if not installed
 require("packrat") || utils::install.packages("packrat")
+library(packrat)
+
 # installs "pacman" if not installed
 require("pacman") || utils::install.packages("pacman")
+library(pacman)
 
 require("latticeExtra") || utils::install.packages("latticeExtra")
-
-library(pacman)
 library(latticeExtra)
 # installs additonal R packages (CRAN and BIOCONDUCTOR packages)
-
-
 
 p_load(car,
        dplyr,
@@ -97,55 +96,25 @@ p_load(car,
        readr,
        gplots, 
        ggplot2, 
-       gdata, 
-       pastecs, 
-       psych, 
-       reshape, 
-       nlme, 
-       pander, 
-       xtable, 
-       dplyr, 
-       plsdepot, 
-       Rcpp, 
-       Matrix,
-       parallel, 
-       ape, 
        reshape2, 
-       phangorn, 
-       stringi,
-       stringr, 
-       downloader, 
-       devtools, 
-       data.table, 
        RCurl, 
        knitr,
        Biostrings,
-       BSgenome,
-       sangerseqR,
-       DECIPHER,
        tibble,
        XVector,
        BiocGenerics,
-       DBI,
-       assertthat,
-       pacman,
        xlsx,
        rJava,
        IRanges,
        S4Vectors,
-       ShortRead,
-       magrittr,
-       utils,
-       pander,
-       lattice)
-
-source("http://bioconductor.org/workflows.R")
-workflowInstall("sequencing")
+       lattice,
+       rmarkdown)
 
 
 ```
 
 ```{r, project_folders}
+
 project_folders <- as.list(paste(root, c("/code",
                           "/images",
                           "/output",
@@ -165,22 +134,19 @@ ifelse(!dir.exists(file.path(path)),
 lapply(project_folders, mkdir)
 
 # if a folder not already in your project this will state "TRUE", and "FALSE" if the folder already exist. 
+
 ```
 
 ### My first README.txt file
 As mentioned, it is handy to have a README.txt file in a directory telling you what is in that directory. For now we will create the most important README.txt: the one that goes in the `data` directory.
 
 ```{r, adding_readme}
+
 file.create(paste0(root, "/data/README.txt"))
+
 ```
 
 If we want to edit this readme file we can do this in RStudio by clicking on the file. You can edit the contents of the file just as you edit R scrips. 
-
-If you are writing many README.txt files with the same introduction you can also use the seperate script "edit_readme.R". Calling an external script can be achieved by using the function `source`.
-
-`source("path-to-edit_readme.R")`
-`readLines(con)`
-
 
 ## Installing and loading additional packages
 The code chunck below will take care of installing and loading all packages nessecary for this tutorial. 
@@ -196,10 +162,9 @@ To load a package manually:
 Please note the difference in use of _"double-quotes"_ above.
 
 
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 # Start Tutorial
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Basic topics for working with R                        
 
@@ -216,10 +181,13 @@ Installing Bioconductor packages is easy with `pacman::p_load` function
 
 ```{r}
 
+library(pacman)
 ## a CRAN package to analyze DNA and protein sequences 
 pacman::p_load(seqinr)
 
-??seqinr
+## a package that handles biological sequences
+library(seqinr)
+help("seqinr")
 
 ## and a BIOCONDUCTOR package to analyze LCMS data
 pacman::p_load(xcms)
@@ -234,17 +202,23 @@ Vignettes are long explanations and demo's of a package. Commonly a vignette con
 
 #### Getting Help for R functions and packages
 ```{r}
+
+library(dplyr)
+library(ggplot2)
 ??dplyr
 ??ggplot2
 ?mean
 ??mean  # go's to the page with functions related with '.mean.'
 apropos("mean") # search on more options of or alternatives for a certain function
+
 ```
 
 #### Examples and demos on functions and packages
 ```{r}
+
 example(mean) # to see a worked example
 demo(graphics) # demonstration of R functions
+
 ```
 
 ## Data objects
@@ -265,6 +239,7 @@ come in different flavours:
 
 #### Numeric vectors
 ```{r}
+
 c(2,8,5) 	# combines its arguments to form a vector
 nv_1 <- c(2,8,5) # assignment statement (use 'alt' + '-' OR 'option' + '-')
 nv_1 # view the content of the object "x"
@@ -272,26 +247,32 @@ nv_1 # view the content of the object "x"
 # combine commands on the same line seperate with ';'
 nv_2 <- c(8.4,5.6,10.1,13.1,2.5,7.8,15.2,3.8,20.9); nv_2
 class(nv_2)
+
 ```
 
 #### Character vectors
 ```{r}
+
 cv <- c("this is", "an", "example of", "1", "character", "vector", "with length:", "length(cv)")
 cv
 length(cv)
 class(cv)
+
 ```
 
 #### Integers
 ```{r}
+
 int <- as.integer(1:5)
 int
 length(int)
 class(int)
+
 ```
 
 #### Logical vectors
 ```{r}
+
 lv <- c(TRUE, FALSE, TRUE, TRUE)
 lv
 class(lv)
@@ -300,11 +281,13 @@ class(lv)
 nlv <- as.numeric(lv)
 nlv
 ## note that coercion of a logical to a numeric vector changes the "TRUE" value to 1 and the "FALSE" value to 0
+
 ```
 
 #### Manipulating vectors
 You can add/subtract/devide or use other arithmetic functions on numeric vectors
 ```{r} 
+
 a <- c(1,3,5,7,9)
 b <- c(2,4,6,8,10)
 
@@ -318,10 +301,12 @@ z4 <- sum(a)
 z4
 z5 <- max(a) - max(b)
 z5
+
 ```   
 
 You can get the individual items of a vector by using the index "[]"
 ```{r}
+
 x<-c(8,5,10,13,2,7,15,3,20,8);x # create vector with 10 variables
 length(x)
 mode(x) # information on data mode (numeric, character, logic)
@@ -332,7 +317,6 @@ x[3]
 
 ## creating a subset by indexing:
 x[c(3, 4, 7)]
-
 
 # apply a simple function
 mean(x) # example of a function
@@ -346,17 +330,17 @@ x[-2] # all but the ith (second) element
 x[3:5] # element 3 to 5
 x[x>9] # all greater than some value
 
-
 # manipulations
 y <- c(x,0,x); y # separate multiple commands on the same line with ";"
 sum(y) # sum of elements in the vector
+
 ```
 
 #### Plotting series/vectors
 ```{r} 
+
 c <- c(1:7,9,11)
 d <- c(1:9)
-
 
 # performing a linear correlation
 m1 <- lm(c ~ d)
@@ -366,33 +350,40 @@ summary(m1)
 plot(c, d, ylim=c(0,13))
 plot(c, d, ylim=c(0,13), abline(m1))  #abline plots the correaltion model in the graph
 m1$coefficients
+
 ```
 
 #### Handeling character vectors
 What happens if you use arithmetic functions on character vectors and numeric vector?
 ```{r, eval=FALSE}
+
 w <- c("1", "2")
 u <- c("a", "b", "c")
 z6 <- w-y  
 z7 <- u+w
+
 ``` 
 This does not work because the vectors are of different type  
 
 we can use the paste command for this
 ```{r}
+
 w <- c("1", "2")
 u <- c("a", "b", "c")
 z8 <- paste(u,w, sep = "_")
 z8 ## because w is shorter than u, it get's recycled over u
+
 ```
 
 ## Let's clean up the workspace
 ```{r}
+
 rm(list=ls())
 
 ## Note: never use this in code that is meant for others!!!
+
 ```
-It is an effectiev way to clear all the items in the Global Environment, but is is not very friendly to use this in code you share with others: can you think of why?
+It is an effective way to clear all the items in the Global Environment, but is is not very friendly to use this in code you share with others: can you think of why?
 
 
 ## Data Structures: Lists and Dataframes
@@ -406,9 +397,11 @@ The dataframe and the list are the most widely used datastructures when consider
 ### Lists
 #### Create a List
 ```{r}
+
 lst <-list(name="Fred", wife="Mary", no.children=3, child_ages=c(4,7,9))
 lst # Lst is a list with 4 components
 str(lst) # display dtructure of R object
+
 ``` 
 
 #### Accessing items in a list
@@ -416,15 +409,20 @@ There are 2 ways to select a single variable from a list
 The indexing of lists work also with square brackets or the dollars sign, but we will see there is a difference:
 
 ```{r}
+
 str(lst)
 lst$child_ages # MyListName$MyVariableName 
 lst[4]# MyListName[MyVariableColumnNumber] 
+
 ```
+
 To select a single element from a variable in a list
 ```{r}
+
 lst$child_ages[2] 
 lst[[4]][2]
 # returns the value of the second element for your variable
+
 ``` 
 
 ### The Dataframe
@@ -432,22 +430,24 @@ The dataframe is the most widely used data structure in the context of experimen
 
 #### Create a data frame
 ```{r}
+
 people <- data.frame(age=c(24, 27, 19, 34),      
                        sex=c("F","F","M", "M"), 
                        weight=c(64,55,80, 70),
                      names = c("Christa", "Suzan", 
                      "Matt", "John"))
 
-
 ``` 
 
 #### Viewing the contents of a dataframe
 ```{r}
+
 head(people) 			# gives the content of the data frame
 names(people) 
 str(people)
 
 people$age # gives the content of the variable "age" from the data frame ""
+
 ``` 
 
 #### Index on Dataframes
@@ -456,30 +456,42 @@ Using the index "[]" on a dataframe is a bit tricky. The dataframe always consis
 `dataframe[row number(s), column number(s)]`
 
 ```{r}
+
 people$age[1] 	# first element of this vector
 people[,2] 	# content of 2nd variable (column) which is a character vector -> factor
 people[1,] 	# content of the 1st row
 
 # multiple indices
 people[2:3, c(1,3)] # remember to use c
+
 ```
 
 ## Import data into R
 ### read.table reads space-delimited or tab delimited files
 ```{r}
 
+gender_age <-read.table(paste0(root, "/gender.txt"),header=TRUE)
 
-
-gender_age <-read.table("./data/gender.txt",header=TRUE)
+# getting the first few rows 
 head(gender_age)
+
+# getting information on the variable, the dimensions
 str(gender_age)
+
+# selecting a variable
+gender_age$gender
+
+
+gender_age$age
+gender_age[1:6,2]
+
 ``` 
 
 ### read_csv
 ```{r}
-## install.packages("readr")
+
 library(readr)
-skin <- read_csv("./data/skin.csv") 
+skin <- read_csv(paste0(root, "/skincolumns.csv")) 
 str(skin)
 
 skin	 # content of the data frame
@@ -487,52 +499,127 @@ dim(skin)
 attributes(skin)
 summary(skin)
 ?read_csv 	 # help on the function
-``` 
 
-### Choosing a file from your computer
-```{r}
-read.csv(file.choose()) # This command reads a .CSV file but the file.choose() part opens up 
-# an explorer type window that allows you to select a file from your computer. 
+## dataset contains an NA, some functions do not work with NAs:
+mean(skin$`Genotype A`)
+mean(skin$`Genotype B`)
 
-## we call this interactive programming, and it should be avoided due to 
-## reproducibility issues.
+# to remove the NA
+skin_noNA <- na.omit(skin)
+mean(skin_noNA$`Genotype B`)
 
 ``` 
 
 ### Example: create data frame with 3 variabels gender, 
 smoke, age category (<15, 15-30, >30)
 ```{r}
-set.seed(6000) # set it at the same number, then we will all produce the same output
-gender<-c(sample(c(1,2), size=50, replace=TRUE))
-smoke<-c(sample(c(1,2), size=50, replace=TRUE))
-age<-c(sample(c(1,2,3), size=50, replace=TRUE))
-weight<-round(rnorm(50, mean=65, sd=10),1); weight
-df<-data.frame(cbind(gender, smoke, age, weight)); df
 
-head(df)
-df[1:10,]
+set.seed(6000) # set it at the same number, then we will all produce the same output
+gender<-c(sample(c(1,2), size=1000, replace=TRUE))
+smoke<-c(sample(c(1,2), size=1000, replace=TRUE))
+age<-c(sample(c(1,2,3), size=1000, replace=TRUE))
+weight<-round(rnorm(1000, mean=65, sd=10),1); weight
+smoking <- data.frame(cbind(gender, smoke, age, weight)); smoking
+
+head(smoking)
+smoking[1:10,]
+
 ``` 
 
 # replace numbers by characters
 ```{r}
+
 # replace numbers by characters
-df$genderf=factor(df$gender, labels=c("female","male"))
-table(df$genderf,df$gender)
-df$smokef=factor(df$smoke, labels=c("Y","N"))
-table(df$smokef,df$smoke)
-df$agecf=factor(df$age, labels=c("A: <15","B: 15-30","C: >30"))
-table(df$agecf,df$age)
-summary(df)
+smoking$genderf=factor(smoking$gender, labels=c("female","male"))
+table(smoking$genderf,smoking$gender)
+smoking$smokef=factor(smoking$smoke, labels=c("Y","N"))
+table(smoking$smokef,smoking$smoke)
+smoking$agecf=factor(smoking$age, labels=c("A: <15","B: 15-30","C: >30"))
+table(smoking$agecf,smoking$age)
+summary(smoking)
 
 ``` 
 
 # Subsetting data frame
 ```{r}
-names(df)
-df_male <- df %>% filter(genderf == "male")
-df_age_gender <- df %>% select(genderf, agecf)
+
+names(smoking)
+smoking_male <- smoking %>% filter(genderf == "male")
+smoking_age_gender <- smoking %>% select(genderf, agecf)
+
 ```
 
+# Summarizing data
+For summarizing data there are many ways in R (as is the case with many operations). I find the dplyr way the most intuitive. Using dplyr has the advantage that you can easily built on existing function and examples, because the code is faily easy to understand.
+
+One thing that makes dplyr great is that it works with the "%>%" symbol. Which is in programming jargon also called the "pipe" symbol.
+
+The pipe symbol takes the previous result of an operation and put it in the next
+
+The pipe symbol can replace the use of annoying round brackets: or "(parentheses)" 
+
+Let's look at a simple example:
+```{r}
+
+### IMPORTANT: RUN ALL THE LINES AT ONCE INCLUDING THE SET.SEET OPTION, BECAUSE OF REPRODUCIBILITY. (Cntrl + Shift + Enter)
+
+
+##of we want to calculate the sum, of the square root of the mean, of two nummeric vectors we could do:
+
+set.seed(12345)    
+zzz <- mean((sqrt(mean(x <- rnorm(10000, mean = 34, sd = 2))))) +
+mean((sqrt(mean(y <- rnorm(10000, mean = 23, sd = 4)))))
+zzz
+
+## the above is alomost impossible to read because of all the round brackets, note the closing brackets: 5 of them!!
+
+
+## let's try the dplyr way with the %>% (pipe) operator
+
+set.seed(12345)
+qqq <- rnorm(10000, mean = 34, sd = 2) %>% mean() %>% sqrt() +
+rnorm(10000, mean = 23, sd = 4) %>% mean() %>% sqrt()
+qqq
+
+zzz == qqq
+
+```
+
+The dplyr way is a lot better is it not? Do you get what the above (dplyr-way) rules do?
+
+ 1) the result of the fist vector (1000 random numbers, with mean of 34 and a sd of 2 is piped into the function mean, which calculates the mean of these 1000 numbers
+ 
+ 2) From that the square root is taken by piping the mean in the function sqrt() 
+ 3) The result of the firt vector is added to the calculation of the second vector (which is done the same way as the first).
+
+ 4) The result is qqq
+ 
+ 5) Is qqq equal to zzz, which we calculated the "old-fashioned" mathematical way: YES! 
+
+
+
+## Let's apply the above to our smoking dataset
+
+Usually, if we want to make a graph we need some sort of summarizing 
+variable that indicates hwat is going on, e.g. a group mean and standard deviation.
+
+From the smoking dataset we will genrate a new dataframe with average weight, grouped by gender, and grouped by smoking or non smoking. We will use dplyr verse to do so.
+
+I will also show you how to sort the data, let's say to decreasing weight, by using the dplyr function 'arrange'. 
+
+```{r}
+## it is handy to have the names of the dataset variables at hand when writing pipes
+
+names(smoking)
+
+smoking_weight <- smoking %>% select(genderf, smokef, weight) %>%
+  group_by(genderf, smokef) %>% summarise(mean_weight = mean(weight)) %>%
+  arrange(desc(weight))
+
+head(smoking_weight)
+
+
+```
 ## Explore data: Graphics     
 
 We will use the demo dataset of the "Old Faithful" Geyser in US Yellowstone National Park 
@@ -609,29 +696,176 @@ g + geom_point() +
 
 He, that's nice, now we have a panelplot, with in each panel a smoother line and data points, for each tratment. Which supplement has the most potent effect on the growth of the teeth of the tested Guinea pigs?
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# GRAMMAR OF GRAPHICS DEMO ON A BIGGER DATASET
+
 ## Want to work on a bigger dataset? I guessed you would want to do so, so I prepared a bit on "big data below" 
 
-### First Get the Data
+
+I have prepared a script that will analyze a big dataset >2 million datapoints on power consumption by US households. The script is called "power_households.R". The script handles a number of steps:
+ 1) System settings and packages are handeled 
+ 2) Getting the data, the dat is downloaded directly from the web
+ 3) The data is cleaned up and subsets are selected (only data from 48 hrs of power consumption are included)
+ 4) A data summary dataframe is generated
+ 5) Exploratory data figures are generated to find trends and patterns in the data
+ 6) Statistical analysis and thourough exploration is not included
+
+External scripts can be called by the 'source' command
+Try it below and look in the folder "images" to see the result. Do you see the items in the Global erivironment? 
+
+What is the name of the object used for generating the figures?
+
+The code below will download the data and create a tidy version of a subset of the data. We will work with summarized data from a period of 48 hours of power consumption by US households.
 
 ```{r, Packages}
-## loading the packages
-library(rmarkdown)
-library(downloader)
-library(dplyr)
-library(lubridate)
-library(ggplot2)
-library(grid)
-library(gridExtra)
-library(cowplot)
+source("power_households.R")
+```
+
+
+The code to create the graphs is included in the code chunck below.
+
+Can you figure out what is shown in the graphs, and what exploratory data questions could be addressed by looking at these graphs induvidually?
+
+### Plot 1: Base plotting system
+```{r}
+
+# save the file
+
+png(filename = paste0(root, "/images/plot1.png"), width = 480, 
+    height = 480, units = "px")
+hist(data_twoDays$global_active_power, col = "red", 
+     xlab = "Global Active Power", ylab = "Frequency", main = "Global Active Power")
+dev.off()  
+
+```
+
+### Plot 2: ggplot2 example
+```{r}
+
+## ---- Plot2--------------------------------------------------------------
+levels_date <- levels(as.factor(data_twoDays$date))
+
+## plot2.png in ggplot2 syntax 
+names(data_twoDays)
+
+plot2 <- ggplot(data_twoDays, aes(date_time, global_active_power)) + 
+  geom_line() +
+  scale_x_datetime(date_breaks = "1 day", 
+                   date_labels = c("Sat", "Thu", "Fri")) +
+  ylab("Global Active Power (kilowatts)") + xlab("Day") +
+theme_bw() +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14)) +
+  theme(plot.margin = unit(c(1,1,1,1), "cm"))
+
+# saving the plot to disk
+png(filename = paste0(root, "/images/plot2.png"), width = 480, 
+                      height = 480, units = "px")
+plot2
+dev.off()
+``` 
+
+### Plot 3: ggplot2 example
+```{r}
+
+## ---- Plot3--------------------------------------------------------------
+# checking the names
+names(data_twoDays)
+
+# creating plot3 with ggplot
+plot3 <- ggplot(data_twoDays, aes(x = date_time)) + 
+  geom_line(aes(y = sub_metering_1, color = "Sub_metering_1")) +
+  geom_line(aes(y = sub_metering_2, color = "Sub_metering_2")) +
+  geom_line(aes(y = sub_metering_3, color = "Sub_metering_3")) +
+  scale_x_datetime(date_breaks = "1 day", date_labels = c("Sat", "Thu", "Fri")) +
+  ylab("Energy sub metering") +
+  scale_colour_manual("", values = c("Sub_metering_1" = "black", 
+                                     "Sub_metering_2" = "red",
+                                     "Sub_metering_3" = "blue")) +
+theme_bw() +
+theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14)) +
+  theme(plot.margin = unit(c(1,1,1,1), "cm")) +
+  theme(legend.position=c(0.7, 0.9)) +
+  theme(legend.background = element_rect(fill="gray95", size=.3, linetype="dotted"))
+
+# saving the plot to disk
+png(filename = paste0(root, "/images/plot3.png"), width = 480, 
+    height = 480, units = "px")
+plot3
+dev.off()
+
+```
+
+### Plot 4: ggplot2 example
+```{r}
+
+## ---- Plot4--------------------------------------------------------------
+# checking names
+names(data_twoDays)
+
+## plot 4 is a panel of four plots consiting of plot2, plot3 and two new plots
+## first create the two additonal plots (plot5 and plot6) that have to go in the panel
+
+## plot5 --> x = date_time, y = voltage
+plot5 <- ggplot(data_twoDays, aes(x = date_time)) + 
+  geom_line(aes(y = voltage)) +
+  scale_x_datetime(date_breaks = "1 day", 
+                   date_labels = c("Sat", "Thu", "Fri")) +
+  ylab("Voltage") +
+  xlab("datetime") +
+  theme_bw() +
+theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.text.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14)) +
+theme(plot.margin = unit(c(1,1,1,1), "cm"))
+
+## plot6 --> x = date_time, y = global_reactive_power
+names(data_twoDays)
+plot6 <- ggplot(data_twoDays, aes(x = date_time)) + 
+  geom_line(aes(y = global_reactive_power)) +
+  scale_x_datetime(date_breaks = "1 day", 
+                   date_labels = c("Sat", "Thu", "Fri")) +
+  ylab("Global_reactive_power") +
+  xlab("datetime") +
+  theme_bw() +
+theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.text.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14)) + 
+  theme(plot.margin = unit(c(1,1,1,1), "cm"))
+
+##################################
+## CREATING A PANEL ##
+##################################
+
+# creating the panel with plot_grid 
+plot4 <- plot_grid(plot2, plot5, plot3, plot6,
+          labels=c("A", "B", "C", "D"), ncol = 2, nrow = 2)
+
+# saving plot 4 to disk
+png(filename = paste0(root, "/images/plot4.png"), width = 480, 
+    height = 480, units = "px")
+plot4
+dev.off()
 
 ```
 
 
-
-
-### Some cleaning up steps, you have to run, but you do not have to understand all the steps. 
-
-
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# START BIONCONDUCTOR DEMO 
 
 ## Let's work on some biological data instead.
 Biological data can be sequence data, genomic information, proteomics and metabolimcs data, expression array data, genomic alignments etc. etc.
@@ -647,21 +881,199 @@ To get started:
 
 ```{r}
 
+## BiocInstaller::biocValid()
+
+## Full genome sequences for Homo sapiens (Human) as provided by UCSC (hg19, Feb. 2009) and stored in Biostrings objects.
+
+url <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz")
+
+download(url = url, destfile = "./BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz")
+
+source("http://bioconductor.org/biocLite.R")
+
+biocLite("BSgenome.Hsapiens.UCSC.hg19", repo = NULL, type = "source")
+
 source("http://bioconductor.org/workflows.R")
-workflowInstall("sequencing")
+workflowInstall("sequencing", dependencies = TRUE)
+browseVignettes("sequencing")
+
+```
+
+The "sequencing" workflow
+
+```{r}
+## ----style, echo=FALSE, message=FALSE, warning=FALSE, results="asis"------------------------------
+options(width=100)
+knitr::opts_chunk$set(message = FALSE, error = FALSE, warning = FALSE,
+fig.width=6, fig.height=4)
+BiocStyle::markdown()
+
+## ---- echo=FALSE, results="hide", warning=FALSE---------------------------------------------------
+suppressPackageStartupMessages({
+   library(GenomicRanges)
+   library(GenomicAlignments) 
+   library(Biostrings)
+   library(Rsamtools)
+   library(ShortRead)
+   library(BiocParallel)
+   library(rtracklayer)
+   library(VariantAnnotation)
+   library(AnnotationHub)
+   library(BSgenome.Hsapiens.UCSC.hg19)
+   library(RNAseqData.HNRNPC.bam.chr14)
+})
+ah = AnnotationHub()
+
+
+## ----eval=FALSE-----------------------------------------------------------------------------------
+#  help(package="GenomicRanges")
+#  vignette(package="GenomicRanges")
+
+## ----message=FALSE--------------------------------------------------------------------------------
+library(Biostrings)
+d <- DNAString("TTGAAAA-CTC-N")
+length(d)  #no of letters in the DNAString
+
+## ----eval=FALSE-----------------------------------------------------------------------------------
+#  library(AnnotationHub)
+#  ah <- AnnotationHub()
+
+## -------------------------------------------------------------------------------------------------
+ah2 <- query(ah, c("fasta", "homo sapiens", "Ensembl"))
+fa <- ah2[["AH18522"]]
+fa
+
+## -------------------------------------------------------------------------------------------------
+library(Rsamtools)
+idx <- scanFaIndex(fa)
+idx
+
+## -------------------------------------------------------------------------------------------------
+long <- idx[width(idx) > 82000]
+getSeq(fa, param=long)
+
+## -------------------------------------------------------------------------------------------------
+library(BSgenome.Hsapiens.UCSC.hg19)
+
+chr14_range = GRanges("chr14", IRanges(1, seqlengths(Hsapiens)["chr14"]))
+chr14_dna <- getSeq(Hsapiens, chr14_range)
+letterFrequency(chr14_dna, "GC", as.prob=TRUE)
+
+## ----eval=FALSE-----------------------------------------------------------------------------------
+#  ## 1. attach ShortRead and BiocParallel
+#  library(ShortRead)
+#  library(BiocParallel)
+#  
+#  ## 2. create a vector of file paths
+#  fls <- dir("~/fastq", pattern="*fastq", full=TRUE)
+#  
+#  ## 3. collect statistics
+#  stats0 <- qa(fls)
+#  
+#  ## 4. generate and browse the report
+#  if (interactive())
+#      browseURL(report(stats0))
+
+## -------------------------------------------------------------------------------------------------
+## 1. load software packages
+library(GenomicRanges)
+library(GenomicAlignments)
+
+## 2. load sample data
+library('RNAseqData.HNRNPC.bam.chr14')
+bf <- BamFile(RNAseqData.HNRNPC.bam.chr14_BAMFILES[[1]], asMates=TRUE)
+
+## 3. define our 'region of interest'
+roi <- GRanges("chr14", IRanges(19653773, width=1)) 
+
+## 4. alignments, junctions, overlapping our roi
+paln <- readGAlignmentsList(bf)
+j <- summarizeJunctions(paln, with.revmap=TRUE)
+j_overlap <- j[j %over% roi]
+
+## 5. supporting reads
+paln[j_overlap$revmap[[1]]]
+
+## -------------------------------------------------------------------------------------------------
+library(VariantAnnotation)
+fl <- system.file("extdata", "chr22.vcf.gz", package="VariantAnnotation")
+vcf <- readVcf(fl, "hg19")
+
+## -------------------------------------------------------------------------------------------------
+library(rtracklayer)
+test_path <- system.file("tests", package = "rtracklayer")
+test_bed <- file.path(test_path, "test.bed")
+  
+test <- import(test_bed, format = "bed")
+test
+
+## -------------------------------------------------------------------------------------------------
+sessionInfo()
 
 ```
 
 
- 
 
 
+From the "seqinr" package we can get intereseting data as well:
+```{r}
+
+library(seqinr)
+data(aaindex)
+aaindex[[5]]
+head(aaindex)
+
+```
+
+# Want to learn more R?
+
+To learn R interactively visit http://swirlstats.com/
+
+There is a enormous amount of information on R freely available on the web. I find it realy helpful to use youtube tutorials, online tutorials, vignettes and workflows (BIOCONDUCTOR.org). Feel free to contact me for questions on which resource is best. 
+
+For statistics, which was not covered in this workshop: The book by Andy Field "Discovering Statistics Using R" kept me awake at night!! So it is a good place to start (if you have ambitions to becoming an insomniac).
+
+E-books from Amazon are good tools, take a look at the ratings and the reviews before buying, though. I find the books from Publisher 'O Reilly very good starting points and a book can be helpful as a solid go-to. 
+
+One thing that will speed up your learning is running the code below. Good luck and let's **swirl!!**
+```{r, eval = false}
+
+install.packages("swirl")
+library(swirl)
+swirl()
+
+## swirl will interact with you through the console. Type answers to the questions in the console, or run them in a script in the script editor
+
+```
 
 
-## R Markdown
+# Now what?
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+One of the biggest advantages of using a system like R and RStudio over e.g. MS Excel or other spreadsheet applications is the reproducibility. You can run and re-run code as often as you like, tweaking it on the fly. Furthermore, you can exactly replicate things you have done in the nearby, or further away future. 
+A big step forward in the way we would have to work with data, if you ask me, is to introduce this concept of "Reproducible research" into our teachings. 
+
+**To my opinion, every future technician, scientist, or professional that works with data, will have to have some form of introducton in the "Reproducible Research" concept. And, yes! Will have to learn a bit about programming!!**  
+
+**__"Everybody a programmer"__**, will you join me?
+
+And lastly: if you feel ready to take on this challenge, look me up and let's start a new **pRoject**.
 
 This code can be used under the Creative Commons License.
 Author: Marc A.T. Teunis, 2016
 For commercial applications contact the author at marc.teunis@hu.nl
+
+## Citations
+```{r}
+
+citation("base")
+citation("ggplot2")
+citation("seqinr")
+citation("dplyr")
+citation("knitr")
+citation("sequencing")
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.

@@ -26,6 +26,34 @@ library(cowplot)
 
 ```
 
+```{r, project_folders}
+
+project_folders <- as.list(paste(root, c("/code",
+                          "/images",
+                          "/output",
+                          "/data",
+                          "/documentation",
+                          "/rmarkdown"
+                          ), sep = ""))
+
+project_folders[[1]]
+
+
+mkdir <- function(path){
+ifelse(!dir.exists(file.path(path)),
+       dir.create(file.path(path)), FALSE)
+}
+# lapply will apply the function to the list of folders
+lapply(project_folders, mkdir)
+
+# if a folder not already in your project this will state "TRUE", and "FALSE" if the folder already exist. 
+
+```
+
+
+
+
+
 # Getting the dataset for the project assignment
 This assignment uses data from
 the http://archive.ics.uci.edu/ml/ Irvine Machine
@@ -94,7 +122,7 @@ date_time_var <- data_twoDays$date_time
 head(date_time_var)
 typeof(date_time_var)
 
-POSIXlt
+
 
 # The POSIXlt data type is a vector, and the entries in the vector have 
 # the following meanings:
