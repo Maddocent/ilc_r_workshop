@@ -46,7 +46,10 @@ Initialize a new project in RStudio under
 
 `File` -> `New Project`, choose `New Directory`.
 
-Give the project the name: `minor_f_p`
+Give the project the name: `ilc_r_workshop`
+
+- be sure to check the boxes 'git' and 'packrat'
+
 
 ### System settings and project preparations
 The root folder of a project is the folder where all the files of the project live. It is important to tell R what this root directory is. "rprojroot" is package that handles project root folder settings. Run the following code to install the first package needed for this tutorial
@@ -66,6 +69,21 @@ library(knitr)
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = root)
 ```
+
+### First things first: we will get the files necessary to run the code below, and also all the packages. Remember the wetransfer.com file? Did you download it? Great! Copy the file into the just created projectfolder. Unsure where to look? Look a the object "root" in the Gobal Envrionment. Store the wentransfer file in that folder.
+
+Run the code below to unzip the bundle. This will (fingers crossed!!) unpack the bundle in your project directory. The bundle contains the data files, R scripts and package libraries to get going in the workshop.
+
+```{r, eval = FALSE}
+library(packrat)
+
+## did you get an error, make sure you enable packrat (check the box) in project tools --> project options --> packrat --> check the fist three of the five boxes --> call library(packrat) again. 
+
+## call the function below, wthout using the "##"
+
+## packrat::unbundle()
+```
+
 
 ### Project folder structure
 It is important to adapt a standard for your project structure. The code below will create a number of folders in the current project `minor_f_p` project. This functions as an example and you might want to adapt your own structure. Anything is basically good: as long as you are being consistent.
@@ -470,7 +488,7 @@ people[2:3, c(1,3)] # remember to use c
 ### read.table reads space-delimited or tab delimited files
 ```{r}
 
-gender_age <-read.table(paste0(root, "/gender.txt"),header=TRUE)
+gender_age <-read.table(paste0(root, "/gender.txt"), header=TRUE)
 
 # getting the first few rows 
 head(gender_age)
@@ -603,7 +621,7 @@ The dplyr way is a lot better is it not? Do you get what the above (dplyr-way) r
 Usually, if we want to make a graph we need some sort of summarizing 
 variable that indicates hwat is going on, e.g. a group mean and standard deviation.
 
-From the smoking dataset we will genrate a new dataframe with average weight, grouped by gender, and grouped by smoking or non smoking. We will use dplyr verse to do so.
+From the smoking dataset we will genrate a new dataframe with average weight, grouped by gender, age and grouped by smoking or non smoking. We will use dplyr verse to do so.
 
 I will also show you how to sort the data, let's say to decreasing weight, by using the dplyr function 'arrange'. 
 
@@ -611,15 +629,29 @@ I will also show you how to sort the data, let's say to decreasing weight, by us
 ## it is handy to have the names of the dataset variables at hand when writing pipes
 
 names(smoking)
+str(smoking)
 
-smoking_weight <- smoking %>% select(genderf, smokef, weight) %>%
-  group_by(genderf, smokef) %>% summarise(mean_weight = mean(weight)) %>%
-  arrange(desc(weight))
+smoking_weight <- smoking %>% select(genderf, smokef, weight, agecf) %>%
+  group_by(genderf, smokef, agecf) %>% summarise(mean_weight = mean(weight)) %>%
+  arrange(desc(mean_weight))
 
 head(smoking_weight)
 
-
 ```
+
+Let's look at what is going on above.
+The smoking_weight datset contains newly created, more descriptive denominators, we will use those. 
+ 
+ 1) The first step is to inspect the dataframe to see if the grouping variables are set to "factor" 
+ 
+ 2) The second step is to select the proper variables to work with
+ 
+ 3) Than the data is grouped by the genderf, agecf and by the smokef variables
+ 
+ 4) Summarise creates a new variable "mean_weight" that is what it says: the mean weight for the groups defined.
+ 
+ 5) Finally, the data is sorted, according the newly created mean_weight variable, in decending order "(dec(mean_weight))". If we want ascending order we can just use arrange(mean_weight). Arrange has the default to order the variable in ascending order.
+
 ## Explore data: Graphics     
 
 We will use the demo dataset of the "Old Faithful" Geyser in US Yellowstone National Park 
