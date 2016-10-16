@@ -21,12 +21,12 @@ library(cowplot)
 ## ---- DownloadingData----------------------------------------------------
 url <- "https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip"
 download(url, dest="project_dataset.zip", mode="wb") 
-unzip("project_dataset.zip", exdir = "./data")
+unzip("project_dataset.zip", exdir = "./data_energy")
 
 ## ---- ReadingDataSet-----------------------------------------------------
 ## for help:
 # ??read.table
-file <- list.files("./data", pattern = "txt", full.names = TRUE)
+file <- list.files("./data_energy", pattern = "txt", full.names = TRUE)
 data <- read.table(file, sep = ";", header = TRUE, na.strings = "?")
 
 ## ---- SelectingCases-----------------------------------------------------
@@ -98,12 +98,7 @@ which_day <- dow_df %>% filter(POSIXlt_code == 4)
 which_day[1]
 
 
-## ---- Plot1--------------------------------------------------------------
-names(data_twoDays)
+## ---- Plot1-------------------------------------------------------------
 
-## create "images" folder
-library(rprojroot)
-root <- find_root_file(criterion = is_rstudio_project)
-
-
+head(data_twoDays)
 
