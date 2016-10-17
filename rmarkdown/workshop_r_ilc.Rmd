@@ -1,0 +1,1411 @@
+---
+title: "An introduction to data analysis using R"
+author: "Marc A.T. Teunis"
+date: '`r Sys.Date()`'
+output:
+  html_document: default
+  pdf_document: default
+  github_document: default
+---
+# Important note: R is case-sensitive, meaning that it will matter whether you use capital or lower case, keep this in mind if you get a cryptic warning or error!
+
+# How to run the code in this tutorial?
+This document contains code chunks that start with
+
+` ```{r} ` 
+
+and end with
+
+` ``` `
+
+Run a code chucks as follows:
+place the cursor somewhere in a code chunk and between the 
+` ```{r} ` and the ` ``` ` and press the keys: 
+
+`Ctrl` `Shift` and `Enter` simultaneously. 
+
+The code will run and the results will show either in the console, or below the code chunck.
+
+Run a line of code as follows:
+place the cursor somewhere on the line that you want to run.
+press the keys:
+
+`Cntrl` and `Enter` simultaneously.
+
+You can also run a piece of code by selecting the code by dragging the cursor and left-click mouse, and entering:
+
+`Cntrl` and `Enter` simultaneously.
+
+# Introduction
+This walkthough is part of the workshop "An introduction to data analysis using R". The workshop is meant as an introduction to R and to be able to use R for data exploration on your own data, obtained in a research project.
+
+## Setting up a project
+RStudio has the function to create projects that hold all your files in one place. Here we will create a project and set it's structure.
+
+### Initializing a new project
+Initialize a new project in RStudio under 
+
+`File` -> `New Project`, choose `New Directory`.
+
+Give the project the name: `ilc_r_workshop`
+
+- be sure to check the boxes 'git' and 'packrat'
+
+
+### System settings and project preparations
+The root folder of a project is the folder where all the files of the project live. It is important to tell R what this root directory is. "rprojroot" is a package that handles project root folder settings. Run the following code to install the first package needed for this tutorial
+
+`install.packages("rprojroot")`
+
+than load the package by executing:
+```{r, rprojroot_load_1}
+library(rprojroot)
+root <- find_root_file(criterion = is_rstudio_project)
+```
+
+### Knitr options and defining the root of the project
+```{r, knitr_setup}
+require("knitr") || utils::install.packages("knitr")
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = root)
+```
+
+### First things first
+We will get the files necessary to run the code below, and also all the packages. Remember the wetransfer.com file? Did you download it? Great! Copy the file into the just created projectfolder. Unsure where to look? Look a the object "root" in the Gobal Envrionment. Store the wentransfer file in that folder.
+
+Run the code below to unzip the bundle. This will (fingers crossed!!) unpack the bundle in your project directory. The bundle contains the data files, R scripts and package libraries to get going in the workshop.
+
+```{r, eval = FALSE}
+library(packrat)
+
+## did you get an error, make sure you enable packrat (check the box) in project tools --> project options --> packrat --> check the fist three of the five boxes --> call library(packrat) again. 
+
+
+
+## call the function below, without using the "##"
+
+## packrat::unbundle("./workshop_ilc")
+```
+
+
+### Project folder structure
+It is important to adapt a standard for your project structure. The code below will create a number of folders in the current project `minor_f_p` project. This functions as an example and you might want to adapt your own structure. Anything is basically good: as long as you are being consistent.
+
+## Installing required packages
+```{r}
+
+# load packages at startup
+
+# install packrat if not installed
+require("packrat") || utils::install.packages("packrat")
+library(packrat)
+
+# installs "pacman" if not installed
+require("pacman") || utils::install.packages("pacman")
+library(pacman)
+
+require("latticeExtra") || utils::install.packages("latticeExtra")
+library(latticeExtra)
+# installs additonal R packages (CRAN and BIOCONDUCTOR packages)
+
+p_load(car,
+       dplyr,
+       downloader,
+       lubridate,
+       gridExtra,
+       cowplot,
+       readr,
+       gplots, 
+       ggplot2, 
+       reshape2, 
+       RCurl, 
+       knitr,
+       Biostrings,
+       tibble,
+       XVector,
+       BiocGenerics,
+       xlsx,
+       rJava,
+       IRanges,
+       S4Vectors,
+       lattice,
+       rmarkdown)
+
+
+```
+
+## Project folders
+It is wise to always have a standardized way of storing your files. I do it according the folders below
+
+```{r, project_folders}
+
+project_folders <- as.list(paste(root, c("/code",
+                          "/images",
+                          "/output",
+                          "/data",
+                          "/documentation",
+                          "/rmarkdown"
+                          ), sep = ""))
+
+project_folders[[1]]
+
+
+mkdir <- function(path){
+ifelse(!dir.exists(file.path(path)),
+       dir.create(file.path(path)), FALSE)
+}
+# lapply will apply the function to the list of folders
+lapply(project_folders, mkdir)
+
+# if a folder not already in your project this will state "TRUE", and "FALSE" if the folder already exist. 
+
+```
+
+### My first README.txt file
+As mentioned, it is handy to have a README.txt file in a directory telling you what is in that directory. For now we will create the most important README.txt: the one that goes in the `data` directory.
+
+```{r, adding_readme}
+
+file.create(paste0(root, "/data/README.md"))
+
+writeLines("# This is my first Markdown README.txt file. \n
+## This file is now about nothing, but \n
+### It will be about something in the future \n
+## Markdown is a simple mark-up language", 
+con = paste0(root, "/data/README.md"))
+
+```
+
+If we want to edit this readme file we can do this in RStudio by clicking on the file. You can edit the contents of the file just as you edit R scrips. 
+
+As shown in the example chunck above: you can also add content to the README.txt file directly from R...
+Nice ay!
+
+## Installing and loading additional packages
+The code chunck below will take care of installing and loading all packages nessecary for this tutorial. 
+
+If you want to install a package manually, run:
+
+`install.packages("package-name")`
+
+To load a package manually:
+
+`library(package-name)` 
+
+Please note the difference in use of _"double-quotes"_ above.
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Start Tutorial
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+# Shiny Apps
+Shiny is an open source application that can powerfully inllustrate the use of R to generate visualizations. Here we look at an example on discision making in ants on two food sources. The sliders in the app are parameters specific for the food source. The graph shows the change in the number of ants visiting the food source.
+
+
+```{r, eval=FALSE}
+
+if (!require("devtools")) install.packages("devtools")
+devtools::install_github("swarm-lab/teachR", dependencies = TRUE)
+if (!require("ggvis")) install.packages("ggvis")
+if (!require("deSolve")) install.packages("deSolve")
+
+library(ggvis)
+library(teachR)
+library(deSolve)
+
+run_app("ant_collective_decision")
+ 
+install.packages()
+
+
+```
+
+There are many, many more examples on nice shiny apps that can illustrate e.g. complex mathematical or statistical models. See http://shiny.rstudio.com/ 
+See e.g. the example on different chemical educational shiny apps:
+http://dpuadweb.depauw.edu/harvey_web/shiny.html
+
+# Reproducible research. 
+I do not think it is neccessary to explain the literal meaning of reproducible research. All of you can grasp what is about. But, from a data scientists' point of view the term it is probabable slightly more complex. 
+
+In data science reproducible research is the possibility to reproduce every step in the process of data analysis. Meaning from the moment a data-file (sometimes in it's very rudimentary and raw form) is recieved, to the final reporting of all the steps that were undertaken to do an analysis. This process is usually characterized by the following steps:
+ 
+ 1) Getting data: getting data in the context of R means getting the the (raw) datafile into R
+ 
+ 2) Inspecting the data: means getting an idea of what kind of data the datafile contains, how many variables, how many observations, what kind of experiment, what kind of groups and how many, so basically: getting an idea of the experimental design.
+ 
+ 3) Cleaning the data: Usually the data is not yet in an analizable form. Cleaning the data to a tidy dataframe, with consistent naming of variables e.g., normally takes a lot of time and is  the most crucial step in preparation for any analysis to come after.
+ 
+ 4) Exploratory data analysis: In this step an initial set of graphical representations of the data are generated. It serves to identify trends, to get summarizing results of the data in a graph and to explore the data. This is a preparative step for the step hereafter.
+ 
+ 5) Statistical inference: the __formal__ data analysis. The process of checking assumptions, relating the data to scientitific questions and hypotheses. The analysis uses statical methods, appropriate for the design of the data and the experiment. 
+
+ 6) Reporting: Th process of writing the analysis into a comprehensive report, according a set of rules, and compliant to the standard of the field of research. Preferable the report is written in such a way that reproduction of the whole of experiment + data analysis can be followed through by a peer, and reproduced if neccessary. 
+
+An important tool in reproducible research in R is RMarkdon, in combination of knitr. The document that is in fromt of you is an Rmd file, an "RMarkdown" file. Markdown is a simple mark-up language that potentiates the use of simply coding for layouting documents. One of the most famous and widely used mark-up languages is HTML, which is broadly used for __marking up__ web pages. RMarkdown is an implementation of Markdown language in R. Together with the __knitr__ package, it is a powerful tool to bring the principle of __literate programming__ into practice. It is one of the most imporatant implementation tools for reproducible research in the R language.
+
+For an eaxample of a full example of reproducible research, see: https://rpubs.com/maddocent/storm
+
+# Basic topics for working with R                        
+
+## Packages
+
+### List of available CRAN packages 
+http://cran.r-project.org/web/packages/available_packages_by_date.html
+
+
+### Biological Packages
+For Biological application go to www.bioconductor.org
+
+Installing Bioconductor packages is easy with `pacman::p_load` function
+
+```{r, eval=FALSE}
+
+library(pacman)
+## a CRAN package to analyze DNA and protein sequences 
+pacman::p_load(seqinr)
+
+## a package that handles biological sequences
+library(seqinr)
+help("seqinr")
+
+## and a BIOCONDUCTOR package to analyze LCMS data
+pacman::p_load(xcms)
+library(xcms)
+??xcms
+browseVignettes("xcms")
+
+```
+
+Vignettes are long explanations and demo's of a package. Commonly a vignette contains examples and a workflow that shows how the package can be used and which (research) questions can be adressed with the functions and datasets in the package. It usually is a good place to start for examples. It also shows the so-called dependence of a package: it explains which other packages you would need and how the data should look to be able to work with the package the vignette belongs to. 
+
+
+### Getting Help for R functions and packages
+```{r, eval=FALSE}
+
+library(dplyr)
+library(ggplot2)
+??dplyr
+??ggplot2
+?mean
+??mean  # go's to the page with functions related with '.mean.'
+apropos("mean") # search on more options of or alternatives for a certain function
+
+```
+
+### Examples and demos on functions and packages
+```{r, eval=FALSE}
+
+example(mean) # to see a worked example
+demo(graphics) # demonstration of R functions
+
+```
+
+# Data objects
+
+## Vectors
+R is an object oriented language: meaning you can create and work with (manipulate/index/access) objects. Vectors are R's elementary objects and 
+come in different flavours:
+
+ 1) Nummeric vector: contains only numbers: decimal separator in R is "." (decimal point) and not "," (decimal comma) as is common in the English language. 
+
+ 2) Character vector: contains only "words", but words can also be numbers: "23" or other items "100%" or "$2,000.00" 
+
+ 3) An integer vector: an nummeric series: 1, 2, 3 is an integer of length 3.
+ 
+ 4) Logical: logical vectors contain only two values: "TRUE" and/or "FALSE"
+  
+ 5) Mixed: Vectors do not need to be of one type. They can be mixed. They can only be of one class, so this operation will induce **_coercion_**.
+
+### Numeric vectors
+```{r}
+
+c(2,8,5) 	# combines its arguments to form a vector
+nv_1 <- c(2,8,5) # assignment statement (use 'alt' + '-' OR 'option' + '-')
+nv_1 # view the content of the object "x"
+
+# combine commands on the same line seperate with ';'
+nv_2 <- c(8.4,5.6,10.1,13.1,2.5,7.8,15.2,3.8,20.9); nv_2
+class(nv_2)
+
+```
+
+### Character vectors
+```{r}
+
+cv <- c("this is", "an", "example of", "1", "character", "vector", "with length:", "length(cv)")
+cv
+length(cv)
+class(cv)
+
+```
+
+### Integers
+```{r}
+
+int <- as.integer(1:5)
+int
+length(int)
+class(int)
+
+```
+
+### Logical vectors
+```{r}
+
+lv <- c(TRUE, FALSE, TRUE, TRUE)
+lv
+class(lv)
+
+## logical vectors can also be converted to numeric vectors
+nlv <- as.numeric(lv)
+nlv
+## note that coercion of a logical to a numeric vector changes the "TRUE" value to 1 and the "FALSE" value to 0
+
+```
+
+## Manipulating vectors
+You can add/subtract/devide or use other arithmetic functions on numeric vectors
+```{r} 
+
+a <- c(1,3,5,7,9)
+b <- c(2,4,6,8,10)
+
+z1 <- a - b
+z1
+z2 <- b - a
+z2
+z3 <- a / b
+z3
+z4 <- sum(a)
+z4
+z5 <- max(a) - max(b)
+z5
+
+```   
+
+You can get the individual items of a vector by using the index "[]"
+```{r}
+
+x<-c(8,5,10,13,2,7,15,3,20,8);x # create vector with 10 variables
+length(x)
+mode(x) # information on data mode (numeric, character, logic)
+class(x)
+
+## using the index
+x[3]
+
+## creating a subset by indexing:
+x[c(3, 4, 7)]
+
+# apply a simple function
+mean(x) # example of a function
+max(x)
+quantile(x)
+
+## Using the vector index "[]" some more
+# extra data from vector
+x[5] # (i = 5), ith element
+x[-2] # all but the ith (second) element
+x[3:5] # element 3 to 5
+x[x>9] # all greater than some value
+
+# manipulations
+y <- c(x,0,x); y # separate multiple commands on the same line with ";"
+sum(y) # sum of elements in the vector
+
+```
+
+### Plotting series/vectors
+```{r} 
+
+c <- c(1:7,9,11)
+d <- c(1:9)
+
+# performing a linear correlation
+m1 <- lm(c ~ d)
+summary(m1)
+
+# make a plot 
+plot(c, d, ylim=c(0,13))
+plot(c, d, ylim=c(0,13), abline(m1))  #abline plots the correaltion model in the graph
+m1$coefficients
+
+```
+
+### Handeling character vectors
+What happens if you use arithmetic functions on character vectors and numeric vector?
+```{r, eval=FALSE}
+
+w <- c("1", "2")
+u <- c("a", "b", "c")
+z6 <- w-y  
+z7 <- u+w
+
+``` 
+This does not work because the vectors are of different type  
+
+we can use the paste command for this
+```{r}
+
+w <- c("1", "2")
+u <- c("a", "b", "c")
+z8 <- paste(u,w, sep = "_")
+z8 ## because w is shorter than u, it get's recycled over u
+
+```
+
+# Let's clean up the workspace
+```{r, eval = FALSE }
+
+rm(list=ls())
+
+root <- find_root_file(criterion = is_rstudio_project)
+
+## Note: never use this in code that is meant for others!!!
+
+```
+
+It is an effective way to clear all the items in the Global Environment, but is is not very friendly to use this in code you share with others: can you think of why?
+
+# Data Structures: Lists and Dataframes
+
+When using R for data analysis you will most likely work with data in a matrix, an array, a list or even more likely: a dataframe.
+
+A matrix is a table with only numeric values. An array consists of multiple matices. A list is collection of R objects of different data type. A dataframe is a table with variable names in the first row and observations in the consecutive rows. The columns in a dataframe represnet different variables.  
+
+The dataframe and the list are the most widely used datastructures when considering experimental Biological data. 
+
+## Lists
+### Create a List
+```{r}
+
+lst <-list(name="Fred", wife="Mary", no.children=3, child_ages=c(4,7,9))
+lst # Lst is a list with 4 components
+str(lst) # display dtructure of R object
+
+``` 
+
+### Accessing items in a list
+There are 2 ways to select a single variable from a list
+The indexing of lists work also with square brackets or the dollars sign, but we will see there is a difference:
+
+```{r}
+
+str(lst)
+lst$child_ages # MyListName$MyVariableName 
+lst[4]# MyListName[MyVariableColumnNumber] 
+
+```
+
+To select a single element from a variable in a list
+```{r}
+
+lst$child_ages[2] 
+lst[[4]][2]
+# returns the value of the second element for your variable
+
+``` 
+
+## The Dataframe
+The dataframe is the most widely used data structure in the context of experimental biology and chemistry. **Remember "Tidy data!"**   
+
+### Create a data frame
+```{r}
+
+people <- data.frame(age=c(24, 27, 19, 34),      
+                       sex=c("F","F","M", "M"), 
+                       weight=c(64,55,80, 70),
+                     names = c("Christa", "Suzan", 
+                     "Matt", "John"))
+
+``` 
+
+### Viewing the contents of a dataframe
+```{r}
+
+head(people) 			# gives the content of the data frame
+names(people) 
+str(people)
+
+people$age # gives the content of the variable "age" from the data frame ""
+
+``` 
+
+### Using Index on Dataframes
+Using the index "[]" on a dataframe is a bit tricky. The dataframe always consists of rows and columns. Indexing a dataframe goes like:
+
+`dataframe[row number(s), column number(s)]`
+
+```{r}
+
+people$age[1] 	# first element of this vector
+people[,2] 	# content of 2nd variable (column) which is a character vector -> factor
+people[1,] 	# content of the 1st row
+
+# multiple indices
+people[2:3, c(1,3)] # remember to use c
+
+```
+
+# Import data into R
+## read.table reads space-delimited or tab delimited files
+```{r}
+
+gender_age <-read.table(paste0(root, "/data/gender.txt"), header=TRUE)
+
+# getting the first few rows 
+head(gender_age)
+
+# getting information on the variable, the dimensions
+str(gender_age)
+
+# selecting a variable
+gender_age$gender
+
+
+gender_age$age
+gender_age[1:6,2]
+
+``` 
+
+## read_csv
+CSV is a format of a data file that uses commas or semicolons as seprators for the columns.
+
+```{r}
+
+library(readr)
+skin <- read_csv(paste0(root, "/data/skincolumns.csv")) 
+str(skin)
+
+skin	 # content of the data frame
+dim(skin)
+attributes(skin)
+summary(skin)
+?read_csv 	 # help on the function
+
+## dataset contains an NA, some functions do not work with NAs:
+mean(skin$`Genotype A`)
+mean(skin$`Genotype B`)
+
+# to remove the NA
+skin_noNA <- na.omit(skin)
+mean(skin_noNA$`Genotype B`)
+
+``` 
+
+## Example: create data frame with 3 variabels gender, 
+smoke, age category (<15, 15-30, >30)
+```{r}
+
+set.seed(6000) # set it at the same number, then we will all produce the same output
+gender<-c(sample(c(1,2), size=1000, replace=TRUE))
+smoke<-c(sample(c(1,2), size=1000, replace=TRUE))
+age<-c(sample(c(1,2,3), size=1000, replace=TRUE))
+weight<-round(rnorm(1000, mean=65, sd=10),1); weight
+smoking <- data.frame(cbind(gender, smoke, age, weight)); smoking
+
+head(smoking)
+smoking[1:10,]
+
+``` 
+
+### replace numbers by characters
+```{r}
+
+# replace numbers by characters
+smoking$genderf=factor(smoking$gender, labels=c("female","male"))
+table(smoking$genderf,smoking$gender)
+smoking$smokef=factor(smoking$smoke, labels=c("Y","N"))
+table(smoking$smokef,smoking$smoke)
+smoking$agecf=factor(smoking$age, labels=c("A: <15","B: 15-30","C: >30"))
+table(smoking$agecf,smoking$age)
+summary(smoking)
+
+``` 
+
+### Subsetting data frame
+```{r}
+
+names(smoking)
+smoking_male <- smoking %>% filter(genderf == "male")
+smoking_age_gender <- smoking %>% select(genderf, agecf)
+
+```
+
+# Summarizing data
+For summarizing data there are many ways in R (as is the case with many operations). I find the dplyr way the most intuitive. Using dplyr has the advantage that you can easily built on existing function and examples, because the code is faily easy to understand.
+
+One thing that makes dplyr great is that it works with the "%>%" symbol. Which is in programming jargon also called the "pipe" symbol.
+
+The pipe symbol takes the previous result of an operation and put it in the next
+
+The pipe symbol can replace the use of annoying round brackets: or "(parentheses)" 
+
+Let's look at a simple example:
+```{r}
+
+### IMPORTANT: RUN ALL THE LINES AT ONCE INCLUDING THE SET.SEET OPTION, BECAUSE OF REPRODUCIBILITY. (Cntrl + Shift + Enter)
+
+
+## If we want to calculate the sum, of the square root of the mean, of two nummeric vectors we could do:
+
+set.seed(12345)    
+zzz <- mean((sqrt(mean(x <- rnorm(10000, mean = 34, sd = 2))))) +
+mean((sqrt(mean(y <- rnorm(10000, mean = 23, sd = 4)))))
+zzz
+
+## the above is alomost impossible to read because of all the round brackets, note the closing brackets: 5 of them!!
+
+
+## let's try the dplyr way with the %>% (pipe) operator
+
+set.seed(12345)
+qqq <- rnorm(10000, mean = 34, sd = 2) %>% mean() %>% sqrt() +
+rnorm(10000, mean = 23, sd = 4) %>% mean() %>% sqrt()
+qqq
+
+zzz == qqq
+
+```
+
+The dplyr way is a lot better is it not? Do you get what the above (dplyr-way) rules do?
+
+ 1) the result of the fist vector (1000 random numbers, with mean of 34 and a sd of 2 is piped into the function mean, which calculates the mean of these 1000 numbers
+ 
+ 2) From that the square root is taken by piping the mean in the function sqrt()
+ 
+ 3) The result of the firt vector is added to the calculation of the second vector (which is done the same way as the first).
+
+ 4) The result is qqq
+ 
+ 5) Is qqq equal to zzz, which we calculated the "old-fashioned" mathematical way: YES! 
+
+## Let's apply the above to our smoking dataset
+
+Usually, if we want to make a graph we need some sort of summarizing 
+variable that indicates hwat is going on, e.g. a group mean and standard deviation.
+
+From the smoking dataset we will genrate a new dataframe with average weight, grouped by gender, age and grouped by smoking or non smoking. We will use dplyr verse to do so.
+
+I will also show you how to sort the data, let's say to decreasing weight, by using the dplyr function 'arrange'. 
+
+```{r}
+## it is handy to have the names of the dataset variables at hand when writing pipes
+
+names(smoking)
+str(smoking)
+
+smoking_weight <- smoking %>% select(genderf, smokef, weight, agecf) %>%
+  group_by(genderf, smokef, agecf) %>% summarise(mean_weight = mean(weight)) %>%
+  arrange(desc(mean_weight))
+
+head(smoking_weight)
+
+```
+
+Let's look at what is going on above.
+The smoking_weight datset contains newly created, more descriptive denominators, we will use those. 
+ 
+ 1) The first step is to inspect the dataframe to see if the grouping variables are set to "factor" 
+ 
+ 2) The second step is to select the proper variables to work with
+ 
+ 3) Than the data is grouped by the genderf, agecf and by the smokef variables
+ 
+ 4) Summarise creates a new variable "mean_weight" that is what it says: the mean weight for the groups defined.
+ 
+ 5) Finally, the data is sorted, according the newly created mean_weight variable, in decending order "(dec(mean_weight))". If we want ascending order we can just use arrange(mean_weight). Arrange has the default to order the variable in ascending order.
+
+# Explore data: Graphics     
+
+We will use the demo dataset of the "Old Faithful" Geyser in US Yellowstone National Park 
+
+The dataset contains two variables "eruptions" and "waiting". Remember how to learn more on the dataset?
+
+```{r}
+data("faithful")
+
+?"faithful"
+
+head(faithful)
+
+
+hist(faithful$eruptions,breaks = 15)
+hist(faithful$waiting, breaks = 15)
+boxplot(faithful$eruptions)
+qqnorm(faithful$eruptions);qqline(faithful$eruptions)
+plot(faithful$eruptions,type="l")
+
+plot(faithful$eruptions, faithful$waiting)
+
+``` 
+
+## Grammar of Graphics (ggplot2 package)
+ggplot2 is a data visualization package for the statistical programming language R. Created by Hadley Wickham in 2005, ggplot2 is an implementation of Leland Wilkinson's Grammar of Graphics—a general scheme for data visualization which breaks up graphs into semantic components such as scales and layers. ggplot2 can serve as a replacement for the base graphics in R and contains a number of defaults for web and print display of common scales. Since 2005, ggplot2 has grown in use to become one of the most popular R packages. It is licensed under GNU GPL v2.[from Wikipedia, September, 2016]
+
+### **The ggplot2 package is very very versatile and can not be demonstrated to it's full abilities during this short workshop. Here we are barely scratching the surface. If you want to learn more about the power of R, you must start with exploring the posibilities of ggplot2, it is the future of data visualization.**
+
+A good place to start learning more Grammar of Graphics:
+http://www.cookbook-r.com/Graphs/
+
+
+We illustrate the workings of ggplot with two demo data-sets: "TootGrowth" and 
+"Household Power Consumption"   
+```{r}
+data("ToothGrowth")
+library(ggplot2)
+g <- ggplot(data = ToothGrowth, aes(len))
+g + geom_histogram() 
+``` 
+
+The graph shows a histogram of the Toothgrowth data (len = length teeth of Guinea pigs, treated with two different vitamine C food-sources).
+
+This looks nice, but what if we would like to add a title to the graph: Simple we add 
+
+`+ ggtitle("ToothGrowth")`
+
+```{r}
+g <- ggplot(data = ToothGrowth, aes(len))
+g + geom_histogram(bins = 30) + ggtitle("ToothGrowth")
+```
+
+Let's see if we can make a more meaningfull graph, that shows something about the result of the treatment, on teeth growth.
+
+```{r}
+g <- ggplot(data = ToothGrowth, aes(x = dose, y = len, group = supp, colour = supp))
+g + geom_point() + ggtitle("ToothGrowth")
+```
+
+Now we get a scatterplot with colours indicating the different supplement. Already more informative, but not very pretty.
+
+Let's try a panel plot:
+```{r}
+str(ToothGrowth)
+
+
+g <- ggplot(data = ToothGrowth, aes(x = dose, y = len, group = 1))
+g + geom_point() + 
+  facet_wrap(facets = "supp") + 
+  geom_smooth() + ggtitle("ToothGrowth")
+
+## ignore the warnings if you get them...
+
+## clean up the workspace again
+
+
+
+
+```
+
+He, that's nice, now we have a panelplot, with in each panel a smoother line and data points, for each tratment. Which vitamine C supplement has the most potent effect on the growth of the teeth of the tested Guinea pigs?
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+First, clean up the workspace again.
+```{r, Packages}
+
+rm(list=ls())
+root <- find_root_file(criterion = is_rstudio_project)
+
+## Note: never use this in code that is meant for others!!!
+
+```
+
+# GRAMMAR OF GRAPHICS DEMO ON A BIGGER DATASET
+
+# Want to work on a bigger dataset? I guessed you would want to do so, so I prepared a bit on "big(ger) data below" 
+
+I have prepared a script that will analyze a big dataset >2 million datapoints on power consumption by US households. The script is called "power_households.R". The script handles a number of steps:
+ 1) System settings and packages are handeled 
+ 
+ 2) Getting the data, the dat is downloaded directly from the web
+ 
+ 3) The data is cleaned up and subsets are selected (only data from 48 hrs of power consumption are included)
+ 
+ 4) A data summary dataframe is generated
+ 
+ 5) Exploratory data figures are generated to find trends and patterns in the data
+ 
+ 6) Statistical analysis and thourough exploration is not included
+
+External scripts can be called by the 'source' command
+Try it below and look in the folder "images" to see the result. Do you see the items in the Global environment? 
+
+What is the name of the object used for generating the figures?
+
+The code below will download the data and create a tidy version of a subset of the data. We will work with summarized data from a period of 48 hours of power consumption by US households.
+
+# Calling an external script
+This script will add a new dataset to the Global Environment: "data_twoDays" 
+
+```{r}
+source(paste0(root, "/code/power_households.R"))
+glimpse(data_twoDays)
+
+```
+
+The code to create the graphs is included in the code chunck below.
+
+Can you figure out what is shown in the graphs, and what exploratory data questions could be addressed by looking at these graphs individually?
+
+### Plot 1: Base plotting system
+```{r}
+
+# save the file
+
+
+hist(data_twoDays$global_active_power, col = "red", 
+     xlab = "Global Active Power", ylab = "Frequency", main = "Global Active Power")
+
+
+```
+
+### Plot 2: ggplot2 example
+```{r}
+
+## ---- Plot2--------------------------------------------------------------
+levels_date <- levels(as.factor(data_twoDays$date))
+
+## plot2.png in ggplot2 syntax 
+names(data_twoDays)
+
+plot2 <- ggplot(data_twoDays, aes(date_time, global_active_power)) + 
+  geom_line() +
+  scale_x_datetime(date_breaks = "1 day", 
+                   date_labels = c("Sat", "Thu", "Fri")) +
+  ylab("Global Active Power (kilowatts)") + xlab("Day") +
+theme_bw() +
+  theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14)) +
+  theme(plot.margin = unit(c(1, 1, 1, 1), "cm"))
+
+# saving the plot to disk
+plot2
+``` 
+
+### Plot 3: ggplot2 example
+```{r}
+
+## ---- Plot3--------------------------------------------------------------
+# checking the names
+names(data_twoDays)
+
+# creating plot3 with ggplot
+plot3 <- ggplot(data_twoDays, aes(x = date_time)) + 
+  geom_line(aes(y = sub_metering_1, color = "Sub_metering_1")) +
+  geom_line(aes(y = sub_metering_2, color = "Sub_metering_2")) +
+  geom_line(aes(y = sub_metering_3, color = "Sub_metering_3")) +
+  scale_x_datetime(date_breaks = "1 day", date_labels = c("Sat", "Thu", "Fri")) +
+  ylab("Energy sub metering") +
+  xlab("Day")
+  scale_colour_manual("", values = c("Sub_metering_1" = "black", 
+                                     "Sub_metering_2" = "red",
+                                     "Sub_metering_3" = "blue")) +
+theme_bw() +
+theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14)) +
+  theme(plot.margin = unit(c(1,1,1,1), "cm")) +
+  theme(legend.position=c(0.7, 0.9)) +
+  theme(legend.background = element_rect(fill="gray95", size=.3, linetype="dotted"))
+
+plot3
+
+```
+
+### Plot 4: ggplot2 example
+```{r}
+
+## ---- Plot4--------------------------------------------------------------
+# checking names
+names(data_twoDays)
+
+## plot 4 is a panel of four plots consiting of plot2, plot3 and two new plots
+## first create the two additonal plots (plot5 and plot6) that have to go in the panel
+
+## plot5 --> x = date_time, y = voltage
+plot5 <- ggplot(data_twoDays, aes(x = date_time)) + 
+  geom_line(aes(y = voltage)) +
+  scale_x_datetime(date_breaks = "1 day", 
+                   date_labels = c("Sat", "Thu", "Fri")) +
+  ylab("Voltage") +
+  xlab("Day") +
+  theme_bw() +
+theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.text.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14)) +
+theme(plot.margin = unit(c(1,1,1,1), "cm"))
+
+## plot6 --> x = date_time, y = global_reactive_power
+names(data_twoDays)
+plot6 <- ggplot(data_twoDays, aes(x = date_time)) + 
+  geom_line(aes(y = global_reactive_power)) +
+  scale_x_datetime(date_breaks = "1 day", 
+                   date_labels = c("Sat", "Thu", "Fri")) +
+  ylab("Global_reactive_power") +
+  xlab("Day") +
+  theme_bw() +
+theme(panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.text.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14)) + 
+  theme(plot.margin = unit(c(1,1,1,1), "cm"))
+
+plot5
+plot6
+```
+
+## CREATING A PANEL PLOT
+```{r}
+
+# creating the panel with plot_grid 
+panel <- plot_grid(plot2, plot5, plot3, plot6,
+          labels=c("A", "B", "C", "D"), ncol = 2)
+
+png(filename = paste0(root, "/images/panel_energy.png"),
+    res = 300, height = 20, width = 25, units = "cm")
+panel
+dev.off()
+
+```
+
+The above is meant as a demo for the strength of the Grammar of Graphics lingo. There is a lot more to ggplot2 than can be shown in this short demo. As mentioned above, a good place to start learning ggplot2 is 
+
+http://www.cookbook-r.com/Graphs/.
+
+Other resources are:
+
+https://www.google.nl/url?sa=t&rct=j&q=&esrc=s&source=web&cd=9&cad=rja&uact=8&ved=0ahUKEwiK5ZeV0N3PAhUhBMAKHUt5A-gQtwIIXzAI&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DHeqHMM4ziXA&usg=AFQjCNGE4PNS-_O1LzB3qiv8b9DI2Q_FiA
+
+and 
+
+https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf 
+
+The reason why I do not show examples from other plotting systems is that I think ggplot2 is the most advaced system that best puts the principles of "reproducible research" in practice.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# START BIONCONDUCTOR DEMO 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## **First, clear the workspace to have an overview!**
+
+```{r, rprojroot_load}
+library(rprojroot)
+
+rm(list=ls())
+
+root <- find_root_file(criterion = is_rstudio_project)
+```
+
+## Let's work on some biological data.
+
+Biological data can be sequence data, genomic information, proteomics and metabolomics data, expression array data, genomic alignments etc. etc.
+
+As mentioned above www.bioconductor.org, but also packages from CRAN and packages people posted on www.github.com and www.bitbucket.org can be used to work with and analyze biological data.
+
+Lets' work with an example from the Bioconductor package "Biostrings"
+To get help on packages and learn about BIOCONDUCTOR workflows visit:
+https://www.bioconductor.org/help/workflows/
+
+Today we will show a little on the workflows: "Multiple Alignment"
+To get started we need two packages
+
+```{r}
+library(Biostrings)
+library(IRanges)
+``` 
+
+To view the vignettes (from which I distilled the code chuncks below)
+```{r}
+
+browseVignettes("Biostrings")
+browseVignettes("IRanges")
+
+``` 
+
+
+### R code from vignette source 'Biostrings2Classes.Rnw'
+### Encoding: ISO8859-1
+
+Create a BString class object
+```{r}
+
+b <- BString("I am a BString object")
+b
+length(b)
+class(b)
+
+```
+
+Create a DNAString class object, with two ambiguous nucleotides
+```{r}
+
+d <- DNAString("TTGAAAA-CTC-N")
+d
+length(d)
+class(d)
+
+DNA_ALPHABET
+
+```
+
+To see the meaning of the "N" and the other UIPAC nucleotide ambiguity codes in this sequence:
+
+http://www.chick.manchester.ac.uk/SiteSeer/IUPAC_codes.html
+
+Indexing works the same as with __'normal'__ vectors
+```{r}
+
+d[3]
+
+d[7:12]
+
+b[length(b):1] ## gets the reverse sequence (could be handy to use on DNAStrings...know why?)
+
+d[length(d):1] ## see that d gets reversed?!
+
+```
+
+
+To get subsequencces of a larger sequence (e.g. to check primer sequences in a genomic sequence)
+```{r}
+
+bb <- subseq(b, 3, 6)
+bb
+
+dd1 <- subseq(d, end=7)
+dd1
+d
+
+dd2 <- subseq(d, start=8)
+dd2
+d
+
+```
+
+To find a specific pattern (a substring) in a larget string
+```{r}
+###################################################
+### code chunk number 6: b1
+###################################################
+bb == "am a"
+dd2 != DNAString("TG") ## is not containing?
+```
+
+## DNAString, RNAString, Amino acid strings (protein)
+
+Logically, we can als define RNA and proteins a string-object.
+Converting DNA to RNA __transcribes__ the DNA string. Remember, what was so typical about RNA?
+
+Tranlating a DNA string to protein __translates the DNA sequence (triplets) to a string of amino acids. A physiologically relevant protein had a start, and a stop coding sequence.
+
+```{r}
+r <- RNAString(d)
+r
+r == d
+
+
+gene <- DNAString(c("ATGAAATTTGGGCGCGCTTTAAAATGGGCGCTGAACTCTTTCCCCCGCGCGCTTGTGTGTGAAATATATATGTAATAAATATTGCCCCCGCGCGCGTTTGTGTGGGGCTCGCCGCGCTTTTAG"))
+                  
+protein <- Biostrings::translate(gene)                  
+gene
+
+length(gene)/3
+
+protein
+
+  
+```                  
+Each triplet codes for one amino acid. 
+
+Mind the ambiguous amino acids indicated by *.
+
+
+## Views on strings
+Views are a way to descibe the subsequences of a longer sequence. 
+```{r}
+
+v4 <- Views(dd2, start=3:0, end=5:8)
+v4
+length(v4)
+
+
+v4[4:2]
+
+v4[[2]]
+
+
+```
+
+
+```{r}
+v12 <- Views(DNAString("TAATAATG"), start=-2:9, end=0:11)
+v12
+
+
+## a complete sequence can also be descibed as a views object, start, stop and width defines a string...
+as(d, "Views")
+
+###################################################
+as(d, "Views")[[1]]
+
+```
+
+
+# IRanages package to use views and strings for biological sequences
+
+### R code from vignette source 'IRangesOverview.Rnw'
+### Encoding: ISO8859-1
+```{r}
+
+p_load(IRanges)
+library(IRanges)
+```
+
+## Generating some dummy sequences
+
+Let's look at Rle. What is this for an object. Assume you have a DNA sequence:
+AAATTGTGTGCCCTTT
+
+This sequence can be converted to a DNAString
+```{r}
+seq_demo <- DNAString("AAATTGTGTGCCCTTT")
+seq_demo
+Views(seq_demo)
+
+
+```
+
+let's see what happens if we convert this sequence to an Rle object
+```{r}
+
+seq_rle <- Rle(as.vector(seq_demo))
+
+seq_rle
+
+
+```
+
+Hey!, That is clever! So we can describe a DNAString as a  collection of Lengths and Values. So the fist three A nucleotides can be described as
+Lengths = 3, Value = A, the consecutive two T nucleotides can be described by Lengths = 2, Value = T, and so on...
+
+This encoding for DNA sequences, or other very long sequences, is used e.g. in sequencing files that contain the genomes. It is a way to condense the information and to prevent writing very very long sequences in a file, that are hard to work with. The sequence encoded in this way is also more easily accessible.
+
+Let's create a sequence
+
+```{r}
+###################################################
+### code chunk number 31: plotRanges
+###################################################
+IRanges_plot <- function(IRanges_object, sep=0.5, height=1,
+                         set_breaks=TRUE, labcol="grey",
+												names=NULL, cov=FALSE, clear=FALSE,
+												disjoint=NULL,
+												color=NULL) {
+	library(ggplot2)
+
+  if (!is.null(colors)) stopifnot(length(colors) <= 3L)
+	COLORS <- c("white", "#383838", "#DDDDDD")
+	x <- list(IRanges_object)
+	if (!is.null(names))
+		names(x) <- names
+	dl <- lapply(x, function(d) {
+							 out <- as.data.frame(d)
+							 out$y <- GenomicRanges::disjointBins(d)
+							 out
+							})
+	d <- do.call(rbind, dl)
+	if (!is.null(disjoint))
+		# manually assigned bins
+		d$y <- disjoint
+	d$ymin <- d$y * (sep + height) - height
+	d$ymax <- d$ymin + height
+	if (!is.null(color))
+		d$color <- color
+	if (length(x) > 1 && is.null(names(x)))
+		stop("multiple ranges must be given names like
+		     plotRanges(rng1=y, rng2=x)")
+	if (length(x) > 1)
+		d$range <- factor(rep(names(x), sapply(x, length)), names(x))
+	p <- ggplot2::ggplot(d)
+	if (clear)
+		p <- p + ggplot2::geom_rect(aes(ymin=ymin, ymax=ymax,
+		                       xmin=start-0.5, xmax=end+0.5),
+											 fill="white", color="grey30", size=0.3)
+	else if(is.null(color))
+		p <- p + ggplot2::geom_rect(aes(ymin=ymin, ymax=ymax, xmin=start-0.5,
+		                       xmax=end+0.5))
+	else {
+		p <- p + ggplot2::geom_rect(aes(ymin=ymin, ymax=ymax, xmin=start-0.5,
+													 xmax=end+0.5, fill=color),
+													 color="grey30", size=0.3)
+		p <- p + ggplot2::scale_fill_manual("", guide=FALSE,
+															 values=COLORS[1:length(unique(color))])
+	}
+	p <- p + ggplot2::theme_bw()
+	if (!is.null(d$names)) {
+		p <- p + ggplot2::geom_text(aes(x=start + width/2 - 0.5,
+													 y=ymin+(ymax-ymin)/2, label=names),
+													 size=4, color=labcol)
+	}
+	xmin <- min(d$start)
+	xmax <- max(d$end)
+	xbreaks <- seq(xmin - 1L, xmax + 1L)
+	if (set_breaks)
+		p <- p + ggplot2::scale_x_continuous(breaks=xbreaks)
+	p <- p + ggplot2::theme(panel.grid.major=element_blank(),
+								 panel.grid.minor.y=element_blank(),
+								 axis.ticks=element_blank())
+	if (!cov)
+		p <- p + ggplot2::theme(axis.text.y=element_blank())
+	p <- p + xlab("") + ylab("")
+	if (length(unique(d$range)) > 1)
+		p <- p + facet_wrap(~ range, ncol=1)
+	if (cov)
+		p <- p + ggplot2::geom_line(aes(x=pos, y=cov), covdf(coverage(rngs)),
+		                   color="red", size=3)
+	p
+}
+
+
+dict <- PDict(c("ATC", "ATG", "ATT", "TAT", "TTA"))
+subj <- DNAString(c("ATTTGTTGATCATCATCATGTTTTATGTTTGTGTGTATTATTATTATTTCCGCGCGTA"))
+match <- Biostrings::matchPDict(dict, subj)
+names_patterns <- c("ATC", "ATG", "ATT", "TAT", "TTA")
+match@NAMES <- c(names_patterns)
+ str(match)
+ match@NAMES
+
+ ## contructing an IRangesList from match
+ir <- lapply(match, IRanges::IRanges)
+ir_list <- IRanges::IRangesList(ir)
+
+## Calling the plot
+plot_iranges <- IRanges_plot(unlist(ir_list))
+plot_iranges
+
+```
+
+## A coverage plot indicates the depth of coverage of sequence and a number of patterns. Look at the plot to understand how coverage works.
+```{r}
+
+coverage_plot <- function(cx, start, end, min.depth, max.depth){
+  plot.new()
+  plot.window(c(start, end), c(min.depth, max.depth))
+  axis(1)
+  axis(2)
+  axis(4)
+  lines(start:end, cx[start:end], type="l")
+}
+
+
+
+## Get the coverage of the original subject:
+cov3R <- as.integer(IRanges::coverage(match, width=length(subj)))
+max(cov3R)
+mean(cov3R)
+sum(cov3R != 0) / length(cov3R)
+
+## A plot that shows the depth of the coverage (depht on the y-axis,
+## subject on the x-axis)
+
+coverplot <- coverage_plot(cx = cov3R,
+                           start = 1, end = 58,
+                           min.depth = 0, max.depth = 5)
+
+
+
+```
+
+
+# Sequencing workflow
+Commonly used workflows can be downloaded from the the BIOCONDUCTOR website. Workflows are installed as packages and demonstrate a data workflow for commond experiments and data types in Life Sciences and Chmeistry. Examples of workflows can be found at:   
+
+To start with a Biological workflow on sewquencing data:
+```{r}
+
+## BiocInstaller::biocValid()
+
+## Full genome sequences for Homo sapiens (Human) as provided by UCSC (hg19, Feb. 2009) and stored in Biostrings objects.
+
+## url <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz")
+
+## download(url = url, destfile = "./BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz")
+
+## source("http://bioconductor.org/biocLite.R")
+
+## ?biocLite
+
+## installing Human genome from downloaded source file:
+
+install.packages("BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz", repo = NULL, 
+                 type = "source")
+
+source("http://bioconductor.org/workflows.R")
+workflowInstall("sequencing", dependencies = TRUE)
+browseVignettes("sequencing")
+
+```
+
+# Want to learn more R?
+
+To learn R interactively visit http://swirlstats.com/
+
+There is a enormous amount of information on R freely available on the web. I find it realy helpful to use youtube tutorials, online tutorials, vignettes and workflows (BIOCONDUCTOR.org). Feel free to contact me for questions on which resource is best. 
+
+For statistics, which was not covered in this workshop: The book by Andy Field "Discovering Statistics Using R" kept me awake at night!! So it is a good place to start (if you have ambitions to becoming an insomniac).
+
+E-books from Amazon are good tools, take a look at the ratings and the reviews before buying, though. I find the books from Publisher 'O Reilly very good starting points and a book can be helpful as a solid go-to. 
+
+One thing that will speed up your learning is running the code below. Good luck and let's **swirl!!**
+```{r, eval = FALSE}
+
+install.packages("swirl")
+library(swirl)
+swirl()
+
+## swirl will interact with you through the console. Type answers to the questions in the console, or run them in a script in the script editor.
+
+```
+
+
+# Now what?
+
+One of the biggest advantages of using a system like R and RStudio over e.g. MS Excel or other spreadsheet applications is the reproducibility. You can run and re-run code as often as you like, tweaking it on the fly. Furthermore, you can exactly replicate things you have done in the nearby, or further away future. 
+A big step forward in the way we would have to work with data, if you ask me, is to introduce this concept of "Reproducible research" into our teachings. 
+
+**To my opinion, every future technician, scientist, or professional that works with data, will have to have some form of introducton in the "Reproducible Research" concept. And, yes! Will have to learn a bit about programming!!**  
+
+__Everybody a programmer__, will you join me?
+
+And lastly: if you feel ready to take on this challenge, look me up and let's start a new **pRoject**.
+
+This code can be used under the Creative Commons License.
+Author: Marc A.T. Teunis, 2016
+For commercial applications contact the author at marc.teunis@hu.nl
+
+# Citations
+```{r}
+
+citation("base")
+citation("ggplot2")
+citation("seqinr")
+citation("dplyr")
+citation("knitr")
+citation("sequencing")
+
+```
+
