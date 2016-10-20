@@ -16,7 +16,7 @@ To get all the files needed for the workshop follow the steps below:
 
  -> Choose a new project (File -> New Project) in RStudio "Version Control"
 
- -> Paste the link to this repo in the "url" field, and press enter 
+ -> Paste the link to YOUR FORK of the repo in the "url" field, and press enter 
 
  -> The files will appear in your project
 
