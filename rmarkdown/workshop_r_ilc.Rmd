@@ -52,7 +52,7 @@ Give the project the name: `ilc_r_workshop`
 - be sure to check the boxes 'git' and 'packrat'
 
 
-### System settings and project preparations
+## System settings and project preparations
 The root folder of a project is the folder where all the files of the project live. It is important to tell R what this root directory is. "rprojroot" is a package that handles project root folder settings. Run the following code to install the first package needed for this tutorial
 
 `install.packages("rprojroot")`
@@ -63,7 +63,7 @@ library(rprojroot)
 root <- find_root_file(criterion = is_rstudio_project)
 ```
 
-### Knitr options and defining the root of the project
+## Knitr options and defining the root of the project
 ```{r, knitr_setup}
 require("knitr") || utils::install.packages("knitr")
 library(knitr)
@@ -71,26 +71,17 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = root)
 ```
 
-### First things first
+# Getting Started
+
+## First things first
 We will get the files necessary to run the code below, and also all the packages. Remember the wetransfer.com file? Did you download it? Great! Copy the file into the just created projectfolder. Unsure where to look? Look a the object "root" in the Gobal Envrionment. Store the wentransfer file in that folder.
 
-Run the code below to unzip the bundle. This will (fingers crossed!!) unpack the bundle in your project directory. The bundle contains the data files, R scripts and package libraries to get going in the workshop.
-
-```{r, eval = FALSE}
-library(packrat)
-
-source
-## did you get an error, make sure you enable packrat (check the box) in project tools --> project options --> packrat --> check the fist three of the five boxes --> call library(packrat) again. 
+Follow the steps outlined in the README.txt. This will (fingers crossed!!) unpack the bundle in your project directory. The bundle contains the data files, R scripts and package libraries to get going in the workshop.
+To view the README.txt file visit:
+https://github.com/Maddocent/ilc_r_workshop/blob/master/README.md
 
 
-
-## call the function below, without using the "##"
-
-## packrat::unbundle("./workshop_ilc")
-```
-
-
-### Project folder structure
+## Project folder structure
 It is important to adapt a standard for your project structure. The code below will create a number of folders in the current project `minor_f_p` project. This functions as an example and you might want to adapt your own structure. Anything is basically good: as long as you are being consistent.
 
 ## Installing required packages
