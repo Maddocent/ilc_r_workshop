@@ -3,13 +3,13 @@ title: "An introduction to data analysis using R"
 author: "Marc A.T. Teunis"
 date: '`r Sys.Date()`'
 output:
+  github_document: default
   html_document: default
   pdf_document: default
-  github_document: default
 ---
-# Important note: R is case-sensitive, meaning that it will matter whether you use capital or lower case, keep this in mind if you get a cryptic warning or error!
+### **__Important note: R is case-sensitive, meaning that it will matter whether you use capital or lower case, keep this in mind if you get a cryptic warning or error!__**
 
-# How to run the code in this tutorial?
+# How to run the code in the tutorial below?
 This document contains code chunks that start with
 
 ` ```{r} ` 
