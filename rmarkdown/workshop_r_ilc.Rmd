@@ -79,6 +79,7 @@ Run the code below to unzip the bundle. This will (fingers crossed!!) unpack the
 ```{r, eval = FALSE}
 library(packrat)
 
+source
 ## did you get an error, make sure you enable packrat (check the box) in project tools --> project options --> packrat --> check the fist three of the five boxes --> call library(packrat) again. 
 
 
