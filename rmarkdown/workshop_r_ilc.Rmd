@@ -187,7 +187,7 @@ The code chunck below will take care of installing and loading all packages ness
 
 If you want to install a package manually, run:
 
-`install.packages("package-name")`
+`install.packages("package-name")` ##package-name is not available (for R version 3.2.3)##
 
 To load a package manually:
 
@@ -204,7 +204,7 @@ Please note the difference in use of _"double-quotes"_ above.
 # Shiny Apps
 Shiny is an open source application that can powerfully inllustrate the use of R to generate visualizations. Here we look at an example on discision making in ants on two food sources. The sliders in the app are parameters specific for the food source. The graph shows the change in the number of ants visiting the food source.
 
-
+## hier gaat het mis bij mij, 
 ```{r, eval=FALSE}
 
 if (!require("devtools")) install.packages("devtools")
