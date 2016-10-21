@@ -24,3 +24,4 @@ Go to www.github.com
 Creative Commons: Marc A.T. Teunis, 2016
 
 Run the code below as shown in the tutorial, and wait for the computer to finish downloading. Be sure the battery is full, or preferably, connected to a power outlet.
+Hey Marc! 
