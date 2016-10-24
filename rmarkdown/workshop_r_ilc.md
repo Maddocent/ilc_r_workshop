@@ -1,26 +1,32 @@
 An introduction to data analysis using R
 ================
 Marc A.T. Teunis
-2016-10-20
+2016-10-24
 
 ### ****Important note: R is case-sensitive, meaning that it will matter whether you use capital or lower case, keep this in mind if you get a cryptic warning or error!****
 
 How to run the code in the tutorial below?
 ==========================================
 
-This document contains code chunks that start with
+This document contains code chunks that look like
 
-```` ```{r} ````
+``` r
+## and end with
 
-and end with
+## These code chunks contain R code that does something: for example: calculate the mean of 100 random numbers between 0 and 50. Without running the code, can you guess what the mean will approximately be?
 
-```` ``` ````
+set.seed(seed = 10)
+numbers <- runif(100, min = 0, max = 20)
+mean_numbers <- mean(numbers)
+```
+
+What happens if we would increase the number of random numbers? What value would we get for the mean?
 
 Run a code chucks as follows: place the cursor somewhere in a code chunk and between the ```` ```{r} ```` and the ```` ``` ```` and press the keys:
 
 `Ctrl` `Shift` and `Enter` simultaneously.
 
-The code will run and the results will show either in the console, or below the code chunck.
+The code will run and the results will show either in the console, or below the code chunk.
 
 Run a line of code as follows: place the cursor somewhere on the line that you want to run. press the keys:
 
@@ -30,25 +36,52 @@ You can also run a piece of code by selecting the code by dragging the cursor an
 
 `Cntrl` and `Enter` simultaneously.
 
+****Try running the code chunck above to see if you guess of the mean was right. Now change the number of random numbers from 100 to 10000. What happens to the mean?****
+
 Introduction
 ============
 
-This walkthough is part of the workshop "An introduction to data analysis using R". The workshop is meant as an introduction to R and to be able to use R for data exploration on your own data, obtained in a research project.
+This walk though is part of the workshop "An introduction to data analysis using R". The workshop is meant as an introduction to R and to be able to use R for data exploration on your own data, obtained in a research project.
+
+There will be too much in this tutorial to be covered in whole during the workshop. The complete walk-though in this document covers many topic in R. It demonstrates how to run code, write functions, work with data-objects, load in data, clean and summarize data, make visualizations, work with "bigger" data sets and also work with biological data. Too much to cover in so little time, so I will make a selection.
+
+At the end of the document you will get tips on how to proceed (with R if you like). A good start could be to repeat this tutorial in full and at your own pace, after that it will be up to you how you will move foRward.
+
+Getting Started
+===============
 
 Setting up a project
 --------------------
 
-RStudio has the function to create projects that hold all your files in one place. Here we will create a project and set it's structure.
+RStudio has the function to create projects that hold all your files in one place. Here we will create a project and set-up it's structure.
 
 ### Initializing a new project
 
-Initialize a new project in RStudio under
+Follow the steps outlined below (from the README.md file). This will (fingers crossed!!) transfer the files for this workshop to your project directory.
 
-`File` -&gt; `New Project`, choose `New Directory`.
+To view the README.md file visit: <https://github.com/Maddocent/ilc_r_workshop/blob/master/README.md>
 
-Give the project the name: `ilc_r_workshop`
+**Follow these steps first before continuing**
 
--   be sure to check the boxes 'git' and 'packrat'
+To get all the files needed for the workshop follow the steps below:
+
+-&gt; Go to www.github.com
+
+-&gt; Create a user name and password for yourself
+
+-&gt; Log in to github
+
+-&gt; go to www.github.com/maddocent/ilc\_r\_workshop
+
+-&gt; Fork this repo to your own account
+
+-&gt; Choose a new project (File -&gt; New Project) in RStudio "Version Control"
+
+-&gt; Paste the link to YOUR FORK of the repo in the "url" field, and press enter
+
+-&gt; Fetching the files will start and the files will appear in your project
+
+Did it work? Please let me know if not.
 
 System settings and project preparations
 ----------------------------------------
@@ -80,21 +113,6 @@ library(knitr)
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_knit$set(root.dir = root)
 ```
-
-Getting Started
-===============
-
-First things first
-------------------
-
-We will get the files necessary to run the code below, and also all the packages. Remember the wetransfer.com file? Did you download it? Great! Copy the file into the just created projectfolder. Unsure where to look? Look a the object "root" in the Gobal Envrionment. Store the wentransfer file in that folder.
-
-Follow the steps outlined in the README.txt. This will (fingers crossed!!) unpack the bundle in your project directory. The bundle contains the data files, R scripts and package libraries to get going in the workshop. To view the README.txt file visit: <https://github.com/Maddocent/ilc_r_workshop/blob/master/README.md>
-
-Project folder structure
-------------------------
-
-It is important to adapt a standard for your project structure. The code below will create a number of folders in the current project `minor_f_p` project. This functions as an example and you might want to adapt your own structure. Anything is basically good: as long as you are being consistent.
 
 Installing required packages
 ----------------------------
@@ -169,7 +187,8 @@ Project folders
 It is wise to always have a standardized way of storing your files. I do it according the folders below
 
 ``` r
-project_folders <- as.list(paste(root, c("/code",
+project_folders <- as.list(paste(root, 
+                        c("/code",
                           "/images",
                           "/output",
                           "/data",
@@ -229,11 +248,13 @@ lapply(project_folders, mkdir)
 
 ``` r
 # if a folder not already in your project this will state "TRUE", and "FALSE" if the folder already exist. 
+
+## because you cloned the project from Github, the folders will already be there
 ```
 
 ### My first README.txt file
 
-As mentioned, it is handy to have a README.txt file in a directory telling you what is in that directory. For now we will create the most important README.txt: the one that goes in the `data` directory.
+It is very handy to have a README.txt file in a directory telling you what is in that directory. For now we will create the most important README.txt: the one that goes in the `data` directory.
 
 ``` r
 file.create(paste0(root, "/data/README.md"))
@@ -251,12 +272,12 @@ con = paste0(root, "/data/README.md"))
 
 If we want to edit this readme file we can do this in RStudio by clicking on the file. You can edit the contents of the file just as you edit R scrips.
 
-As shown in the example chunck above: you can also add content to the README.txt file directly from R... Nice ay!
+As shown in the example chunk above: you can also add content to the README.txt file directly from R... Nice ay!
 
 Installing and loading additional packages
 ------------------------------------------
 
-The code chunck below will take care of installing and loading all packages nessecary for this tutorial.
+The code chunk below will take care of installing and loading all packages necessary for this tutorial.
 
 If you want to install a package manually, run:
 
@@ -273,7 +294,7 @@ Please note the difference in use of *"double-quotes"* above.
 Shiny Apps
 ==========
 
-Shiny is an open source application that can powerfully inllustrate the use of R to generate visualizations. Here we look at an example on discision making in ants on two food sources. The sliders in the app are parameters specific for the food source. The graph shows the change in the number of ants visiting the food source.
+Shiny is an open source application that can powerfully illustrate the use of R to generate visualizations. Here we look at an example on decision making in ants on two food sources. The sliders in the app are parameters specific for the food source. The graph shows the change in the number of ants visiting the food source.
 
 ``` r
 if (!require("devtools")) install.packages("devtools")
@@ -290,28 +311,28 @@ run_app("ant_collective_decision")
 install.packages()
 ```
 
-There are many, many more examples on nice shiny apps that can illustrate e.g. complex mathematical or statistical models. See <http://shiny.rstudio.com/> See e.g. the example on different chemical educational shiny apps: <http://dpuadweb.depauw.edu/harvey_web/shiny.html>
+There are many, many more examples on nice shiny apps that can illustrate e.g. complex mathematical or statistical models. See <HTTP://shiny.rstudio.com/> See e.g. the example on different chemical educational shiny apps: <HTTP://dpuadweb.depauw.edu/harvey_web/shiny.html>
 
 Reproducible research.
 ======================
 
-I do not think it is neccessary to explain the literal meaning of reproducible research. All of you can grasp what is about. But, from a data scientists' point of view the term it is probabable slightly more complex.
+I do not think it is necessary to explain the literal meaning of reproducible research. All of you can grasp what is about. But, from a data scientists' point of view the term it is probable slightly more complex.
 
-In data science reproducible research is the possibility to reproduce every step in the process of data analysis. Meaning from the moment a data-file (sometimes in it's very rudimentary and raw form) is recieved, to the final reporting of all the steps that were undertaken to do an analysis. This process is usually characterized by the following steps:
+In data science reproducible research is the possibility to reproduce every step in the process of data analysis. Meaning from the moment a data-file (sometimes in it's very rudimentary and raw form) is received, to the final reporting of all the steps that were undertaken to do an analysis. This process is usually characterized by the following steps:
 
-1.  Getting data: getting data in the context of R means getting the the (raw) datafile into R
+1.  Getting data: getting data in the context of R means getting the (raw) data file into R
 
-2.  Inspecting the data: means getting an idea of what kind of data the datafile contains, how many variables, how many observations, what kind of experiment, what kind of groups and how many, so basically: getting an idea of the experimental design.
+2.  Inspecting the data: means getting an idea of what kind of data the data file contains, how many variables, how many observations, what kind of experiment, what kind of groups and how many, so basically: getting an idea of the experimental design.
 
-3.  Cleaning the data: Usually the data is not yet in an analizable form. Cleaning the data to a tidy dataframe, with consistent naming of variables e.g., normally takes a lot of time and is the most crucial step in preparation for any analysis to come after.
+3.  Cleaning the data: Usually the data is not yet in an analyzable form. Cleaning the data to a tidy data frame, with consistent naming of variables e.g., normally takes a lot of time and is the most crucial step in preparation for any analysis to come after.
 
 4.  Exploratory data analysis: In this step an initial set of graphical representations of the data are generated. It serves to identify trends, to get summarizing results of the data in a graph and to explore the data. This is a preparative step for the step hereafter.
 
-5.  Statistical inference: the **formal** data analysis. The process of checking assumptions, relating the data to scientitific questions and hypotheses. The analysis uses statical methods, appropriate for the design of the data and the experiment.
+5.  Statistical inference: the **formal** data analysis. The process of checking assumptions, relating the data to scientific questions and hypotheses. The analysis uses statistically methods, appropriate for the design of the data and the experiment.
 
-6.  Reporting: Th process of writing the analysis into a comprehensive report, according a set of rules, and compliant to the standard of the field of research. Preferable the report is written in such a way that reproduction of the whole of experiment + data analysis can be followed through by a peer, and reproduced if neccessary.
+6.  Reporting: The process of writing the analysis into a comprehensive report, according a set of rules, and compliant to the standard of the field of research. Preferable the report is written in such a way that reproduction of the whole of experiment + data analysis can be followed through by a peer, and reproduced if necessary.
 
-An important tool in reproducible research in R is RMarkdon, in combination of knitr. The document that is in fromt of you is an Rmd file, an "RMarkdown" file. Markdown is a simple mark-up language that potentiates the use of simply coding for layouting documents. One of the most famous and widely used mark-up languages is HTML, which is broadly used for **marking up** web pages. RMarkdown is an implementation of Markdown language in R. Together with the **knitr** package, it is a powerful tool to bring the principle of **literate programming** into practice. It is one of the most imporatant implementation tools for reproducible research in the R language.
+An important tool in reproducible research in R is RMarkdown, in combination of knitr. The document that is in front of you is an Rmd file, an "RMarkdown" file. Markdown is a simple mark-up language that potentiates the use of simply coding for layouting documents. One of the most famous and widely used mark-up languages is HTML, which is broadly used for **marking up** web pages. RMarkdown is an implementation of Markdown language in R. Together with the **knitr** package, it is a powerful tool to bring the principle of **literate programming** into practice. It is one of the most imporatant implementation tools for reproducible research in the R language.
 
 For an eaxample of a full example of reproducible research, see: <https://rpubs.com/maddocent/storm>
 
@@ -661,13 +682,13 @@ summary(m1)
 plot(c, d, ylim=c(0,13))
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-12-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-10-1.png)
 
 ``` r
 plot(c, d, ylim=c(0,13), abline(m1))  #abline plots the correaltion model in the graph
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-12-2.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-10-2.png)
 
 ``` r
 m1$coefficients
@@ -2230,7 +2251,7 @@ summary(smoking)
     ##  Median :2.000   Median :1.000   Median :2.000   Median :65.60  
     ##  Mean   :1.503   Mean   :1.479   Mean   :1.981   Mean   :65.47  
     ##  3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.:3.000   3rd Qu.:72.50  
-    ##  "problems" Max.   :2.000   Max.   :3.000   Max.   :98.60  
+    ##  Max.   :2.000   Max.   :2.000   Max.   :3.000   Max.   :98.60  
     ##    genderf    smokef       agecf    
     ##  female:497   Y:521   A: <15  :332  
     ##  male  :503   N:479   B: 15-30:355  
@@ -2400,37 +2421,37 @@ head(faithful)
 hist(faithful$eruptions,breaks = 15)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-27-1.png)
 
 ``` r
 hist(faithful$waiting, breaks = 15)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-2.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-27-2.png)
 
 ``` r
 boxplot(faithful$eruptions)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-3.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-27-3.png)
 
 ``` r
 qqnorm(faithful$eruptions);qqline(faithful$eruptions)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-4.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-27-4.png)
 
 ``` r
 plot(faithful$eruptions,type="l")
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-5.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-27-5.png)
 
 ``` r
 plot(faithful$eruptions, faithful$waiting)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-6.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-27-6.png)
 
 Grammar of Graphics (ggplot2 package)
 -------------------------------------
@@ -2452,7 +2473,7 @@ g + geom_histogram()
 
     ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-30-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-28-1.png)
 
 The graph shows a histogram of the Toothgrowth data (len = length teeth of Guinea pigs, treated with two different vitamine C food-sources).
 
@@ -2465,7 +2486,7 @@ g <- ggplot(data = ToothGrowth, aes(len))
 g + geom_histogram(bins = 30) + ggtitle("ToothGrowth")
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-31-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-1.png)
 
 Let's see if we can make a more meaningfull graph, that shows something about the result of the treatment, on teeth growth.
 
@@ -2474,7 +2495,7 @@ g <- ggplot(data = ToothGrowth, aes(x = dose, y = len, group = supp, colour = su
 g + geom_point() + ggtitle("ToothGrowth")
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-32-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-30-1.png)
 
 Now we get a scatterplot with colours indicating the different supplement. Already more informative, but not very pretty.
 
@@ -2560,7 +2581,7 @@ g + geom_point() +
     ## as.matrix(model.frame(delete.response(terms(object)), : There are other
     ## near singularities as well. 2.2726
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-33-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-31-1.png)
 
 ``` r
 ## ignore the warnings if you get them...
@@ -2656,7 +2677,7 @@ hist(data_twoDays$global_active_power, col = "red",
      xlab = "Global Active Power", ylab = "Frequency", main = "Global Active Power")
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-35-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-33-1.png)
 
 ### Plot 2: ggplot2 example
 
@@ -2693,7 +2714,7 @@ theme_bw() +
 plot2
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-36-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-34-1.png)
 
 ### Plot 3: ggplot2 example
 
@@ -2739,7 +2760,7 @@ theme(panel.grid.major = element_blank(),
 plot3
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-37-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-35-1.png)
 
 ### Plot 4: ggplot2 example
 
@@ -2802,13 +2823,13 @@ theme(panel.grid.major = element_blank(),
 plot5
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-38-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-36-1.png)
 
 ``` r
 plot6
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-38-2.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-36-2.png)
 
 CREATING A PANEL PLOT
 ---------------------
@@ -3336,7 +3357,7 @@ plot_iranges <- IRanges_plot(unlist(ir_list))
 plot_iranges
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-53-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-51-1.png)
 
 A coverage plot indicates the depth of coverage of sequence and a number of patterns. Look at the plot to understand how coverage works.
 ----------------------------------------------------------------------------------------------------------------------------------------
@@ -3381,7 +3402,7 @@ coverplot <- coverage_plot(cx = cov3R,
                            min.depth = 0, max.depth = 5)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-54-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-52-1.png)
 
 Sequencing workflow
 ===================
@@ -3439,7 +3460,7 @@ workflowInstall("sequencing", dependencies = TRUE)
     ## package 'sequencing' successfully unpacked and MD5 sums checked
     ## 
     ## The downloaded binary packages are in
-    ##  C:\Users\marct\AppData\Local\Temp\Rtmp0e0xAo\downloaded_packages
+    ##  C:\Users\marct\AppData\Local\Temp\RtmpeC4Veb\downloaded_packages
 
 ``` r
 browseVignettes("sequencing")

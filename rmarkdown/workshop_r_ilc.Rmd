@@ -3,21 +3,24 @@ title: "An introduction to data analysis using R"
 author: "Marc A.T. Teunis"
 date: '`r Sys.Date()`'
 output:
-  github_document: default
   html_document: default
+  github_document: default
   pdf_document: default
 ---
 ### **__Important note: R is case-sensitive, meaning that it will matter whether you use capital or lower case, keep this in mind if you get a cryptic warning or error!__**
 
 # How to run the code in the tutorial below?
-This document contains code chunks that look like
+This document contains code chunks that start with
 
-```{r, example_chunk}
+` ```{r, .....options......} `
 
 ## and end with
 
-## These code chunks contain R code that does something: for example: calculate the mean of 100 random numbers between 0 and 50. Without running the code, can you guess what the mean will approximately be?
+` ``` `
 
+## These so called code chunks contain R code that does something: for example: calculate the mean of 100 random numbers between 0 and 50. Without running the code, can you guess what the mean will approximately be?
+
+```{r}
 set.seed(seed = 10)
 numbers <- runif(100, min = 0, max = 20)
 mean_numbers <- mean(numbers)
@@ -31,7 +34,7 @@ place the cursor somewhere in a code chunk and between the
 
 `Ctrl` `Shift` and `Enter` simultaneously. 
 
-The code will run and the results will show either in the console, or below the code chunck.
+The code will run and the results will show either in the console, or below the code chunk.
 
 Run a line of code as follows:
 place the cursor somewhere on the line that you want to run.
@@ -47,9 +50,9 @@ __**Try running the code chunck above to see if you guess of the mean was right.
 
 
 # Introduction
-This walkthough is part of the workshop "An introduction to data analysis using R". The workshop is meant as an introduction to R and to be able to use R for data exploration on your own data, obtained in a research project.
+This walk though is part of the workshop "An introduction to data analysis using R". The workshop is meant as an introduction to R and to be able to use R for data exploration on your own data, obtained in a research project.
 
-There will be too much in this tutorial to be covered in whole during the workshop. The complete walk-though in this document covers many topic in R. It demonstrates how to run code, write functions, work with data-objects, load in data, clean and summarize data, make visualizations, work with "bigger" datasets and also work with biological data. Too much to cover in so little time, so I will make a selection.  
+There will be too much in this tutorial to be covered in whole during the workshop. The complete walk-though in this document covers many topic in R. It demonstrates how to run code, write functions, work with data-objects, load in data, clean and summarize data, make visualizations, work with "bigger" data sets and also work with biological data. Too much to cover in so little time, so I will make a selection.  
 
 At the end of the document you will get tips on how to proceed (with R if you like). A good start could be to repeat this tutorial in full and at your own pace, after that it will be up to you how you will move foRward. 
 
@@ -194,11 +197,11 @@ con = paste0(root, "/data/README.md"))
 
 If we want to edit this readme file we can do this in RStudio by clicking on the file. You can edit the contents of the file just as you edit R scrips. 
 
-As shown in the example chunck above: you can also add content to the README.txt file directly from R...
+As shown in the example chunk above: you can also add content to the README.txt file directly from R...
 Nice ay!
 
 ## Installing and loading additional packages
-The code chunck below will take care of installing and loading all packages nessecary for this tutorial. 
+The code chunk below will take care of installing and loading all packages necessary for this tutorial. 
 
 If you want to install a package manually, run:
 
@@ -217,7 +220,7 @@ Please note the difference in use of _"double-quotes"_ above.
 
 
 # Shiny Apps
-Shiny is an open source application that can powerfully inllustrate the use of R to generate visualizations. Here we look at an example on discision making in ants on two food sources. The sliders in the app are parameters specific for the food source. The graph shows the change in the number of ants visiting the food source.
+Shiny is an open source application that can powerfully illustrate the use of R to generate visualizations. Here we look at an example on decision making in ants on two food sources. The sliders in the app are parameters specific for the food source. The graph shows the change in the number of ants visiting the food source.
 
 
 ```{r, shiny_example, eval=FALSE}
@@ -238,28 +241,28 @@ install.packages()
 
 ```
 
-There are many, many more examples on nice shiny apps that can illustrate e.g. complex mathematical or statistical models. See http://shiny.rstudio.com/ 
+There are many, many more examples on nice shiny apps that can illustrate e.g. complex mathematical or statistical models. See HTTP://shiny.rstudio.com/ 
 See e.g. the example on different chemical educational shiny apps:
-http://dpuadweb.depauw.edu/harvey_web/shiny.html
+HTTP://dpuadweb.depauw.edu/harvey_web/shiny.html
 
 # Reproducible research. 
-I do not think it is neccessary to explain the literal meaning of reproducible research. All of you can grasp what is about. But, from a data scientists' point of view the term it is probabable slightly more complex. 
+I do not think it is necessary to explain the literal meaning of reproducible research. All of you can grasp what is about. But, from a data scientists' point of view the term it is probable slightly more complex. 
 
-In data science reproducible research is the possibility to reproduce every step in the process of data analysis. Meaning from the moment a data-file (sometimes in it's very rudimentary and raw form) is recieved, to the final reporting of all the steps that were undertaken to do an analysis. This process is usually characterized by the following steps:
+In data science reproducible research is the possibility to reproduce every step in the process of data analysis. Meaning from the moment a data-file (sometimes in it's very rudimentary and raw form) is received, to the final reporting of all the steps that were undertaken to do an analysis. This process is usually characterized by the following steps:
  
- 1) Getting data: getting data in the context of R means getting the (raw) datafile into R
+ 1) Getting data: getting data in the context of R means getting the (raw) data file into R
  
- 2) Inspecting the data: means getting an idea of what kind of data the datafile contains, how many variables, how many observations, what kind of experiment, what kind of groups and how many, so basically: getting an idea of the experimental design.
+ 2) Inspecting the data: means getting an idea of what kind of data the data file contains, how many variables, how many observations, what kind of experiment, what kind of groups and how many, so basically: getting an idea of the experimental design.
  
- 3) Cleaning the data: Usually the data is not yet in an analyzable form. Cleaning the data to a tidy dataframe, with consistent naming of variables e.g., normally takes a lot of time and is  the most crucial step in preparation for any analysis to come after.
+ 3) Cleaning the data: Usually the data is not yet in an analyzable form. Cleaning the data to a tidy data frame, with consistent naming of variables e.g., normally takes a lot of time and is  the most crucial step in preparation for any analysis to come after.
  
  4) Exploratory data analysis: In this step an initial set of graphical representations of the data are generated. It serves to identify trends, to get summarizing results of the data in a graph and to explore the data. This is a preparative step for the step hereafter.
  
- 5) Statistical inference: the __formal__ data analysis. The process of checking assumptions, relating the data to scientitific questions and hypotheses. The analysis uses statical methods, appropriate for the design of the data and the experiment. 
+ 5) Statistical inference: the __formal__ data analysis. The process of checking assumptions, relating the data to scientific questions and hypotheses. The analysis uses statistically methods, appropriate for the design of the data and the experiment. 
 
- 6) Reporting: The process of writing the analysis into a comprehensive report, according a set of rules, and compliant to the standard of the field of research. Preferable the report is written in such a way that reproduction of the whole of experiment + data analysis can be followed through by a peer, and reproduced if neccessary. 
+ 6) Reporting: The process of writing the analysis into a comprehensive report, according a set of rules, and compliant to the standard of the field of research. Preferable the report is written in such a way that reproduction of the whole of experiment + data analysis can be followed through by a peer, and reproduced if necessary. 
 
-An important tool in reproducible research in R is RMarkdon, in combination of knitr. The document that is in fromt of you is an Rmd file, an "RMarkdown" file. Markdown is a simple mark-up language that potentiates the use of simply coding for layouting documents. One of the most famous and widely used mark-up languages is HTML, which is broadly used for __marking up__ web pages. RMarkdown is an implementation of Markdown language in R. Together with the __knitr__ package, it is a powerful tool to bring the principle of __literate programming__ into practice. It is one of the most imporatant implementation tools for reproducible research in the R language.
+An important tool in reproducible research in R is RMarkdown, in combination of knitr. The document that is in front of you is an Rmd file, an "RMarkdown" file. Markdown is a simple mark-up language that potentiates the use of simply coding for layouting documents. One of the most famous and widely used mark-up languages is HTML, which is broadly used for __marking up__ web pages. RMarkdown is an implementation of Markdown language in R. Together with the __knitr__ package, it is a powerful tool to bring the principle of __literate programming__ into practice. It is one of the most imporatant implementation tools for reproducible research in the R language.
 
 For an eaxample of a full example of reproducible research, see: https://rpubs.com/maddocent/storm
 

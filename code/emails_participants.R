@@ -1,11 +1,12 @@
 
 root <- find_root_file(criterion = is_rstudio_project)
 library(xlsx)
+library(readr)
+
 
 ## get data
-participants <- read.xlsx(file = paste0(root,  
-                          "/data/participants_4_nov_intro_r.xlsx"),
-                          sheetIndex = 1)
+participants <- read_csv(file = paste0(root,  
+                          "/data/participants_4_nov_intro_r.csv"))
 
 
 ## generate email addresses
@@ -29,7 +30,7 @@ mail_list <- paste(participants$email, ";", sep = "")
 writeLines(mail_list, con = paste0(root, "/data/mail_list.txt"))
            
 ## mail directly from R
-install.packages("mailR")
+## install.packages("mailR")
 
            
            
