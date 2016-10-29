@@ -4,20 +4,22 @@ This is the workspace for the Heidelberglaan 7 R-Programming Workshop
 
 To get all the files needed for the workshop follow the steps below:
 
- -> Go to www.github.com
+ Follow these steps first before continuing
 
- -> Create a user name and pasword for yourself
+-> Go to www.github.com
 
- -> Log in to github
+-> Create a user name and password for yourself
 
- -> go to www.github.com/maddocent/ilc_r_workshop
+-> Log in to github
 
- -> Fork this repo to your own account
+-> go to www.github.com/maddocent/ilc_r_workshop
 
- -> Choose a new project (File -> New Project) in RStudio "Version Control"
+-> Fork this repo to your own account
 
- -> Paste the link to YOUR FORK of the repo in the "url" field, and press enter 
+-> Choose "File" -> "New Project" -> "Version Control"
 
- -> The files will appear in your project
+-> Paste the link to YOUR FORK of the repo in the "url" field, and press enter
+
+-> Fetching the files will start and the files will appear in your project
 
 Creative Commons: Marc A.T. Teunis, 2016

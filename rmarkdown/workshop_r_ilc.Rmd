@@ -5,28 +5,39 @@ date: '`r Sys.Date()`'
 output:
   html_document: default
   github_document: default
-  pdf_document: default
 ---
-### **__Important note: R is case-sensitive, meaning that it will matter whether you use capital or lower case, keep this in mind if you get a cryptic warning or error!__**
+
+Let's look a an R plot example  first before doing anything else:
+The code below will reproduce the circos plot in the presentation.
+
+```{r}
+## to call this plot run
+## this line without the 2 ##:
+
+## source("./code/circos_example.R")
+```
+
+### *_Important note: R is case-sensitive, meaning that it will matter whether you use capital or lower case, keep this in mind if you get a cryptic warning or error!_*
 
 # How to run the code in the tutorial below?
+
 This document contains code chunks that start with
 
 ` ```{r, .....options......} `
 
-## and end with
+and end with
 
 ` ``` `
 
-## These so called code chunks contain R code that does something: for example: calculate the mean of 100 random numbers between 0 and 50. Without running the code, can you guess what the mean will approximately be?
+These so called code chunks contain R code that does something: for example: calculate the mean of 100 random numbers between 0 and 50. Without running the code, can you guess what the mean will approximately be?
 
 ```{r}
 set.seed(seed = 10)
-numbers <- runif(100, min = 0, max = 20)
+numbers <- runif(100, min = 0, max = 50)
 mean_numbers <- mean(numbers)
 
 ```
-What happens if we would increase the number of random numbers? What value would we get for the mean?
+What happens if we would increase the number of random numbers? What value would we get for the mean? Give it a try!
 
 Run a code chucks as follows:
 place the cursor somewhere in a code chunk and between the 
@@ -46,17 +57,37 @@ You can also run a piece of code by selecting the code by dragging the cursor an
 
 `Cntrl` and `Enter` simultaneously.
 
-__**Try running the code chunck above to see if you guess of the mean was right. Now change the number of random numbers from 100 to 10000. What happens to the mean?**__
+_*Try running the code chunck above to see if your guess of the mean was right. Now change the number of random numbers from 100 to 10000. What happens to the mean?*_
 
 
 # Introduction
-This walk though is part of the workshop "An introduction to data analysis using R". The workshop is meant as an introduction to R and to be able to use R for data exploration on your own data, obtained in a research project.
+This walkthrough is part of the workshop "An introduction to data analysis using R". The workshop is meant as an introduction to R and to be able to use R for data exploration on your own data, obtained in a research project.
 
-There will be too much in this tutorial to be covered in whole during the workshop. The complete walk-though in this document covers many topic in R. It demonstrates how to run code, write functions, work with data-objects, load in data, clean and summarize data, make visualizations, work with "bigger" data sets and also work with biological data. Too much to cover in so little time, so I will make a selection.  
+There will be too much in this tutorial to be covered in whole during the workshop. The complete walkthough in this document covers many topic in R. It demonstrates how to run code, write functions, work with data-objects, load in data, clean and summarize data, make visualizations, work with "bigger" data sets and also work with biological data. Too much to cover in so little time, so I will make a selection.  
 
 At the end of the document you will get tips on how to proceed (with R if you like). A good start could be to repeat this tutorial in full and at your own pace, after that it will be up to you how you will move foRward. 
 
 # Getting Started
+## Setting up your laptop: For Windows Users
+
+Install Git for Windows if you have not do so already:
+https://git-scm.com/download/win
+
+Install extra R Build tools "Rtools"
+https://cran.r-project.org/bin/windows/Rtools/
+choose the most resent version
+
+Set up a local directory on you laptop: preferably "c:/r_workingdir" or something like this
+
+Changing the location where R will install packages. 
+If you are working on a corporate laptop (HU laptop) follow the steps below:
+ 1) Open control panel
+ 2) Locate "System"
+ 3) Choose
+
+
+
+
 ## Setting up a project
 RStudio has the function to create projects that hold all your files in one place. Here we will create a project and set-up it's structure.
 
@@ -80,8 +111,8 @@ To get all the files needed for the workshop follow the steps below:
 
  -> Fork this repo to your own account
 
- -> Choose a new project (File -> New Project) in RStudio "Version Control"
-
+ -> Choose "File" -> "New Project" -> "Version Control"
+ 
  -> Paste the link to YOUR FORK of the repo in the "url" field, and press enter 
 
  -> Fetching the files will start and the files will appear in your project
@@ -98,17 +129,18 @@ than load the package by executing:
 library(rprojroot)
 root <- find_root_file(criterion = is_rstudio_project)
 ```
+The above will result in the creation of an object in the _Global Environment_ named "root". This object referes to where the root of your project is residing on your computer. 
 
-## Knitr options and defining the root of the project
-```{r, knitr_setup}
+## Knitr options 
+```{r, knitr_setup, warning=FALSE, error=FALSE, message=FALSE}
 require("knitr") || utils::install.packages("knitr")
 library(knitr)
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE)
 knitr::opts_knit$set(root.dir = root)
 ```
 
 ## Installing required packages
-```{r, installing_packages}
+```{r, installing_packages, error=FALSE, message=FALSE, warning=FALSE}
 
 # load packages at startup
 
@@ -151,7 +183,7 @@ p_load(car,
 ```
 
 ## Project folders
-It is wise to always have a standardized way of storing your files. I do it according the folders below
+It is feasible to have a standardized way of structuring your project and storing your files. I do it according the folders below.
 
 ```{r, project_folders}
 
@@ -174,9 +206,9 @@ ifelse(!dir.exists(file.path(path)),
 # lapply will apply the function to the list of folders
 lapply(project_folders, mkdir)
 
-# if a folder not already in your project this will state "TRUE", and "FALSE" if the folder already exist. 
+# if a folder is not already in your project this will state "TRUE", and "FALSE" if the folder already exist. 
 
-## because you cloned the project from Github, the folders will already be there
+## because you cloned the project from Github, the folders (including)     will already be there
 
 ```
 
@@ -213,11 +245,9 @@ To load a package manually:
 
 Please note the difference in use of _"double-quotes"_ above.
 
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##################
 # Start Tutorial
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+##################
 
 # Shiny Apps
 Shiny is an open source application that can powerfully illustrate the use of R to generate visualizations. Here we look at an example on decision making in ants on two food sources. The sliders in the app are parameters specific for the food source. The graph shows the change in the number of ants visiting the food source.
@@ -258,13 +288,30 @@ In data science reproducible research is the possibility to reproduce every step
  
  4) Exploratory data analysis: In this step an initial set of graphical representations of the data are generated. It serves to identify trends, to get summarizing results of the data in a graph and to explore the data. This is a preparative step for the step hereafter.
  
- 5) Statistical inference: the __formal__ data analysis. The process of checking assumptions, relating the data to scientific questions and hypotheses. The analysis uses statistically methods, appropriate for the design of the data and the experiment. 
+ 5) Statistical inference: the _formal_ data analysis. The process of checking assumptions, relating the data to scientific questions and hypotheses. The analysis uses statistical methods, appropriate for the design of the data and the experiment. 
 
  6) Reporting: The process of writing the analysis into a comprehensive report, according a set of rules, and compliant to the standard of the field of research. Preferable the report is written in such a way that reproduction of the whole of experiment + data analysis can be followed through by a peer, and reproduced if necessary. 
 
-An important tool in reproducible research in R is RMarkdown, in combination of knitr. The document that is in front of you is an Rmd file, an "RMarkdown" file. Markdown is a simple mark-up language that potentiates the use of simply coding for layouting documents. One of the most famous and widely used mark-up languages is HTML, which is broadly used for __marking up__ web pages. RMarkdown is an implementation of Markdown language in R. Together with the __knitr__ package, it is a powerful tool to bring the principle of __literate programming__ into practice. It is one of the most imporatant implementation tools for reproducible research in the R language.
+An important tool in reproducible research in R are the "rmarkdown" and "knitr" packages. The document that is in front of you is an Rmd file, an "RMarkdown" file. Markdown is a simple mark-up language that potentiates the use of simply coding for layouting documents. One of the most famous and widely used mark-up languages is HTML, which is broadly used for _marking up__ web pages. RMarkdown is an implementation of Markdown language in R. Together with the _knitr_ package, it is a powerful tool to bring the principle of _literate programming_ into practice. It is one of the most important implementation tools for reproducible research in the R language.
 
-For an eaxample of a full example of reproducible research, see: https://rpubs.com/maddocent/storm
+For a full example of reproducible research, see: https://rpubs.com/maddocent/storm
+
+# Statistics and R
+This workshop does not cover statistical applications of R. Allbeit that we will look at an example of a linear regression later on. Nowadays R is a versatile language and can be used for various applications, but it was originally designed as a language for performing statistical analyses. This is why very many statistical applcations are available for R. To start learning about statisics and R, I can highly recommend the book "Discovering Statistics Using R" by Dr. Andy Field: https://uk.sagepub.com/en-gb/eur/discovering-statistics-using-r/book236067%20
+
+R is also a very useful tool in teaching students about statistics. The way that R can be used interactively in explaning difficult concepts like distributions, assumptions, expectations, probability and power and variance can be really helpful in the classroom.
+
+For more on learning R in the context of statistics: start e.g. with:
+
+http://www.statsteachr.org/ or
+
+https://www.coursera.org/learn/statistical-inference/home/welcome or
+
+https://www.youtube.com/watch?v=ACWuV16tdhY&index=21&list=PLqzoL9-eJTNBDdKgJgJzaQcY6OXmsXAHU and
+
+https://www.youtube.com/watch?v=kvmSAXhX9Hs&index=29&list=PLqzoL9-eJTNBDdKgJgJzaQcY6OXmsXAHU 
+
+and the rest of Mike Marin's lectures, that are a really great way to start learning R.
 
 # Basic topics for working with R                        
 
@@ -275,19 +322,19 @@ http://cran.r-project.org/web/packages/available_packages_by_date.html
 
 
 ### Biological Packages
-For Biological application go to www.bioconductor.org
+For Biological application go to http://www.bioconductor.org
 
 Installing Bioconductor packages is easy with `pacman::p_load` function
 
 ```{r, eval=FALSE}
 
 library(pacman)
-## a CRAN package to analyze DNA and protein sequences 
-pacman::p_load(seqinr)
+## a CRAN package to analyze affymetrix expression data   
+pacman::p_load(affy)
 
-## a package that handles biological sequences
-library(seqinr)
-help("seqinr")
+## loading affy package and the vignettes pages of this package
+library(affy)
+browseVignettes("affy")
 
 ## and a BIOCONDUCTOR package to analyze LCMS data
 pacman::p_load(xcms)
@@ -297,8 +344,7 @@ browseVignettes("xcms")
 
 ```
 
-Vignettes are long explanations and demo's of a package. Commonly a vignette contains examples and a workflow that shows how the package can be used and which (research) questions can be adressed with the functions and datasets in the package. It usually is a good place to start for examples. It also shows the so-called dependence of a package: it explains which other packages you would need and how the data should look to be able to work with the package the vignette belongs to. 
-
+Vignettes are long explanations and demos of a package. Commonly, a vignette contains examples and a workflow that shows how the package can be used and which (research) questions can be adressed with the functions and datasets in the package. It usually is a good place to start for examples. It also shows the so-called dependence of a package: it explains which other packages you would need and how the data should look to be able to work with the package the vignette belongs to. 
 
 ### Getting Help for R functions and packages
 ```{r, eval=FALSE}
@@ -486,7 +532,7 @@ root <- find_root_file(criterion = is_rstudio_project)
 
 ```
 
-It is an effective way to clear all the items in the Global Environment, but is is not very friendly to use this in code you share with others: can you think of why?
+*_The above is an effective way to clear all the items in the Global Environment, but is is not very friendly to use this in code you share with others: can you think of why?_*
 
 # Data Structures: Lists and Dataframes
 
@@ -502,7 +548,7 @@ The dataframe and the list are the most widely used datastructures when consider
 
 lst <-list(name="Fred", wife="Mary", no.children=3, child_ages=c(4,7,9))
 lst # Lst is a list with 4 components
-str(lst) # display dtructure of R object
+str(lst) # display structure of lst
 
 ``` 
 
@@ -614,23 +660,28 @@ mean(skin_noNA$`Genotype B`)
 
 ``` 
 
-## Example: create data frame with 3 variabels gender, 
-smoke, age category (<15, 15-30, >30)
+## Smoking example with multiple variables
+Create data frame with 4 variables:
+gender, 
+smoke, 
+age,
+weigth
+
 ```{r}
 
 set.seed(6000) # set it at the same number, then we will all produce the same output
 gender<-c(sample(c(1,2), size=1000, replace=TRUE))
 smoke<-c(sample(c(1,2), size=1000, replace=TRUE))
 age<-c(sample(c(1,2,3), size=1000, replace=TRUE))
-weight<-round(rnorm(1000, mean=65, sd=10),1); weight
-smoking <- data.frame(cbind(gender, smoke, age, weight)); smoking
+weight<-round(rnorm(1000, mean=65, sd=10),1)
+smoking <- data.frame(cbind(gender, smoke, age, weight))
 
-head(smoking)
-smoking[1:10,]
+head(smoking, 5)
+smoking[1:5,]
 
 ``` 
 
-### replace numbers by characters
+### replace numbers by descriptive labels 
 ```{r}
 
 # replace numbers by characters
@@ -657,25 +708,24 @@ smoking_age_gender <- smoking %>% select(genderf, agecf)
 For summarizing data there are many ways in R (as is the case with many operations). I find the dplyr way the most intuitive. Using dplyr has the advantage that you can easily built on existing function and examples, because the code is faily easy to understand.
 
 One thing that makes dplyr great is that it works with the "%>%" symbol. Which is in programming jargon also called the "pipe" symbol.
-
-The pipe symbol takes the previous result of an operation and put it in the next
-
+The pipe symbol takes the previous result of an operation and put it in the next.
 The pipe symbol can replace the use of annoying round brackets: or "(parentheses)" 
 
-Let's look at a simple example:
+Let's look at quite a simple example:
 ```{r}
 
-### IMPORTANT: RUN ALL THE LINES AT ONCE INCLUDING THE SET.SEET OPTION, BECAUSE OF REPRODUCIBILITY. (Cntrl + Shift + Enter)
+library(dplyr)
+### IMPORTANT: RUN ALL THE LINES BELOW AT ONCE INCLUDING THE SET.SEET OPTION, BECAUSE OF REPRODUCIBILITY. (Cntrl + Shift + Enter)
 
 
-## If we want to calculate the sum, of the square root of the mean, of two nummeric vectors we could do:
+## If we want to calculate the sum, of the square root of the mean, of two nummeric vectors (each of length = 1000) we could do:
 
 set.seed(12345)    
-zzz <- mean((sqrt(mean(x <- rnorm(10000, mean = 34, sd = 2))))) +
-mean((sqrt(mean(y <- rnorm(10000, mean = 23, sd = 4)))))
+zzz <- sqrt(mean(x <- rnorm(10000, mean = 34, sd = 2))) +
+sqrt(mean(y <- rnorm(10000, mean = 23, sd = 4)))
 zzz
 
-## the above is alomost impossible to read because of all the round brackets, note the closing brackets: 5 of them!!
+## the above is almost impossible to read because of all the round brackets, note the closing brackets: 3 of them!!
 
 
 ## let's try the dplyr way with the %>% (pipe) operator
@@ -689,9 +739,9 @@ zzz == qqq
 
 ```
 
-The dplyr way is a lot better is it not? Do you get what the above (dplyr-way) rules do?
+The dplyr way is a lot better is it not? Do you get what the above (dplyr-way) lines do?
 
- 1) the result of the fist vector (1000 random numbers, with mean of 34 and a sd of 2 is piped into the function mean, which calculates the mean of these 1000 numbers
+ 1) the result of the fist vector (1000 random numbers, with mean of 34 and a sd of 2 is piped into the function mean, which calculates the mean of these 1000 numbers (which will be around 34)
  
  2) From that the square root is taken by piping the mean in the function sqrt()
  
@@ -699,7 +749,7 @@ The dplyr way is a lot better is it not? Do you get what the above (dplyr-way) r
 
  4) The result is qqq
  
- 5) Is qqq equal to zzz, which we calculated the "old-fashioned" mathematical way: YES! 
+ 5) Is qqq equal to zzz, which we calculated the "old-fashioned" mathematical way? YES! 
 
 ## Let's apply the above to our smoking dataset
 
@@ -764,19 +814,24 @@ plot(faithful$eruptions, faithful$waiting)
 ## Grammar of Graphics (ggplot2 package)
 ggplot2 is a data visualization package for the statistical programming language R. Created by Hadley Wickham in 2005, ggplot2 is an implementation of Leland Wilkinson's Grammar of Graphics—a general scheme for data visualization which breaks up graphs into semantic components such as scales and layers. ggplot2 can serve as a replacement for the base graphics in R and contains a number of defaults for web and print display of common scales. Since 2005, ggplot2 has grown in use to become one of the most popular R packages. It is licensed under GNU GPL v2.[from Wikipedia, September, 2016]
 
-### **The ggplot2 package is very very versatile and can not be demonstrated to it's full abilities during this short workshop. Here we are barely scratching the surface. If you want to learn more about the power of R, you must start with exploring the posibilities of ggplot2, it is the future of data visualization.**
+### **The ggplot2 package is very very versatile and can not be demonstrated to it's full abilities during this short workshop. Here we are barely scratching the ggplot2 surface. If you want to learn more about the power of R, you must start with exploring the posibilities of ggplot2, it is the future of data visualization.**
 
-A good place to start learning more Grammar of Graphics:
+ggplot2 is also very good for creating heat-mas, which are very informative for visualization of large-scale and high deminensional data, e.g. obtained from genomics or proteomics experiments.
+
+A good place to start learning more on The Grammar of Graphics:
 http://www.cookbook-r.com/Graphs/
 
+We illustrate the workings of ggplot with two demo data-sets: 
 
-We illustrate the workings of ggplot with two demo data-sets: "TootGrowth" and 
-"Household Power Consumption"   
+ 1) "TootGrowth" 
+ 2) "Household Power Consumption"   
+
 ```{r}
-data("ToothGrowth")
+tg <- datasets::ToothGrowth
+head(tg)
 library(ggplot2)
-g <- ggplot(data = ToothGrowth, aes(len))
-g + geom_histogram() 
+g <- ggplot(data = tg, aes(len))
+g + geom_histogram(bins = 25) 
 ``` 
 
 The graph shows a histogram of the Toothgrowth data (len = length teeth of Guinea pigs, treated with two different vitamine C food-sources).
@@ -786,14 +841,14 @@ This looks nice, but what if we would like to add a title to the graph: Simple w
 `+ ggtitle("ToothGrowth")`
 
 ```{r}
-g <- ggplot(data = ToothGrowth, aes(len))
+g <- ggplot(data = tg, aes(len))
 g + geom_histogram(bins = 30) + ggtitle("ToothGrowth")
 ```
 
 Let's see if we can make a more meaningfull graph, that shows something about the result of the treatment, on teeth growth.
 
 ```{r}
-g <- ggplot(data = ToothGrowth, aes(x = dose, y = len, group = supp, colour = supp))
+g <- ggplot(data = tg, aes(x = dose, y = len, group = supp, colour = supp))
 g + geom_point() + ggtitle("ToothGrowth")
 ```
 
@@ -804,29 +859,25 @@ Let's try a panel plot:
 str(ToothGrowth)
 
 
-g <- ggplot(data = ToothGrowth, aes(x = dose, y = len, group = 1))
+g <- ggplot(data = tg, aes(x = dose, y = len, group = 1))
 g + geom_point() + 
   facet_wrap(facets = "supp") + 
   geom_smooth() + ggtitle("ToothGrowth")
 
 ## ignore the warnings if you get them...
-
 ## clean up the workspace again
-
-
-
 
 ```
 
-He, that's nice, now we have a panelplot, with in each panel a smoother line and data points, for each tratment. Which vitamine C supplement has the most potent effect on the growth of the teeth of the tested Guinea pigs?
+Hey, that's nice, now we have a panelplot, with in each panel a smoother line and data points, for each tratment. Which vitamine C supplement (OJ or VC) has the most potent effect on the growth of the teeth of the tested Guinea pigs?
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-First, clean up the workspace again.
+## First, clean up the workspace again.
 ```{r, Packages}
 
 rm(list=ls())
 root <- find_root_file(criterion = is_rstudio_project)
+
+
 
 ## Note: never use this in code that is meant for others!!!
 
@@ -834,12 +885,12 @@ root <- find_root_file(criterion = is_rstudio_project)
 
 # GRAMMAR OF GRAPHICS DEMO ON A BIGGER DATASET
 
-# Want to work on a bigger dataset? I guessed you would want to do so, so I prepared a bit on "big(ger) data below" 
+## Want to work on a bigger dataset? I guessed you would want to do so, so I prepared a bit on "big(ger) data below" 
 
 I have prepared a script that will analyze a big dataset >2 million datapoints on power consumption by US households. The script is called "power_households.R". The script handles a number of steps:
  1) System settings and packages are handeled 
  
- 2) Getting the data, the dat is downloaded directly from the web
+ 2) Getting the data, the data is downloaded directly from the web
  
  3) The data is cleaned up and subsets are selected (only data from 48 hrs of power consumption are included)
  
@@ -993,14 +1044,12 @@ plot6
 panel <- plot_grid(plot2, plot5, plot3, plot6,
           labels=c("A", "B", "C", "D"), ncol = 2)
 
-png(filename = paste0(root, "/images/panel_energy.png"),
-    res = 300, height = 20, width = 25, units = "cm")
 panel
-dev.off()
+
 
 ```
 
-The above is meant as a demo for the strength of the Grammar of Graphics lingo. There is a lot more to ggplot2 than can be shown in this short demo. As mentioned above, a good place to start learning ggplot2 is 
+The above is meant as a demo for the strength of the Grammar of Graphics lingo. There is a lot more to ggplot2 than can be shown in this short demo. As mentioned above, a good place to start learning ggplot2 is: 
 
 http://www.cookbook-r.com/Graphs/.
 
@@ -1056,7 +1105,6 @@ browseVignettes("IRanges")
 
 
 ### R code from vignette source 'Biostrings2Classes.Rnw'
-### Encoding: ISO8859-1
 
 Create a BString class object
 ```{r}
@@ -1183,10 +1231,9 @@ as(d, "Views")[[1]]
 ```
 
 
-# IRanages package to use views and strings for biological sequences
+# IRanges package to use views and strings for biological sequences
 
 ### R code from vignette source 'IRangesOverview.Rnw'
-### Encoding: ISO8859-1
 ```{r}
 
 p_load(IRanges)
