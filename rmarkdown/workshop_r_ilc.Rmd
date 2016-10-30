@@ -1197,11 +1197,10 @@ protein
 ```                  
 Each triplet codes for one amino acid. 
 
-Mind the ambiguous amino acids indicated by *.
-
+_Notice the ambiguous amino acids indicated by *._
 
 ## Views on strings
-Views are a way to descibe the subsequences of a longer sequence. 
+IRanges Views are a way to describe the subsequences of a longer sequence. 
 ```{r}
 
 v4 <- Views(dd2, start=3:0, end=5:8)
@@ -1238,22 +1237,26 @@ as(d, "Views")[[1]]
 
 p_load(IRanges)
 library(IRanges)
+library(Biostrings)
 ```
 
-## Generating some dummy sequences
+## Generating dummy DNA sequence
 
-Let's look at Rle. What is this for an object. Assume you have a DNA sequence:
+### Encoding long strings and sequences
+The storage of large sequences in a friendly, accessible and small format is feasibe for the very long sequences of DNA that we use in Biology. When ragarding a full genome we can easily have sequences over 50 milion bases. Considering the longest chomosome of the human (chromosome 1) is over 200 milion base pairs long, you can appriciate the neccessity to store these strings of nucleotides in a computational-and-storage-friendle format. In R this format is encoded by the Rle class of objects. 
+
+Let's look at Rle. Assume you have a short DNA sequence:
 AAATTGTGTGCCCTTT
 
 This sequence can be converted to a DNAString
 ```{r}
 seq_demo <- DNAString("AAATTGTGTGCCCTTT")
 seq_demo
-Views(seq_demo)
-
 
 ```
 
+
+## 
 let's see what happens if we convert this sequence to an Rle object
 ```{r}
 
@@ -1264,17 +1267,45 @@ seq_rle
 
 ```
 
-Hey!, That is clever! So we can describe a DNAString as a  collection of Lengths and Values. So the fist three A nucleotides can be described as
+Hey!, That is clever! So we can describe a DNAString as a  collection of Lengths and Values. The fist three A nucleotides in this sequence can be described as
 Lengths = 3, Value = A, the consecutive two T nucleotides can be described by Lengths = 2, Value = T, and so on...
 
-This encoding for DNA sequences, or other very long sequences, is used e.g. in sequencing files that contain the genomes. It is a way to condense the information and to prevent writing very very long sequences in a file, that are hard to work with. The sequence encoded in this way is also more easily accessible.
+This encoding for DNA sequences, or other very long sequences, is used e.g. in sequencing files that contain the genomes. It is a way to condense the information and to prevent writing very very long sequences in a file, that are hard to work with. The sequence encoded in this way is also more easily accessible by the computer and this encoding will reduce computation time.
 
-Let's create a sequence
+Let's create a longer sequence and  some shorter ones that we want to match to the longer sequence. 
+The shorter sequences ar stored in a dictionary. This disctionary can contain only sequence that are of equal lenth. Although, there are ways to do multiple matchings with sequences of unequal length we will not go into detail on this here.   
+
 
 ```{r}
-###################################################
+## Our subject sequence (the longer sequence)
+subject_seq <- DNAString(c("ATTTGTTGATCATCATCATGTTTTATGTTTGTGTGTATTATTATTATTTCCGCGCGTA"))
+
+## the dictionary with a few three-base long sequences
+dictionary <- PDict(c("ATC", "ATG", "ATT", "TAT", "TTA"))
+
+## the actual matching of the dictionary against the subject DNA sequence
+match <- Biostrings::matchPDict(pdict = dictionary, subject = subject_seq)
+names_patterns <- c("ATC", "ATG", "ATT", "TAT", "TTA")
+
+## the names of the pattern are added to the match object
+match@NAMES <- c(names_patterns)
+ str(match)
+ match@NAMES
+
+ ## contructing an IRangesList from match
+ir <- lapply(match, IRanges::IRanges)
+ir_list <- IRanges::IRangesList(ir)
+
+head(ir_list, 2)
+
+```
+
+Although with the Views you could figure out for each pattern in the dictionary where the match to the subject is located and how many times it is represented in the subject sequence, we could use a plot here to see the details in an overview.
+Let's make a plot!
+
+The code below is rather complicated, do not worry if you do not understand, you will understand the end-result, anyway.
+```{r}
 ### code chunk number 31: plotRanges
-###################################################
 IRanges_plot <- function(IRanges_object, sep=0.5, height=1,
                          set_breaks=TRUE, labcol="grey",
 												names=NULL, cov=FALSE, clear=FALSE,
@@ -1345,22 +1376,10 @@ IRanges_plot <- function(IRanges_object, sep=0.5, height=1,
 	p
 }
 
-
-dict <- PDict(c("ATC", "ATG", "ATT", "TAT", "TTA"))
-subj <- DNAString(c("ATTTGTTGATCATCATCATGTTTTATGTTTGTGTGTATTATTATTATTTCCGCGCGTA"))
-match <- Biostrings::matchPDict(dict, subj)
-names_patterns <- c("ATC", "ATG", "ATT", "TAT", "TTA")
-match@NAMES <- c(names_patterns)
- str(match)
- match@NAMES
-
- ## contructing an IRangesList from match
-ir <- lapply(match, IRanges::IRanges)
-ir_list <- IRanges::IRangesList(ir)
-
 ## Calling the plot
 plot_iranges <- IRanges_plot(unlist(ir_list))
 plot_iranges
+
 
 ```
 
@@ -1395,29 +1414,27 @@ coverplot <- coverage_plot(cx = cov3R,
 
 ```
 
+The above matching, Views, plotting an IRangesList and coverage are cocepts that play an important role in understanding the methodology of sequencing and how sequence data can be interpreted. If you want to learn more about analysis of sequence data in R, take a look at the BIOCONDUCTOR workflow below. 
 
 # Sequencing workflow
 Commonly used workflows can be downloaded from the the BIOCONDUCTOR website. Workflows are installed as packages and demonstrate a data workflow for commond experiments and data types in Life Sciences and Chmeistry. Examples of workflows can be found at:   
 
-To start with a Biological workflow on sewquencing data:
-```{r}
+## To start with a Biological workflow on sequencing data:
+```{r, eval=FALSE}
 
-## BiocInstaller::biocValid()
+BiocInstaller::biocValid()
 
 ## Full genome sequences for Homo sapiens (Human) as provided by UCSC (hg19, Feb. 2009) and stored in Biostrings objects.
 
-## url <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz")
+url <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz")
 
-## download(url = url, destfile = "./BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz")
+download.file(url = url, destfile = paste0(root, "/data/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz"))
 
-## source("http://bioconductor.org/biocLite.R")
-
-## ?biocLite
+source("http://bioconductor.org/biocLite.R")
 
 ## installing Human genome from downloaded source file:
 
-install.packages("BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz", repo = NULL, 
-                 type = "source")
+install.packages("BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz", repo = NULL, type = "source")
 
 source("http://bioconductor.org/workflows.R")
 workflowInstall("sequencing", dependencies = TRUE)
@@ -1425,11 +1442,47 @@ browseVignettes("sequencing")
 
 ```
 
-# Want to learn more R?
+see also http://bioconductor.org/packages/release/bioc/html/GenomicRanges.html for learning annotation, gene id's, pathway analysis and much more:
+
+## To start working on pathway analysis with KEGG and Bioreactome
+```{r}
+
+url_kegg_package <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/KEGG.db_3.2.3.tar.gz")
+
+dir.create(paste0(root, "/tar_gz"))
+
+download.file(url = url_kegg_package, 
+              destfile = paste0(root, "/tar_gz/KEGG.db_3.2.3.tar.gz"))
+
+install.packages(paste0(root, "/tar_gz/KEGG.db_3.2.3.tar.gz"), repos = NULL, type = "source")
+
+p_load(KEGGREST)
+
+url_reactome_db <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/reactome.db_1.58.0.tar.gz")
+
+download.file(url = url_reactome_db,
+              destfile = paste0(root, "/tar_gz/reactome.db_1.58.0.tar.gz"))
+
+install.packages(paste0(root, "/tar_gz/reactome.db_1.58.0.tar.gz"), repos = NULL, type = "source")
+
+## An example with KEGG
+## from: http://bioconductor.org/packages/release/bioc/vignettes/GenomicRanges/inst/doc/GenomicRangesHOWTOs.R
+
+library(KEGG.db)
+pathways <- toTable(KEGGPATHNAME2ID)
+pathways[grepl("cancer", pathways$path_name, fixed=TRUE),] 
+
+## For the complete how-to: see the link above.
+
+```
+
+# Want to learn more about R and BIOCONDUCTOR?
+
+Visit the BIOCONDUCTOR workflows: https://www.bioconductor.org/help/workflows/ 
 
 To learn R interactively visit http://swirlstats.com/
 
-There is a enormous amount of information on R freely available on the web. I find it realy helpful to use youtube tutorials, online tutorials, vignettes and workflows (BIOCONDUCTOR.org). Feel free to contact me for questions on which resource is best. 
+There is a enormous amount of information on R freely available on the web. I find it realy helpful to use youtube tutorials, online tutorials, vignettes and workflows (BIOCONDUCTOR.org). Feel free to contact me for questions on which resource is best to start with or to advance your skills. 
 
 For statistics, which was not covered in this workshop: The book by Andy Field "Discovering Statistics Using R" kept me awake at night!! So it is a good place to start (if you have ambitions to becoming an insomniac).
 
