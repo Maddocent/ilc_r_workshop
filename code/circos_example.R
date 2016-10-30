@@ -1,5 +1,8 @@
-install.packages("circlize", dependencies = TRUE)
 
+## installing and loading required packages
+require("stats") || utils::install.packages("stats")
+library(stats)
+require("circlize") || utils::install.packages("circlize")
 library(circlize) 
 
 # dend: as dendrogram object, usually returned by hclust and as.dendrogram

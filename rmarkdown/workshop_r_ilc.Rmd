@@ -11,11 +11,17 @@ Let's look a an R plot example  first before doing anything else:
 The code below will reproduce the circos plot in the presentation.
 
 ```{r}
+
 ## to call this plot run
 ## this line without the 2 ##:
 
 ## source("./code/circos_example.R")
 ```
+
+# You can make slides with R:
+
+open the file "./circos/index.html"
+To see the code: inspect "./cicos/index.Rmd"
 
 ### *_Important note: R is case-sensitive, meaning that it will matter whether you use capital or lower case, keep this in mind if you get a cryptic warning or error!_*
 
@@ -122,10 +128,8 @@ Did it work? Please let me know if not.
 ## System settings and project preparations
 The root folder of a project is the folder where all the files of the project live. It is important to tell R what this root directory is. "rprojroot" is a package that handles project root folder settings. Run the following code to install the first package needed for this tutorial
 
-`install.packages("rprojroot")`
-
-than load the package by executing:
 ```{r, root_1}
+require("rprojroot") || utils::install.packages("rprojroot")
 library(rprojroot)
 root <- find_root_file(criterion = is_rstudio_project)
 ```
@@ -143,10 +147,6 @@ knitr::opts_knit$set(root.dir = root)
 ```{r, installing_packages, error=FALSE, message=FALSE, warning=FALSE}
 
 # load packages at startup
-
-# install packrat if not installed
-require("packrat") || utils::install.packages("packrat")
-library(packrat)
 
 # installs "pacman" if not installed
 require("pacman") || utils::install.packages("pacman")
