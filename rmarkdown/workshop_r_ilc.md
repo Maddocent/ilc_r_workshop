@@ -1,26 +1,51 @@
 An introduction to data analysis using R
 ================
 Marc A.T. Teunis
-2016-10-24
+2016-11-02
 
-### ****Important note: R is case-sensitive, meaning that it will matter whether you use capital or lower case, keep this in mind if you get a cryptic warning or error!****
+``` r
+require("rprojroot") || utils::install.packages("rprojroot")
+```
+
+    ## Loading required package: rprojroot
+
+    ## [1] TRUE
+
+``` r
+library(rprojroot)
+root <- find_root_file(criterion = is_rstudio_project)
+```
+
+Let's look a an R plot example first before doing anything else: The code below will reproduce the circos plot in the presentation.
+
+``` r
+## to call this plot run
+## this line without the 2 ##:
+source(paste0(root, "/code/circos_example.R"))
+```
+
+### **Important note: R is case-sensitive, meaning that it will matter whether you use capital or lower case, keep this in mind if you get a cryptic warning or error!**
 
 How to run the code in the tutorial below?
 ==========================================
 
-This document contains code chunks that look like
+This document contains code chunks that start with
+
+```` ```{r, .....options......} ````
+
+and end with
+
+```` ``` ````
+
+These so called code chunks contain R code that does something: for example: calculate the mean of 100 random numbers between 0 and 50. Without running the code, can you guess what the mean will approximately be?
 
 ``` r
-## and end with
-
-## These code chunks contain R code that does something: for example: calculate the mean of 100 random numbers between 0 and 50. Without running the code, can you guess what the mean will approximately be?
-
 set.seed(seed = 10)
-numbers <- runif(100, min = 0, max = 20)
+numbers <- runif(100, min = 0, max = 50)
 mean_numbers <- mean(numbers)
 ```
 
-What happens if we would increase the number of random numbers? What value would we get for the mean?
+What happens if we would increase the number of random numbers? What value would we get for the mean? Give it a try!
 
 Run a code chucks as follows: place the cursor somewhere in a code chunk and between the ```` ```{r} ```` and the ```` ``` ```` and press the keys:
 
@@ -36,19 +61,30 @@ You can also run a piece of code by selecting the code by dragging the cursor an
 
 `Cntrl` and `Enter` simultaneously.
 
-****Try running the code chunck above to see if you guess of the mean was right. Now change the number of random numbers from 100 to 10000. What happens to the mean?****
+**Try running the code chunck above to see if your guess of the mean was right. Now change the number of random numbers from 100 to 10000. What happens to the mean?**
 
 Introduction
 ============
 
-This walk though is part of the workshop "An introduction to data analysis using R". The workshop is meant as an introduction to R and to be able to use R for data exploration on your own data, obtained in a research project.
+This walkthrough is part of the workshop "An introduction to data analysis using R". The workshop is meant as an introduction to R and to be able to use R for data exploration on your own data, obtained in a research project.
 
-There will be too much in this tutorial to be covered in whole during the workshop. The complete walk-though in this document covers many topic in R. It demonstrates how to run code, write functions, work with data-objects, load in data, clean and summarize data, make visualizations, work with "bigger" data sets and also work with biological data. Too much to cover in so little time, so I will make a selection.
+There will be too much in this tutorial to be covered in whole during the workshop. The complete walkthough in this document covers many topic in R. It demonstrates how to run code, write functions, work with data-objects, load in data, clean and summarize data, make visualizations, work with "bigger" data sets and also work with biological data. Too much to cover in so little time, so I will make a selection.
 
 At the end of the document you will get tips on how to proceed (with R if you like). A good start could be to repeat this tutorial in full and at your own pace, after that it will be up to you how you will move foRward.
 
 Getting Started
 ===============
+
+Setting up your laptop: For Windows Users
+-----------------------------------------
+
+Install Git for Windows if you have not do so already: <https://git-scm.com/download/win>
+
+Install extra R Build tools "Rtools" <https://cran.r-project.org/bin/windows/Rtools/> choose the most resent version
+
+Set up a local directory on you laptop: preferably "c:/r\_workingdir" or something like this
+
+Changing the location where R will install packages. If you are working on a corporate laptop (HU laptop) follow the steps below: 1) Open control panel 2) Locate "System" 3) Choose
 
 Setting up a project
 --------------------
@@ -75,7 +111,7 @@ To get all the files needed for the workshop follow the steps below:
 
 -&gt; Fork this repo to your own account
 
--&gt; Choose a new project (File -&gt; New Project) in RStudio "Version Control"
+-&gt; Choose "File" -&gt; "New Project" -&gt; "Version Control"
 
 -&gt; Paste the link to YOUR FORK of the repo in the "url" field, and press enter
 
@@ -88,29 +124,20 @@ System settings and project preparations
 
 The root folder of a project is the folder where all the files of the project live. It is important to tell R what this root directory is. "rprojroot" is a package that handles project root folder settings. Run the following code to install the first package needed for this tutorial
 
-`install.packages("rprojroot")`
+The above will result in the creation of an object in the *Global Environment* named "root". This object referes to where the root of your project is residing on your computer.
 
-than load the package by executing:
-
-``` r
-library(rprojroot)
-root <- find_root_file(criterion = is_rstudio_project)
-```
-
-Knitr options and defining the root of the project
---------------------------------------------------
+Knitr options
+-------------
 
 ``` r
 require("knitr") || utils::install.packages("knitr")
 ```
 
-    ## Loading required package: knitr
-
     ## [1] TRUE
 
 ``` r
 library(knitr)
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE)
 knitr::opts_knit$set(root.dir = root)
 ```
 
@@ -120,22 +147,9 @@ Installing required packages
 ``` r
 # load packages at startup
 
-# install packrat if not installed
-require("packrat") || utils::install.packages("packrat")
-```
-
-    ## Loading required package: packrat
-
-    ## [1] TRUE
-
-``` r
-library(packrat)
-
 # installs "pacman" if not installed
 require("pacman") || utils::install.packages("pacman")
 ```
-
-    ## Loading required package: pacman
 
     ## [1] TRUE
 
@@ -144,12 +158,6 @@ library(pacman)
 
 require("latticeExtra") || utils::install.packages("latticeExtra")
 ```
-
-    ## Loading required package: latticeExtra
-
-    ## Loading required package: lattice
-
-    ## Loading required package: RColorBrewer
 
     ## [1] TRUE
 
@@ -178,13 +186,15 @@ p_load(car,
        IRanges,
        S4Vectors,
        lattice,
-       rmarkdown)
+       rmarkdown,
+       GenomicRanges,
+       BSgenome)
 ```
 
 Project folders
 ---------------
 
-It is wise to always have a standardized way of storing your files. I do it according the folders below
+It is feasible to have a standardized way of structuring your project and storing your files. I do it according the folders below.
 
 ``` r
 project_folders <- as.list(paste(root, 
@@ -199,7 +209,7 @@ project_folders <- as.list(paste(root,
 project_folders[[1]]
 ```
 
-    ## [1] "C:/RWorkingDir/RProjects/ilc_r_workshop/code"
+    ## [1] "/Users/raypieters/ilc_r_workshop/code"
 
 ``` r
 mkdir <- function(path){
@@ -209,24 +219,6 @@ ifelse(!dir.exists(file.path(path)),
 # lapply will apply the function to the list of folders
 lapply(project_folders, mkdir)
 ```
-
-    ## Warning in dir.create(file.path(path)): 'C:\RWorkingDir\RProjects
-    ## \ilc_r_workshop\code' already exists
-
-    ## Warning in dir.create(file.path(path)): 'C:\RWorkingDir\RProjects
-    ## \ilc_r_workshop\images' already exists
-
-    ## Warning in dir.create(file.path(path)): 'C:\RWorkingDir\RProjects
-    ## \ilc_r_workshop\output' already exists
-
-    ## Warning in dir.create(file.path(path)): 'C:\RWorkingDir\RProjects
-    ## \ilc_r_workshop\data' already exists
-
-    ## Warning in dir.create(file.path(path)): 'C:\RWorkingDir\RProjects
-    ## \ilc_r_workshop\documentation' already exists
-
-    ## Warning in dir.create(file.path(path)): 'C:\RWorkingDir\RProjects
-    ## \ilc_r_workshop\rmarkdown' already exists
 
     ## [[1]]
     ## [1] FALSE
@@ -247,9 +239,9 @@ lapply(project_folders, mkdir)
     ## [1] FALSE
 
 ``` r
-# if a folder not already in your project this will state "TRUE", and "FALSE" if the folder already exist. 
+# if a folder is not already in your project this will state "TRUE", and "FALSE" if the folder already exist. 
 
-## because you cloned the project from Github, the folders will already be there
+## because you cloned the project from Github, the folders (including)     will already be there
 ```
 
 ### My first README.txt file
@@ -289,7 +281,12 @@ To load a package manually:
 
 Please note the difference in use of *"double-quotes"* above.
 
-    # Start Tutorial
+################## 
+
+Start Tutorial
+==============
+
+################## 
 
 Shiny Apps
 ==========
@@ -307,8 +304,6 @@ library(teachR)
 library(deSolve)
 
 run_app("ant_collective_decision")
- 
-install.packages()
 ```
 
 There are many, many more examples on nice shiny apps that can illustrate e.g. complex mathematical or statistical models. See <HTTP://shiny.rstudio.com/> See e.g. the example on different chemical educational shiny apps: <HTTP://dpuadweb.depauw.edu/harvey_web/shiny.html>
@@ -328,13 +323,32 @@ In data science reproducible research is the possibility to reproduce every step
 
 4.  Exploratory data analysis: In this step an initial set of graphical representations of the data are generated. It serves to identify trends, to get summarizing results of the data in a graph and to explore the data. This is a preparative step for the step hereafter.
 
-5.  Statistical inference: the **formal** data analysis. The process of checking assumptions, relating the data to scientific questions and hypotheses. The analysis uses statistically methods, appropriate for the design of the data and the experiment.
+5.  Statistical inference: the *formal* data analysis. The process of checking assumptions, relating the data to scientific questions and hypotheses. The analysis uses statistical methods, appropriate for the design of the data and the experiment.
 
 6.  Reporting: The process of writing the analysis into a comprehensive report, according a set of rules, and compliant to the standard of the field of research. Preferable the report is written in such a way that reproduction of the whole of experiment + data analysis can be followed through by a peer, and reproduced if necessary.
 
-An important tool in reproducible research in R is RMarkdown, in combination of knitr. The document that is in front of you is an Rmd file, an "RMarkdown" file. Markdown is a simple mark-up language that potentiates the use of simply coding for layouting documents. One of the most famous and widely used mark-up languages is HTML, which is broadly used for **marking up** web pages. RMarkdown is an implementation of Markdown language in R. Together with the **knitr** package, it is a powerful tool to bring the principle of **literate programming** into practice. It is one of the most imporatant implementation tools for reproducible research in the R language.
+An important tool in reproducible research in R are the "rmarkdown" and "knitr" packages. The document that is in front of you is an Rmd file, an "RMarkdown" file. Markdown is a simple mark-up language that potentiates the use of simply coding for layouting documents. One of the most famous and widely used mark-up languages is HTML, which is broadly used for \_marking up\_\_ web pages. RMarkdown is an implementation of Markdown language in R. Together with the *knitr* package, it is a powerful tool to bring the principle of *literate programming* into practice. It is one of the most important implementation tools for reproducible research in the R language.
 
-For an eaxample of a full example of reproducible research, see: <https://rpubs.com/maddocent/storm>
+For a full example of reproducible research, see: <https://rpubs.com/maddocent/storm>
+
+Statistics and R
+================
+
+This workshop does not cover statistical applications of R. Allbeit that we will look at an example of a linear regression later on. Nowadays R is a versatile language and can be used for various applications, but it was originally designed as a language for performing statistical analyses. This is why very many statistical applcations are available for R. To start learning about statisics and R, I can highly recommend the book "Discovering Statistics Using R" by Dr. Andy Field: <https://uk.sagepub.com/en-gb/eur/discovering-statistics-using-r/book236067%20>
+
+R is also a very useful tool in teaching students about statistics. The way that R can be used interactively in explaning difficult concepts like distributions, assumptions, expectations, probability and power and variance can be really helpful in the classroom.
+
+For more on learning R in the context of statistics: start e.g. with:
+
+<http://www.statsteachr.org/> or
+
+<https://www.coursera.org/learn/statistical-inference/home/welcome> or
+
+<https://www.youtube.com/watch?v=ACWuV16tdhY&index=21&list=PLqzoL9-eJTNBDdKgJgJzaQcY6OXmsXAHU> and
+
+<https://www.youtube.com/watch?v=kvmSAXhX9Hs&index=29&list=PLqzoL9-eJTNBDdKgJgJzaQcY6OXmsXAHU>
+
+and the rest of Mike Marin's lectures, that are a really great way to start learning R.
 
 Basic topics for working with R
 ===============================
@@ -348,18 +362,18 @@ Packages
 
 ### Biological Packages
 
-For Biological application go to www.bioconductor.org
+For Biological application go to <http://www.bioconductor.org>
 
 Installing Bioconductor packages is easy with `pacman::p_load` function
 
 ``` r
 library(pacman)
-## a CRAN package to analyze DNA and protein sequences 
-pacman::p_load(seqinr)
+## a CRAN package to analyze affymetrix expression data   
+pacman::p_load(affy)
 
-## a package that handles biological sequences
-library(seqinr)
-help("seqinr")
+## loading affy package and the vignettes pages of this package
+library(affy)
+browseVignettes("affy")
 
 ## and a BIOCONDUCTOR package to analyze LCMS data
 pacman::p_load(xcms)
@@ -368,7 +382,7 @@ library(xcms)
 browseVignettes("xcms")
 ```
 
-Vignettes are long explanations and demo's of a package. Commonly a vignette contains examples and a workflow that shows how the package can be used and which (research) questions can be adressed with the functions and datasets in the package. It usually is a good place to start for examples. It also shows the so-called dependence of a package: it explains which other packages you would need and how the data should look to be able to work with the package the vignette belongs to.
+Vignettes are long explanations and demos of a package. Commonly, a vignette contains examples and a workflow that shows how the package can be used and which (research) questions can be adressed with the functions and datasets in the package. It usually is a good place to start for examples. It also shows the so-called dependence of a package: it explains which other packages you would need and how the data should look to be able to work with the package the vignette belongs to.
 
 ### Getting Help for R functions and packages
 
@@ -386,6 +400,7 @@ apropos("mean") # search on more options of or alternatives for a certain functi
 
 ``` r
 example(mean) # to see a worked example
+
 demo(graphics) # demonstration of R functions
 ```
 
@@ -548,7 +563,7 @@ z5
 
     ## [1] -1
 
-You can get the individual items of a vector by using the index "\[\]"
+You can get the individual items of a vector by using the index "[](#section-2)"
 
 ``` r
 x<-c(8,5,10,13,2,7,15,3,20,8);x # create vector with 10 variables
@@ -682,13 +697,13 @@ summary(m1)
 plot(c, d, ylim=c(0,13))
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-10-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-12-1.png)
 
 ``` r
 plot(c, d, ylim=c(0,13), abline(m1))  #abline plots the correaltion model in the graph
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-10-2.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-12-2.png)
 
 ``` r
 m1$coefficients
@@ -732,7 +747,7 @@ root <- find_root_file(criterion = is_rstudio_project)
 ## Note: never use this in code that is meant for others!!!
 ```
 
-It is an effective way to clear all the items in the Global Environment, but is is not very friendly to use this in code you share with others: can you think of why?
+**The above is an effective way to clear all the items in the Global Environment, but is is not very friendly to use this in code you share with others: can you think of why?**
 
 Data Structures: Lists and Dataframes
 =====================================
@@ -766,7 +781,7 @@ lst # Lst is a list with 4 components
     ## [1] 4 7 9
 
 ``` r
-str(lst) # display dtructure of R object
+str(lst) # display structure of lst
 ```
 
     ## List of 4
@@ -871,7 +886,7 @@ people$age # gives the content of the variable "age" from the data frame ""
 
 ### Using Index on Dataframes
 
-Using the index "\[\]" on a dataframe is a bit tricky. The dataframe always consists of rows and columns. Indexing a dataframe goes like:
+Using the index "[](#section-2)" on a dataframe is a bit tricky. The dataframe always consists of rows and columns. Indexing a dataframe goes like:
 
 `dataframe[row number(s), column number(s)]`
 
@@ -912,12 +927,7 @@ read.table reads space-delimited or tab delimited files
 
 ``` r
 gender_age <-read.table(paste0(root, "/data/gender.txt"), header=TRUE)
-```
 
-    ## Warning in scan(file = file, what = what, sep = sep, quote = quote, dec =
-    ## dec, : number of items read is not a multiple of the number of columns
-
-``` r
 # getting the first few rows 
 head(gender_age)
 ```
@@ -967,15 +977,6 @@ CSV is a format of a data file that uses commas or semicolons as seprators for t
 ``` r
 library(readr)
 skin <- read_csv(paste0(root, "/data/skincolumns.csv")) 
-```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   `Genotype A` = col_double(),
-    ##   `Genotype B` = col_double()
-    ## )
-
-``` r
 str(skin)
 ```
 
@@ -1055,13 +1056,7 @@ summary(skin)
 
 ``` r
 ?read_csv    # help on the function
-```
 
-    ## starting httpd help server ...
-
-    ##  done
-
-``` r
 ## dataset contains an NA, some functions do not work with NAs:
 mean(skin$`Genotype A`)
 ```
@@ -1082,1105 +1077,20 @@ mean(skin_noNA$`Genotype B`)
 
     ## [1] 25.72858
 
-Example: create data frame with 3 variabels gender,
----------------------------------------------------
+Smoking example with multiple variables
+---------------------------------------
 
-smoke, age category (&lt;15, 15-30, &gt;30)
+Create data frame with 4 variables: gender, smoke, age, weigth
 
 ``` r
 set.seed(6000) # set it at the same number, then we will all produce the same output
 gender<-c(sample(c(1,2), size=1000, replace=TRUE))
 smoke<-c(sample(c(1,2), size=1000, replace=TRUE))
 age<-c(sample(c(1,2,3), size=1000, replace=TRUE))
-weight<-round(rnorm(1000, mean=65, sd=10),1); weight
-```
+weight<-round(rnorm(1000, mean=65, sd=10),1)
+smoking <- data.frame(cbind(gender, smoke, age, weight))
 
-    ##    [1] 65.1 66.9 46.9 70.5 66.9 93.0 67.1 74.5 77.6 61.6 70.9 57.5 62.3
-    ##   [14] 69.3 60.4 81.9 50.8 48.5 67.7 57.6 57.3 70.4 70.4 80.2 63.8 59.8
-    ##   [27] 75.3 80.6 73.0 65.4 65.7 57.5 64.3 48.0 74.9 64.5 73.4 45.3 57.4
-    ##   [40] 75.2 82.7 49.6 58.6 71.7 67.8 46.4 52.5 68.0 63.2 66.1 64.4 69.7
-    ##   [53] 67.6 65.3 67.3 62.1 49.3 66.6 65.0 60.5 72.4 77.3 70.7 56.8 74.7
-    ##   [66] 65.8 59.5 77.5 91.8 78.2 81.4 52.6 56.7 71.0 67.2 63.8 83.3 58.8
-    ##   [79] 63.8 63.3 75.2 52.7 68.4 74.4 71.7 44.9 86.9 64.6 62.2 65.5 63.9
-    ##   [92] 78.4 98.6 72.8 78.3 68.4 88.3 56.1 69.5 54.8 75.9 65.4 76.5 76.4
-    ##  [105] 71.9 57.6 61.2 85.2 64.6 71.4 66.5 64.3 63.2 65.4 53.8 88.1 65.0
-    ##  [118] 60.4 53.5 84.3 56.1 53.5 53.3 56.4 68.6 67.6 70.8 61.2 71.8 74.8
-    ##  [131] 79.0 68.1 68.9 46.7 75.8 43.8 77.9 67.2 63.8 87.5 89.2 54.6 69.7
-    ##  [144] 56.5 61.2 72.9 64.3 76.7 76.1 66.2 61.0 55.8 70.7 47.9 75.4 66.5
-    ##  [157] 82.7 52.9 43.5 67.9 59.6 69.0 84.4 70.7 69.0 64.5 73.3 70.2 68.6
-    ##  [170] 70.7 42.7 58.4 69.0 64.7 52.8 81.5 72.1 74.3 63.0 60.1 76.0 68.8
-    ##  [183] 39.3 59.3 59.6 62.6 75.4 74.9 48.6 63.4 63.2 76.9 64.7 62.5 84.0
-    ##  [196] 54.0 69.9 68.2 81.5 60.1 66.2 93.4 68.3 60.6 63.6 45.4 64.0 81.7
-    ##  [209] 57.9 59.8 70.1 64.4 62.7 71.8 54.5 62.4 73.0 63.8 69.5 67.1 50.3
-    ##  [222] 79.6 55.5 51.4 76.8 61.9 77.1 70.3 80.3 81.4 67.5 46.0 74.6 56.1
-    ##  [235] 59.3 58.0 79.0 56.8 68.3 69.4 55.9 79.1 82.6 65.2 51.7 65.2 55.1
-    ##  [248] 75.8 64.7 57.5 51.9 73.1 54.5 73.8 61.1 71.3 66.7 51.8 58.1 68.6
-    ##  [261] 53.9 63.8 49.0 75.5 73.5 67.3 75.4 71.9 48.2 60.9 72.6 63.0 50.5
-    ##  [274] 77.3 67.4 60.3 63.7 62.4 62.0 78.2 56.3 47.5 69.4 53.3 66.6 79.7
-    ##  [287] 61.3 58.2 53.0 70.1 77.3 67.4 66.0 73.7 67.9 62.5 66.8 50.9 60.4
-    ##  [300] 88.7 64.5 77.5 69.5 69.6 63.6 53.0 65.3 51.6 69.7 70.4 56.2 58.6
-    ##  [313] 60.2 66.3 56.3 71.9 57.6 60.5 56.0 71.7 80.9 88.0 71.5 53.0 79.6
-    ##  [326] 72.3 73.7 49.1 63.4 70.0 68.5 69.4 73.9 49.7 53.3 61.3 55.3 52.0
-    ##  [339] 70.3 60.2 56.1 49.7 64.0 64.8 72.5 45.0 82.5 47.3 58.6 75.2 55.3
-    ##  [352] 54.0 47.8 66.3 62.2 55.9 61.4 66.2 60.7 72.3 65.5 45.5 57.3 63.8
-    ##  [365] 62.0 74.1 61.9 57.6 81.3 75.0 60.6 55.4 70.1 63.1 48.2 65.4 75.8
-    ##  [378] 47.7 56.0 64.4 76.7 70.7 56.3 74.3 70.2 67.7 69.5 53.4 71.3 57.5
-    ##  [391] 54.9 74.2 72.2 54.9 68.2 69.3 73.2 72.0 63.6 76.1 81.7 74.6 66.7
-    ##  [404] 67.7 67.6 69.7 72.5 58.5 66.8 53.6 62.1 76.3 63.1 73.3 65.3 64.1
-    ##  [417] 71.3 63.1 74.7 81.3 62.0 54.0 72.4 55.2 57.0 62.0 76.3 82.6 68.4
-    ##  [430] 75.3 69.6 48.3 54.0 70.3 42.6 60.2 61.1 76.4 81.4 66.3 58.8 58.8
-    ##  [443] 64.6 72.3 56.7 64.0 58.3 82.1 74.3 56.7 59.1 54.3 66.2 74.0 54.9
-    ##  [456] 45.4 86.8 70.3 62.1 59.4 90.3 71.5 65.9 72.6 73.6 68.0 64.3 67.0
-    ##  [469] 65.2 63.5 60.3 78.0 74.2 66.1 68.4 70.9 74.3 56.1 59.3 58.6 64.2
-    ##  [482] 65.7 71.4 61.3 74.5 70.8 65.1 77.2 76.7 53.7 57.0 73.7 71.9 57.1
-    ##  [495] 72.9 64.4 58.5 81.0 55.6 71.3 62.2 54.7 69.2 68.4 81.1 71.4 69.2
-    ##  [508] 63.6 54.2 54.3 84.8 54.5 66.2 57.9 55.5 61.2 69.7 54.6 58.9 68.9
-    ##  [521] 71.8 60.2 78.7 48.6 43.8 58.1 70.6 52.2 45.7 56.5 50.1 67.0 58.1
-    ##  [534] 46.8 79.2 70.8 52.9 62.6 52.2 56.4 72.2 56.7 58.1 85.2 60.4 51.6
-    ##  [547] 85.4 60.0 53.2 73.5 69.8 53.5 76.2 50.7 64.7 72.9 76.9 74.7 55.0
-    ##  [560] 63.8 67.0 66.0 71.7 59.0 62.3 77.5 77.4 62.8 78.4 68.7 70.8 67.5
-    ##  [573] 76.1 67.3 79.9 58.2 68.7 67.7 80.4 57.3 80.1 63.4 70.6 61.8 51.1
-    ##  [586] 63.3 51.6 49.1 46.4 65.3 64.2 74.2 48.0 70.0 69.8 69.5 71.0 64.0
-    ##  [599] 74.8 61.0 49.7 65.8 46.6 69.3 61.1 43.6 52.1 58.3 59.9 52.9 73.8
-    ##  [612] 60.2 58.1 75.6 63.3 63.6 66.8 54.9 56.6 66.4 71.4 58.0 84.7 46.6
-    ##  [625] 70.1 61.8 56.7 80.9 71.7 48.5 64.5 66.2 63.5 70.8 73.8 60.6 65.3
-    ##  [638] 71.8 58.2 80.3 74.2 61.4 62.6 66.5 67.5 70.4 62.5 63.7 75.7 59.9
-    ##  [651] 51.6 41.5 53.0 81.6 49.7 54.2 65.7 58.3 73.1 61.6 59.9 60.4 72.7
-    ##  [664] 53.5 45.6 58.2 61.6 77.5 66.1 69.2 62.8 56.3 57.0 65.9 69.9 80.6
-    ##  [677] 57.6 88.3 74.1 62.0 74.2 66.1 76.0 79.3 66.5 70.8 68.3 47.7 56.2
-    ##  [690] 78.1 56.8 60.5 69.4 62.2 58.9 59.9 61.0 82.4 71.5 64.9 61.0 77.6
-    ##  [703] 49.1 63.4 75.9 52.7 64.4 72.8 74.0 62.4 75.1 71.9 65.9 54.7 73.6
-    ##  [716] 74.0 58.4 56.8 68.3 61.6 62.7 65.0 52.2 76.3 48.6 72.8 77.2 45.1
-    ##  [729] 68.2 76.6 79.6 76.2 61.4 68.3 50.8 60.0 68.4 58.9 75.2 80.6 65.8
-    ##  [742] 62.7 65.3 49.1 49.0 61.1 58.6 79.6 67.1 53.7 67.4 70.2 67.5 49.0
-    ##  [755] 69.0 78.6 80.8 65.0 57.7 56.2 53.9 63.6 60.8 70.4 62.3 67.6 68.6
-    ##  [768] 54.5 51.9 71.8 71.7 76.4 73.7 55.7 54.4 78.0 72.6 77.8 66.8 36.7
-    ##  [781] 62.4 58.9 58.1 45.5 53.0 77.7 68.7 71.7 42.7 83.9 61.1 65.5 69.2
-    ##  [794] 73.9 68.0 73.5 60.8 62.9 70.4 56.8 77.1 58.3 69.5 46.6 89.6 70.8
-    ##  [807] 77.6 64.3 47.0 55.3 73.1 68.6 60.1 69.9 67.9 61.3 69.8 80.2 73.2
-    ##  [820] 69.7 55.3 57.0 70.1 59.1 53.0 67.8 77.1 81.3 78.2 75.1 64.2 74.2
-    ##  [833] 73.1 72.3 50.8 53.4 74.6 67.6 56.6 62.9 65.1 67.4 53.2 56.4 59.5
-    ##  [846] 79.1 84.2 62.4 63.5 63.1 80.4 69.9 77.8 53.6 51.9 67.6 64.4 67.4
-    ##  [859] 48.7 59.9 60.9 63.3 65.5 70.3 56.5 77.0 53.8 78.4 72.0 79.7 59.9
-    ##  [872] 55.9 77.4 52.7 75.4 52.4 68.5 48.0 56.5 63.2 62.4 85.7 75.2 62.0
-    ##  [885] 60.5 71.2 82.9 73.6 74.5 69.1 50.0 68.4 78.2 62.6 28.5 78.4 37.3
-    ##  [898] 60.3 59.6 67.8 68.2 68.1 94.7 79.2 63.2 74.6 53.7 73.6 72.8 50.7
-    ##  [911] 60.0 69.8 60.5 75.5 65.1 55.1 51.1 58.7 78.5 71.3 61.4 74.9 65.3
-    ##  [924] 76.3 68.0 63.9 63.4 47.2 77.9 76.2 60.9 64.4 73.2 65.5 67.3 62.1
-    ##  [937] 65.4 64.4 89.0 54.7 59.0 70.5 42.2 71.3 65.4 55.2 76.9 68.8 65.5
-    ##  [950] 77.8 67.4 55.5 76.6 69.3 69.9 45.2 71.9 65.9 60.0 58.4 57.7 60.6
-    ##  [963] 66.9 67.0 71.4 66.3 53.0 65.8 50.8 64.0 72.8 62.9 63.7 76.6 73.8
-    ##  [976] 77.7 73.4 74.8 64.1 78.5 39.9 54.1 78.6 76.7 83.0 71.8 58.8 57.9
-    ##  [989] 59.3 69.1 67.0 78.4 68.0 68.9 64.3 73.4 74.5 70.7 56.0 76.0
-
-``` r
-smoking <- data.frame(cbind(gender, smoke, age, weight)); smoking
-```
-
-    ##      gender smoke age weight
-    ## 1         2     1   3   65.1
-    ## 2         2     1   1   66.9
-    ## 3         1     2   3   46.9
-    ## 4         1     1   3   70.5
-    ## 5         1     2   1   66.9
-    ## 6         2     2   3   93.0
-    ## 7         1     1   1   67.1
-    ## 8         1     2   3   74.5
-    ## 9         1     2   3   77.6
-    ## 10        2     1   1   61.6
-    ## 11        2     1   3   70.9
-    ## 12        2     2   1   57.5
-    ## 13        2     1   1   62.3
-    ## 14        1     2   3   69.3
-    ## 15        2     2   3   60.4
-    ## 16        2     2   1   81.9
-    ## 17        2     2   3   50.8
-    ## 18        1     1   3   48.5
-    ## 19        1     2   2   67.7
-    ## 20        2     1   3   57.6
-    ## 21        2     2   2   57.3
-    ## 22        1     1   3   70.4
-    ## 23        1     1   3   70.4
-    ## 24        2     1   3   80.2
-    ## 25        1     2   3   63.8
-    ## 26        2     1   1   59.8
-    ## 27        1     2   3   75.3
-    ## 28        2     1   1   80.6
-    ## 29        2     2   1   73.0
-    ## 30        1     1   2   65.4
-    ## 31        1     2   3   65.7
-    ## 32        1     2   2   57.5
-    ## 33        2     1   3   64.3
-    ## 34        1     2   1   48.0
-    ## 35        1     2   1   74.9
-    ## 36        2     1   2   64.5
-    ## 37        1     1   1   73.4
-    ## 38        2     2   2   45.3
-    ## 39        2     1   1   57.4
-    ## 40        1     1   2   75.2
-    ## 41        2     1   1   82.7
-    ## 42        2     2   1   49.6
-    ## 43        1     2   1   58.6
-    ## 44        2     2   1   71.7
-    ## 45        2     1   1   67.8
-    ## 46        1     1   2   46.4
-    ## 47        2     1   2   52.5
-    ## 48        2     2   1   68.0
-    ## 49        1     2   2   63.2
-    ## 50        1     2   1   66.1
-    ## 51        1     1   1   64.4
-    ## 52        1     2   1   69.7
-    ## 53        1     1   1   67.6
-    ## 54        2     2   2   65.3
-    ## 55        2     1   1   67.3
-    ## 56        1     1   1   62.1
-    ## 57        1     2   1   49.3
-    ## 58        1     1   1   66.6
-    ## 59        1     1   2   65.0
-    ## 60        2     2   3   60.5
-    ## 61        1     1   3   72.4
-    ## 62        2     1   2   77.3
-    ## 63        1     1   3   70.7
-    ## 64        2     1   1   56.8
-    ## 65        2     2   3   74.7
-    ## 66        1     1   1   65.8
-    ## 67        2     1   2   59.5
-    ## 68        1     2   3   77.5
-    ## 69        2     2   1   91.8
-    ## 70        1     2   2   78.2
-    ## 71        1     2   2   81.4
-    ## 72        2     1   3   52.6
-    ## 73        2     1   1   56.7
-    ## 74        1     1   1   71.0
-    ## 75        1     1   1   67.2
-    ## 76        1     2   2   63.8
-    ## 77        2     1   2   83.3
-    ## 78        1     2   2   58.8
-    ## 79        2     1   3   63.8
-    ## 80        1     1   2   63.3
-    ## 81        1     1   3   75.2
-    ## 82        2     2   1   52.7
-    ## 83        2     2   2   68.4
-    ## 84        2     1   3   74.4
-    ## 85        1     1   3   71.7
-    ## 86        2     1   1   44.9
-    ## 87        1     2   3   86.9
-    ## 88        2     2   3   64.6
-    ## 89        2     1   3   62.2
-    ## 90        2     2   2   65.5
-    ## 91        1     1   3   63.9
-    ## 92        1     2   2   78.4
-    ## 93        1     2   3   98.6
-    ## 94        1     2   1   72.8
-    ## 95        1     1   3   78.3
-    ## 96        1     1   3   68.4
-    ## 97        1     1   3   88.3
-    ## 98        2     1   2   56.1
-    ## 99        2     2   3   69.5
-    ## 100       2     2   3   54.8
-    ## 101       2     2   1   75.9
-    ## 102       2     1   1   65.4
-    ## 103       1     2   3   76.5
-    ## 104       1     1   3   76.4
-    ## 105       1     1   3   71.9
-    ## 106       2     1   2   57.6
-    ## 107       1     2   1   61.2
-    ## 108       1     1   3   85.2
-    ## 109       2     2   1   64.6
-    ## 110       2     2   1   71.4
-    ## 111       2     2   3   66.5
-    ## 112       1     2   3   64.3
-    ## 113       2     1   1   63.2
-    ## 114       1     2   1   65.4
-    ## 115       1     1   1   53.8
-    ## 116       2     1   2   88.1
-    ## 117       2     1   1   65.0
-    ## 118       2     1   3   60.4
-    ## 119       1     2   2   53.5
-    ## 120       1     2   3   84.3
-    ## 121       2     1   2   56.1
-    ## 122       1     1   2   53.5
-    ## 123       2     1   1   53.3
-    ## 124       1     2   1   56.4
-    ## 125       2     1   3   68.6
-    ## 126       1     2   1   67.6
-    ## 127       1     1   2   70.8
-    ## 128       1     2   2   61.2
-    ## 129       2     2   2   71.8
-    ## 130       2     2   1   74.8
-    ## 131       2     2   1   79.0
-    ## 132       2     1   2   68.1
-    ## 133       2     2   2   68.9
-    ## 134       1     2   2   46.7
-    ## 135       1     2   3   75.8
-    ## 136       2     1   1   43.8
-    ## 137       1     1   2   77.9
-    ## 138       1     1   2   67.2
-    ## 139       2     2   1   63.8
-    ## 140       1     1   2   87.5
-    ## 141       2     2   2   89.2
-    ## 142       2     1   2   54.6
-    ## 143       1     1   1   69.7
-    ## 144       1     2   1   56.5
-    ## 145       2     2   1   61.2
-    ## 146       1     2   1   72.9
-    ## 147       2     2   2   64.3
-    ## 148       2     1   2   76.7
-    ## 149       2     2   3   76.1
-    ## 150       1     2   2   66.2
-    ## 151       1     1   3   61.0
-    ## 152       1     1   3   55.8
-    ## 153       1     2   1   70.7
-    ## 154       1     1   1   47.9
-    ## 155       1     1   2   75.4
-    ## 156       1     2   1   66.5
-    ## 157       1     2   2   82.7
-    ## 158       1     2   2   52.9
-    ## 159       2     2   1   43.5
-    ## 160       2     1   2   67.9
-    ## 161       1     1   2   59.6
-    ## 162       1     2   3   69.0
-    ## 163       1     2   3   84.4
-    ## 164       2     1   3   70.7
-    ## 165       1     1   3   69.0
-    ## 166       2     2   2   64.5
-    ## 167       2     1   1   73.3
-    ## 168       2     2   2   70.2
-    ## 169       1     1   2   68.6
-    ## 170       1     1   3   70.7
-    ## 171       2     2   3   42.7
-    ## 172       1     2   2   58.4
-    ## 173       1     2   2   69.0
-    ## 174       1     2   2   64.7
-    ## 175       1     2   3   52.8
-    ## 176       1     2   1   81.5
-    ## 177       1     1   2   72.1
-    ## 178       2     2   1   74.3
-    ## 179       2     1   3   63.0
-    ## 180       1     2   2   60.1
-    ## 181       2     1   1   76.0
-    ## 182       2     2   3   68.8
-    ## 183       2     1   3   39.3
-    ## 184       1     1   3   59.3
-    ## 185       1     1   1   59.6
-    ## 186       1     1   3   62.6
-    ## 187       1     2   1   75.4
-    ## 188       1     2   2   74.9
-    ## 189       1     2   3   48.6
-    ## 190       1     2   1   63.4
-    ## 191       1     2   1   63.2
-    ## 192       1     2   1   76.9
-    ## 193       2     1   3   64.7
-    ## 194       2     2   2   62.5
-    ## 195       1     2   2   84.0
-    ## 196       1     2   1   54.0
-    ## 197       1     1   2   69.9
-    ## 198       2     1   1   68.2
-    ## 199       1     1   2   81.5
-    ## 200       1     2   3   60.1
-    ## 201       2     2   2   66.2
-    ## 202       1     2   2   93.4
-    ## 203       2     1   2   68.3
-    ## 204       2     1   3   60.6
-    ## 205       1     2   1   63.6
-    ## 206       2     2   1   45.4
-    ## 207       2     1   2   64.0
-    ## 208       1     2   3   81.7
-    ## 209       1     2   1   57.9
-    ## 210       1     2   3   59.8
-    ## 211       2     2   1   70.1
-    ## 212       1     2   2   64.4
-    ## 213       1     2   3   62.7
-    ## 214       1     2   2   71.8
-    ## 215       1     1   2   54.5
-    ## 216       1     2   3   62.4
-    ## 217       2     1   1   73.0
-    ## 218       2     2   2   63.8
-    ## 219       1     1   2   69.5
-    ## 220       2     2   2   67.1
-    ## 221       2     1   1   50.3
-    ## 222       2     2   3   79.6
-    ## 223       1     1   2   55.5
-    ## 224       1     1   1   51.4
-    ## 225       1     2   3   76.8
-    ## 226       2     2   2   61.9
-    ## 227       2     1   2   77.1
-    ## 228       1     1   3   70.3
-    ## 229       1     2   2   80.3
-    ## 230       2     2   1   81.4
-    ## 231       2     2   2   67.5
-    ## 232       1     1   2   46.0
-    ## 233       2     2   1   74.6
-    ## 234       2     2   2   56.1
-    ## 235       1     2   1   59.3
-    ## 236       1     1   1   58.0
-    ## 237       1     1   3   79.0
-    ## 238       1     2   3   56.8
-    ## 239       1     1   3   68.3
-    ## 240       2     1   2   69.4
-    ## 241       1     1   1   55.9
-    ## 242       2     2   1   79.1
-    ## 243       2     2   2   82.6
-    ## 244       1     1   1   65.2
-    ## 245       1     2   3   51.7
-    ## 246       2     1   3   65.2
-    ## 247       2     2   1   55.1
-    ## 248       2     1   1   75.8
-    ## 249       2     2   3   64.7
-    ## 250       1     1   2   57.5
-    ## 251       2     1   1   51.9
-    ## 252       1     1   3   73.1
-    ## 253       1     1   2   54.5
-    ## 254       1     1   2   73.8
-    ## 255       2     2   1   61.1
-    ## 256       1     1   3   71.3
-    ## 257       2     2   1   66.7
-    ## 258       1     1   1   51.8
-    ## 259       1     1   1   58.1
-    ## 260       2     2   1   68.6
-    ## 261       2     1   2   53.9
-    ## 262       2     1   1   63.8
-    ## 263       2     1   3   49.0
-    ## 264       1     2   3   75.5
-    ## 265       2     2   2   73.5
-    ## 266       2     2   1   67.3
-    ## 267       1     2   2   75.4
-    ## 268       1     2   3   71.9
-    ## 269       2     2   3   48.2
-    ## 270       2     1   1   60.9
-    ## 271       1     2   3   72.6
-    ## 272       1     1   2   63.0
-    ## 273       2     2   3   50.5
-    ## 274       2     2   3   77.3
-    ## 275       1     1   2   67.4
-    ## 276       2     2   2   60.3
-    ## 277       2     1   3   63.7
-    ## 278       2     1   2   62.4
-    ## 279       1     2   2   62.0
-    ## 280       2     1   2   78.2
-    ## 281       2     2   2   56.3
-    ## 282       2     2   3   47.5
-    ## 283       2     1   2   69.4
-    ## 284       1     1   3   53.3
-    ## 285       2     2   3   66.6
-    ## 286       1     2   3   79.7
-    ## 287       2     2   2   61.3
-    ## 288       2     2   1   58.2
-    ## 289       1     1   2   53.0
-    ## 290       2     2   2   70.1
-    ## 291       2     1   1   77.3
-    ## 292       2     2   3   67.4
-    ## 293       1     1   3   66.0
-    ## 294       2     1   3   73.7
-    ## 295       2     2   1   67.9
-    ## 296       2     2   2   62.5
-    ## 297       1     2   2   66.8
-    ## 298       2     1   2   50.9
-    ## 299       1     1   3   60.4
-    ## 300       1     1   3   88.7
-    ## 301       2     2   3   64.5
-    ## 302       2     1   2   77.5
-    ## 303       2     1   1   69.5
-    ## 304       1     2   2   69.6
-    ## 305       2     1   2   63.6
-    ## 306       2     1   1   53.0
-    ## 307       1     1   3   65.3
-    ## 308       2     2   3   51.6
-    ## 309       1     2   3   69.7
-    ## 310       2     1   3   70.4
-    ## 311       2     1   1   56.2
-    ## 312       1     2   2   58.6
-    ## 313       2     1   1   60.2
-    ## 314       2     2   2   66.3
-    ## 315       1     1   2   56.3
-    ## 316       2     1   3   71.9
-    ## 317       2     1   3   57.6
-    ## 318       1     1   1   60.5
-    ## 319       2     2   2   56.0
-    ## 320       1     1   2   71.7
-    ## 321       2     2   3   80.9
-    ## 322       2     1   3   88.0
-    ## 323       1     2   1   71.5
-    ## 324       1     2   3   53.0
-    ## 325       2     1   2   79.6
-    ## 326       1     2   3   72.3
-    ## 327       2     1   3   73.7
-    ## 328       1     1   3   49.1
-    ## 329       1     1   1   63.4
-    ## 330       1     2   1   70.0
-    ## 331       1     1   3   68.5
-    ## 332       1     2   1   69.4
-    ## 333       2     1   1   73.9
-    ## 334       1     1   1   49.7
-    ## 335       2     1   3   53.3
-    ## 336       1     1   3   61.3
-    ## 337       2     2   1   55.3
-    ## 338       1     2   2   52.0
-    ## 339       1     1   1   70.3
-    ## 340       1     1   1   60.2
-    ## 341       2     1   3   56.1
-    ## 342       2     1   3   49.7
-    ## 343       1     2   1   64.0
-    ## 344       2     1   3   64.8
-    ## 345       1     1   1   72.5
-    ## 346       2     2   1   45.0
-    ## 347       2     2   3   82.5
-    ## 348       1     2   3   47.3
-    ## 349       2     2   1   58.6
-    ## 350       1     2   2   75.2
-    ## 351       1     2   2   55.3
-    ## 352       2     2   1   54.0
-    ## 353       1     2   2   47.8
-    ## 354       2     1   3   66.3
-    ## 355       1     2   1   62.2
-    ## 356       1     2   1   55.9
-    ## 357       1     2   1   61.4
-    ## 358       1     1   2   66.2
-    ## 359       1     1   3   60.7
-    ## 360       1     2   2   72.3
-    ## 361       1     2   3   65.5
-    ## 362       2     1   1   45.5
-    ## 363       2     1   2   57.3
-    ## 364       2     2   1   63.8
-    ## 365       2     2   3   62.0
-    ## 366       2     1   3   74.1
-    ## 367       1     2   2   61.9
-    ## 368       2     1   1   57.6
-    ## 369       2     2   2   81.3
-    ## 370       2     1   2   75.0
-    ## 371       2     1   2   60.6
-    ## 372       1     1   2   55.4
-    ## 373       1     1   2   70.1
-    ## 374       2     2   1   63.1
-    ## 375       2     1   1   48.2
-    ## 376       2     2   2   65.4
-    ## 377       1     1   1   75.8
-    ## 378       2     2   2   47.7
-    ## 379       1     2   2   56.0
-    ## 380       1     1   2   64.4
-    ## 381       1     2   1   76.7
-    ## 382       1     1   3   70.7
-    ## 383       1     1   2   56.3
-    ## 384       1     2   3   74.3
-    ## 385       1     2   3   70.2
-    ## 386       1     1   1   67.7
-    ## 387       2     1   1   69.5
-    ## 388       2     1   1   53.4
-    ## 389       1     1   1   71.3
-    ## 390       1     1   2   57.5
-    ## 391       1     2   2   54.9
-    ## 392       2     2   2   74.2
-    ## 393       1     1   2   72.2
-    ## 394       1     1   3   54.9
-    ## 395       2     2   1   68.2
-    ## 396       1     1   3   69.3
-    ## 397       1     2   2   73.2
-    ## 398       1     1   2   72.0
-    ## 399       1     2   2   63.6
-    ## 400       2     1   1   76.1
-    ## 401       1     1   1   81.7
-    ## 402       1     2   2   74.6
-    ## 403       2     1   2   66.7
-    ## 404       2     1   2   67.7
-    ## 405       1     2   2   67.6
-    ## 406       1     2   3   69.7
-    ## 407       1     1   2   72.5
-    ## 408       1     1   3   58.5
-    ## 409       2     2   1   66.8
-    ## 410       1     2   3   53.6
-    ## 411       1     1   3   62.1
-    ## 412       1     2   3   76.3
-    ## 413       2     1   3   63.1
-    ## 414       1     1   2   73.3
-    ## 415       2     1   3   65.3
-    ## 416       2     1   2   64.1
-    ## 417       2     1   2   71.3
-    ## 418       1     1   3   63.1
-    ## 419       1     2   3   74.7
-    ## 420       2     1   2   81.3
-    ## 421       2     2   2   62.0
-    ## 422       1     1   2   54.0
-    ## 423       2     1   2   72.4
-    ## 424       1     1   2   55.2
-    ## 425       2     1   3   57.0
-    ## 426       2     2   1   62.0
-    ## 427       1     2   2   76.3
-    ## 428       1     1   1   82.6
-    ## 429       2     1   2   68.4
-    ## 430       2     2   1   75.3
-    ## 431       2     1   2   69.6
-    ## 432       1     1   1   48.3
-    ## 433       1     1   1   54.0
-    ## 434       1     2   2   70.3
-    ## 435       2     1   2   42.6
-    ## 436       2     1   2   60.2
-    ## 437       1     2   3   61.1
-    ## 438       1     2   2   76.4
-    ## 439       2     1   1   81.4
-    ## 440       2     2   3   66.3
-    ## 441       2     1   1   58.8
-    ## 442       2     1   2   58.8
-    ## 443       1     2   1   64.6
-    ## 444       1     1   3   72.3
-    ## 445       1     1   3   56.7
-    ## 446       1     2   2   64.0
-    ## 447       2     2   1   58.3
-    ## 448       2     2   2   82.1
-    ## 449       1     1   1   74.3
-    ## 450       2     1   1   56.7
-    ## 451       2     1   3   59.1
-    ## 452       2     2   2   54.3
-    ## 453       2     1   3   66.2
-    ## 454       2     2   3   74.0
-    ## 455       1     2   3   54.9
-    ## 456       2     1   1   45.4
-    ## 457       1     2   2   86.8
-    ## 458       2     2   2   70.3
-    ## 459       1     1   3   62.1
-    ## 460       1     1   1   59.4
-    ## 461       2     1   2   90.3
-    ## 462       2     2   2   71.5
-    ## 463       1     1   3   65.9
-    ## 464       2     2   3   72.6
-    ## 465       1     1   1   73.6
-    ## 466       2     1   2   68.0
-    ## 467       2     2   2   64.3
-    ## 468       1     1   1   67.0
-    ## 469       2     2   3   65.2
-    ## 470       1     1   1   63.5
-    ## 471       2     1   2   60.3
-    ## 472       2     2   2   78.0
-    ## 473       2     1   3   74.2
-    ## 474       1     2   2   66.1
-    ## 475       2     1   2   68.4
-    ## 476       1     1   3   70.9
-    ## 477       1     1   1   74.3
-    ## 478       2     1   2   56.1
-    ## 479       1     2   1   59.3
-    ## 480       2     2   2   58.6
-    ## 481       1     2   1   64.2
-    ## 482       2     1   3   65.7
-    ## 483       1     1   2   71.4
-    ## 484       1     1   1   61.3
-    ## 485       2     1   3   74.5
-    ## 486       2     2   3   70.8
-    ## 487       2     1   2   65.1
-    ## 488       2     1   3   77.2
-    ## 489       2     1   1   76.7
-    ## 490       1     1   2   53.7
-    ## 491       2     1   1   57.0
-    ## 492       1     1   1   73.7
-    ## 493       2     2   3   71.9
-    ## 494       1     2   1   57.1
-    ## 495       1     1   2   72.9
-    ## 496       1     1   3   64.4
-    ## 497       1     2   3   58.5
-    ## 498       1     1   2   81.0
-    ## 499       1     2   1   55.6
-    ## 500       2     1   3   71.3
-    ## 501       1     2   1   62.2
-    ## 502       2     2   2   54.7
-    ## 503       2     2   1   69.2
-    ## 504       1     2   3   68.4
-    ## 505       2     1   2   81.1
-    ## 506       2     1   3   71.4
-    ## 507       2     2   2   69.2
-    ## 508       1     1   3   63.6
-    ## 509       2     1   2   54.2
-    ## 510       1     1   2   54.3
-    ## 511       2     1   3   84.8
-    ## 512       2     1   3   54.5
-    ## 513       2     1   2   66.2
-    ## 514       2     1   2   57.9
-    ## 515       2     1   2   55.5
-    ## 516       2     2   1   61.2
-    ## 517       2     1   2   69.7
-    ## 518       2     2   1   54.6
-    ## 519       1     1   2   58.9
-    ## 520       2     1   1   68.9
-    ## 521       2     2   3   71.8
-    ## 522       1     1   3   60.2
-    ## 523       2     1   2   78.7
-    ## 524       1     1   3   48.6
-    ## 525       2     2   3   43.8
-    ## 526       2     2   2   58.1
-    ## 527       2     2   2   70.6
-    ## 528       1     2   2   52.2
-    ## 529       1     1   3   45.7
-    ## 530       1     2   3   56.5
-    ## 531       1     1   2   50.1
-    ## 532       2     2   2   67.0
-    ## 533       1     2   3   58.1
-    ## 534       2     1   2   46.8
-    ## 535       1     2   1   79.2
-    ## 536       2     1   3   70.8
-    ## 537       2     2   1   52.9
-    ## 538       1     1   3   62.6
-    ## 539       2     1   1   52.2
-    ## 540       2     2   3   56.4
-    ## 541       1     1   3   72.2
-    ## 542       1     2   3   56.7
-    ## 543       1     2   2   58.1
-    ## 544       1     1   1   85.2
-    ## 545       2     1   2   60.4
-    ## 546       2     2   2   51.6
-    ## 547       1     1   2   85.4
-    ## 548       1     2   2   60.0
-    ## 549       2     2   2   53.2
-    ## 550       2     1   3   73.5
-    ## 551       1     2   3   69.8
-    ## 552       2     1   3   53.5
-    ## 553       1     1   1   76.2
-    ## 554       2     2   3   50.7
-    ## 555       2     1   2   64.7
-    ## 556       2     1   1   72.9
-    ## 557       2     1   3   76.9
-    ## 558       1     2   3   74.7
-    ## 559       1     2   2   55.0
-    ## 560       1     2   1   63.8
-    ## 561       2     2   2   67.0
-    ## 562       2     2   3   66.0
-    ## 563       1     1   2   71.7
-    ## 564       1     1   2   59.0
-    ## 565       2     1   3   62.3
-    ## 566       1     1   3   77.5
-    ## 567       2     2   2   77.4
-    ## 568       2     2   1   62.8
-    ## 569       2     1   2   78.4
-    ## 570       1     1   3   68.7
-    ## 571       2     1   1   70.8
-    ## 572       1     1   2   67.5
-    ## 573       1     1   2   76.1
-    ## 574       1     2   1   67.3
-    ## 575       1     1   1   79.9
-    ## 576       1     1   2   58.2
-    ## 577       2     1   3   68.7
-    ## 578       2     1   2   67.7
-    ## 579       2     1   3   80.4
-    ## 580       2     2   2   57.3
-    ## 581       2     1   2   80.1
-    ## 582       2     1   1   63.4
-    ## 583       1     1   1   70.6
-    ## 584       2     1   2   61.8
-    ## 585       2     2   3   51.1
-    ## 586       1     1   2   63.3
-    ## 587       1     2   1   51.6
-    ## 588       2     1   1   49.1
-    ## 589       2     2   1   46.4
-    ## 590       1     2   3   65.3
-    ## 591       1     1   3   64.2
-    ## 592       2     1   1   74.2
-    ## 593       1     2   2   48.0
-    ## 594       2     2   2   70.0
-    ## 595       1     1   1   69.8
-    ## 596       2     1   1   69.5
-    ## 597       1     1   1   71.0
-    ## 598       2     1   1   64.0
-    ## 599       1     2   1   74.8
-    ## 600       2     1   2   61.0
-    ## 601       1     2   2   49.7
-    ## 602       2     1   2   65.8
-    ## 603       2     2   2   46.6
-    ## 604       2     2   3   69.3
-    ## 605       2     2   3   61.1
-    ## 606       1     1   1   43.6
-    ## 607       1     2   3   52.1
-    ## 608       1     1   1   58.3
-    ## 609       1     1   2   59.9
-    ## 610       2     2   3   52.9
-    ## 611       2     2   2   73.8
-    ## 612       2     1   3   60.2
-    ## 613       1     1   2   58.1
-    ## 614       1     2   1   75.6
-    ## 615       2     2   1   63.3
-    ## 616       2     1   1   63.6
-    ## 617       2     2   2   66.8
-    ## 618       2     1   3   54.9
-    ## 619       1     1   1   56.6
-    ## 620       2     2   3   66.4
-    ## 621       2     2   2   71.4
-    ## 622       2     1   1   58.0
-    ## 623       1     2   1   84.7
-    ## 624       2     1   1   46.6
-    ## 625       1     1   2   70.1
-    ## 626       2     1   2   61.8
-    ## 627       1     1   2   56.7
-    ## 628       2     1   3   80.9
-    ## 629       1     1   2   71.7
-    ## 630       2     2   1   48.5
-    ## 631       1     1   1   64.5
-    ## 632       1     1   1   66.2
-    ## 633       1     2   3   63.5
-    ## 634       1     1   3   70.8
-    ## 635       1     1   3   73.8
-    ## 636       2     2   1   60.6
-    ## 637       2     2   2   65.3
-    ## 638       2     2   2   71.8
-    ## 639       2     2   1   58.2
-    ## 640       1     1   2   80.3
-    ## 641       2     1   3   74.2
-    ## 642       2     1   3   61.4
-    ## 643       1     1   2   62.6
-    ## 644       2     1   2   66.5
-    ## 645       1     1   1   67.5
-    ## 646       1     2   2   70.4
-    ## 647       1     1   2   62.5
-    ## 648       2     1   2   63.7
-    ## 649       2     1   1   75.7
-    ## 650       1     2   2   59.9
-    ## 651       2     2   3   51.6
-    ## 652       1     2   1   41.5
-    ## 653       2     2   2   53.0
-    ## 654       2     2   2   81.6
-    ## 655       1     2   2   49.7
-    ## 656       1     1   2   54.2
-    ## 657       1     2   3   65.7
-    ## 658       2     1   3   58.3
-    ## 659       1     2   1   73.1
-    ## 660       1     1   2   61.6
-    ## 661       2     1   1   59.9
-    ## 662       1     2   3   60.4
-    ## 663       2     1   2   72.7
-    ## 664       2     2   1   53.5
-    ## 665       1     2   2   45.6
-    ## 666       2     2   1   58.2
-    ## 667       1     2   3   61.6
-    ## 668       1     2   2   77.5
-    ## 669       1     1   2   66.1
-    ## 670       1     1   3   69.2
-    ## 671       1     2   2   62.8
-    ## 672       1     1   3   56.3
-    ## 673       2     1   1   57.0
-    ## 674       1     1   3   65.9
-    ## 675       1     1   2   69.9
-    ## 676       1     2   3   80.6
-    ## 677       1     2   2   57.6
-    ## 678       1     2   1   88.3
-    ## 679       2     1   3   74.1
-    ## 680       2     1   1   62.0
-    ## 681       2     2   2   74.2
-    ## 682       1     1   2   66.1
-    ## 683       1     1   1   76.0
-    ## 684       1     2   2   79.3
-    ## 685       2     2   2   66.5
-    ## 686       1     1   2   70.8
-    ## 687       1     2   2   68.3
-    ## 688       2     2   1   47.7
-    ## 689       2     2   3   56.2
-    ## 690       2     2   1   78.1
-    ## 691       1     2   2   56.8
-    ## 692       2     2   1   60.5
-    ## 693       1     1   1   69.4
-    ## 694       2     1   3   62.2
-    ## 695       2     2   2   58.9
-    ## 696       2     2   3   59.9
-    ## 697       2     1   3   61.0
-    ## 698       1     2   2   82.4
-    ## 699       1     1   1   71.5
-    ## 700       1     1   2   64.9
-    ## 701       2     2   3   61.0
-    ## 702       1     1   3   77.6
-    ## 703       1     2   2   49.1
-    ## 704       2     2   2   63.4
-    ## 705       2     1   1   75.9
-    ## 706       2     2   2   52.7
-    ## 707       2     1   3   64.4
-    ## 708       1     1   1   72.8
-    ## 709       1     2   3   74.0
-    ## 710       2     1   1   62.4
-    ## 711       1     2   2   75.1
-    ## 712       1     2   1   71.9
-    ## 713       2     2   1   65.9
-    ## 714       2     2   3   54.7
-    ## 715       1     1   2   73.6
-    ## 716       1     2   3   74.0
-    ## 717       1     2   2   58.4
-    ## 718       1     1   2   56.8
-    ## 719       1     1   3   68.3
-    ## 720       2     1   2   61.6
-    ## 721       2     2   1   62.7
-    ## 722       1     1   1   65.0
-    ## 723       1     2   1   52.2
-    ## 724       2     2   3   76.3
-    ## 725       1     2   1   48.6
-    ## 726       1     2   1   72.8
-    ## 727       2     1   1   77.2
-    ## 728       1     1   3   45.1
-    ## 729       2     1   3   68.2
-    ## 730       2     1   2   76.6
-    ## 731       1     1   3   79.6
-    ## 732       1     2   1   76.2
-    ## 733       1     1   1   61.4
-    ## 734       2     1   1   68.3
-    ## 735       2     2   3   50.8
-    ## 736       2     2   2   60.0
-    ## 737       1     1   1   68.4
-    ## 738       2     1   1   58.9
-    ## 739       1     1   1   75.2
-    ## 740       1     1   1   80.6
-    ## 741       2     2   3   65.8
-    ## 742       2     1   3   62.7
-    ## 743       1     1   2   65.3
-    ## 744       2     1   3   49.1
-    ## 745       1     2   1   49.0
-    ## 746       2     2   2   61.1
-    ## 747       2     2   2   58.6
-    ## 748       1     2   3   79.6
-    ## 749       1     1   1   67.1
-    ## 750       2     1   1   53.7
-    ## 751       2     1   2   67.4
-    ## 752       2     1   1   70.2
-    ## 753       2     1   3   67.5
-    ## 754       1     2   1   49.0
-    ## 755       1     2   3   69.0
-    ## 756       2     2   2   78.6
-    ## 757       2     1   2   80.8
-    ## 758       1     2   1   65.0
-    ## 759       2     2   2   57.7
-    ## 760       2     2   1   56.2
-    ## 761       1     1   2   53.9
-    ## 762       2     2   1   63.6
-    ## 763       2     2   3   60.8
-    ## 764       1     1   1   70.4
-    ## 765       2     1   3   62.3
-    ## 766       2     2   3   67.6
-    ## 767       2     1   1   68.6
-    ## 768       1     1   3   54.5
-    ## 769       2     1   1   51.9
-    ## 770       2     1   2   71.8
-    ## 771       1     2   1   71.7
-    ## 772       2     1   1   76.4
-    ## 773       2     1   3   73.7
-    ## 774       2     2   1   55.7
-    ## 775       1     2   3   54.4
-    ## 776       2     2   1   78.0
-    ## 777       2     1   3   72.6
-    ## 778       2     2   1   77.8
-    ## 779       2     2   1   66.8
-    ## 780       1     1   3   36.7
-    ## 781       1     2   1   62.4
-    ## 782       1     2   3   58.9
-    ## 783       2     1   3   58.1
-    ## 784       1     2   1   45.5
-    ## 785       1     2   3   53.0
-    ## 786       2     1   1   77.7
-    ## 787       2     1   1   68.7
-    ## 788       2     2   3   71.7
-    ## 789       2     2   1   42.7
-    ## 790       2     2   3   83.9
-    ## 791       1     2   3   61.1
-    ## 792       2     1   3   65.5
-    ## 793       1     1   2   69.2
-    ## 794       2     2   3   73.9
-    ## 795       1     2   1   68.0
-    ## 796       1     1   2   73.5
-    ## 797       1     2   2   60.8
-    ## 798       2     2   3   62.9
-    ## 799       1     1   2   70.4
-    ## 800       2     2   1   56.8
-    ## 801       1     2   1   77.1
-    ## 802       2     2   3   58.3
-    ## 803       2     1   2   69.5
-    ## 804       1     1   1   46.6
-    ## 805       2     2   3   89.6
-    ## 806       2     1   2   70.8
-    ## 807       2     2   1   77.6
-    ## 808       2     1   1   64.3
-    ## 809       1     2   1   47.0
-    ## 810       1     2   2   55.3
-    ## 811       1     2   2   73.1
-    ## 812       2     2   3   68.6
-    ## 813       1     1   3   60.1
-    ## 814       1     1   3   69.9
-    ## 815       1     1   2   67.9
-    ## 816       1     2   1   61.3
-    ## 817       1     2   3   69.8
-    ## 818       2     1   3   80.2
-    ## 819       2     2   3   73.2
-    ## 820       2     2   2   69.7
-    ## 821       2     1   1   55.3
-    ## 822       1     2   3   57.0
-    ## 823       1     1   2   70.1
-    ## 824       1     2   2   59.1
-    ## 825       2     1   2   53.0
-    ## 826       2     2   1   67.8
-    ## 827       2     1   2   77.1
-    ## 828       2     2   1   81.3
-    ## 829       1     2   1   78.2
-    ## 830       1     1   1   75.1
-    ## 831       2     1   1   64.2
-    ## 832       1     1   1   74.2
-    ## 833       2     2   2   73.1
-    ## 834       1     1   1   72.3
-    ## 835       2     1   3   50.8
-    ## 836       1     2   3   53.4
-    ## 837       2     1   1   74.6
-    ## 838       2     2   3   67.6
-    ## 839       1     2   3   56.6
-    ## 840       1     2   1   62.9
-    ## 841       2     1   2   65.1
-    ## 842       1     1   1   67.4
-    ## 843       2     1   3   53.2
-    ## 844       2     1   3   56.4
-    ## 845       2     2   1   59.5
-    ## 846       1     1   1   79.1
-    ## 847       2     2   2   84.2
-    ## 848       1     1   1   62.4
-    ## 849       2     2   1   63.5
-    ## 850       2     1   2   63.1
-    ## 851       1     1   1   80.4
-    ## 852       1     2   1   69.9
-    ## 853       2     2   1   77.8
-    ## 854       2     2   2   53.6
-    ## 855       1     1   1   51.9
-    ## 856       2     2   1   67.6
-    ## 857       2     1   1   64.4
-    ## 858       1     2   3   67.4
-    ## 859       1     2   1   48.7
-    ## 860       2     1   1   59.9
-    ## 861       2     1   2   60.9
-    ## 862       1     2   2   63.3
-    ## 863       1     2   3   65.5
-    ## 864       2     1   1   70.3
-    ## 865       1     1   2   56.5
-    ## 866       1     1   3   77.0
-    ## 867       2     1   1   53.8
-    ## 868       1     2   2   78.4
-    ## 869       1     2   3   72.0
-    ## 870       1     2   1   79.7
-    ## 871       2     1   2   59.9
-    ## 872       1     1   2   55.9
-    ## 873       2     2   2   77.4
-    ## 874       1     2   2   52.7
-    ## 875       2     2   1   75.4
-    ## 876       1     2   1   52.4
-    ## 877       1     1   3   68.5
-    ## 878       2     1   3   48.0
-    ## 879       2     1   2   56.5
-    ## 880       1     2   2   63.2
-    ## 881       2     1   3   62.4
-    ## 882       1     1   1   85.7
-    ## 883       1     1   2   75.2
-    ## 884       1     2   2   62.0
-    ## 885       1     2   3   60.5
-    ## 886       2     1   1   71.2
-    ## 887       2     2   2   82.9
-    ## 888       2     1   3   73.6
-    ## 889       1     2   3   74.5
-    ## 890       1     1   1   69.1
-    ## 891       1     1   3   50.0
-    ## 892       1     2   1   68.4
-    ## 893       2     2   1   78.2
-    ## 894       2     2   2   62.6
-    ## 895       1     1   2   28.5
-    ## 896       2     2   3   78.4
-    ## 897       2     1   1   37.3
-    ## 898       1     1   1   60.3
-    ## 899       2     2   1   59.6
-    ## 900       1     1   3   67.8
-    ## 901       1     2   2   68.2
-    ## 902       2     1   2   68.1
-    ## 903       2     1   2   94.7
-    ## 904       2     2   3   79.2
-    ## 905       1     1   1   63.2
-    ## 906       1     2   2   74.6
-    ## 907       2     2   2   53.7
-    ## 908       2     1   3   73.6
-    ## 909       2     1   2   72.8
-    ## 910       2     1   2   50.7
-    ## 911       2     1   1   60.0
-    ## 912       1     1   1   69.8
-    ## 913       1     1   3   60.5
-    ## 914       1     1   2   75.5
-    ## 915       1     1   2   65.1
-    ## 916       1     1   1   55.1
-    ## 917       2     1   2   51.1
-    ## 918       2     2   1   58.7
-    ## 919       1     2   3   78.5
-    ## 920       1     1   1   71.3
-    ## 921       2     2   3   61.4
-    ## 922       2     1   1   74.9
-    ## 923       1     1   1   65.3
-    ## 924       1     2   1   76.3
-    ## 925       2     2   2   68.0
-    ## 926       2     2   2   63.9
-    ## 927       1     2   2   63.4
-    ## 928       1     1   2   47.2
-    ## 929       1     1   3   77.9
-    ## 930       1     2   1   76.2
-    ## 931       2     1   3   60.9
-    ## 932       1     1   1   64.4
-    ## 933       2     2   2   73.2
-    ## 934       1     1   3   65.5
-    ## 935       1     2   3   67.3
-    ## 936       1     1   2   62.1
-    ## 937       1     1   3   65.4
-    ## 938       1     2   2   64.4
-    ## 939       1     1   1   89.0
-    ## 940       2     1   1   54.7
-    ## 941       1     2   2   59.0
-    ## 942       2     1   3   70.5
-    ## 943       2     2   2   42.2
-    ## 944       1     2   2   71.3
-    ## 945       1     1   2   65.4
-    ## 946       2     1   1   55.2
-    ## 947       2     1   2   76.9
-    ## 948       2     2   2   68.8
-    ## 949       1     2   3   65.5
-    ## 950       1     1   1   77.8
-    ## 951       2     1   1   67.4
-    ## 952       2     2   2   55.5
-    ## 953       1     2   3   76.6
-    ## 954       1     1   2   69.3
-    ## 955       2     1   1   69.9
-    ## 956       2     2   3   45.2
-    ## 957       1     2   1   71.9
-    ## 958       2     1   3   65.9
-    ## 959       2     2   3   60.0
-    ## 960       1     2   2   58.4
-    ## 961       2     2   2   57.7
-    ## 962       2     2   2   60.6
-    ## 963       1     1   1   66.9
-    ## 964       1     2   2   67.0
-    ## 965       2     1   2   71.4
-    ## 966       2     1   3   66.3
-    ## 967       2     2   2   53.0
-    ## 968       1     2   1   65.8
-    ## 969       1     2   1   50.8
-    ## 970       2     2   2   64.0
-    ## 971       1     1   3   72.8
-    ## 972       1     2   3   62.9
-    ## 973       1     1   2   63.7
-    ## 974       1     2   3   76.6
-    ## 975       2     2   3   73.8
-    ## 976       2     2   3   77.7
-    ## 977       1     1   1   73.4
-    ## 978       2     1   1   74.8
-    ## 979       2     2   1   64.1
-    ## 980       1     1   2   78.5
-    ## 981       2     2   3   39.9
-    ## 982       2     2   3   54.1
-    ## 983       1     1   3   78.6
-    ## 984       2     2   2   76.7
-    ## 985       2     1   2   83.0
-    ## 986       1     1   2   71.8
-    ## 987       2     1   1   58.8
-    ## 988       2     1   2   57.9
-    ## 989       2     2   2   59.3
-    ## 990       2     1   1   69.1
-    ## 991       1     1   2   67.0
-    ## 992       2     2   2   78.4
-    ## 993       2     2   2   68.0
-    ## 994       1     1   2   68.9
-    ## 995       2     2   1   64.3
-    ## 996       2     1   3   73.4
-    ## 997       2     2   3   74.5
-    ## 998       2     1   3   70.7
-    ## 999       2     2   1   56.0
-    ## 1000      2     1   1   76.0
-
-``` r
-head(smoking)
+head(smoking, 5)
 ```
 
     ##   gender smoke age weight
@@ -2189,25 +1099,19 @@ head(smoking)
     ## 3      1     2   3   46.9
     ## 4      1     1   3   70.5
     ## 5      1     2   1   66.9
-    ## 6      2     2   3   93.0
 
 ``` r
-smoking[1:10,]
+smoking[1:5,]
 ```
 
-    ##    gender smoke age weight
-    ## 1       2     1   3   65.1
-    ## 2       2     1   1   66.9
-    ## 3       1     2   3   46.9
-    ## 4       1     1   3   70.5
-    ## 5       1     2   1   66.9
-    ## 6       2     2   3   93.0
-    ## 7       1     1   1   67.1
-    ## 8       1     2   3   74.5
-    ## 9       1     2   3   77.6
-    ## 10      2     1   1   61.6
+    ##   gender smoke age weight
+    ## 1      2     1   3   65.1
+    ## 2      2     1   1   66.9
+    ## 3      1     2   3   46.9
+    ## 4      1     1   3   70.5
+    ## 5      1     2   1   66.9
 
-### replace numbers by characters
+### replace numbers by descriptive labels
 
 ``` r
 # replace numbers by characters
@@ -2278,30 +1182,27 @@ Summarizing data
 
 For summarizing data there are many ways in R (as is the case with many operations). I find the dplyr way the most intuitive. Using dplyr has the advantage that you can easily built on existing function and examples, because the code is faily easy to understand.
 
-One thing that makes dplyr great is that it works with the "%&gt;%" symbol. Which is in programming jargon also called the "pipe" symbol.
+One thing that makes dplyr great is that it works with the "%&gt;%" symbol. Which is in programming jargon also called the "pipe" symbol. The pipe symbol takes the previous result of an operation and put it in the next. The pipe symbol can replace the use of annoying round brackets: or "(parentheses)"
 
-The pipe symbol takes the previous result of an operation and put it in the next
-
-The pipe symbol can replace the use of annoying round brackets: or "(parentheses)"
-
-Let's look at a simple example:
+Let's look at quite a simple example:
 
 ``` r
-### IMPORTANT: RUN ALL THE LINES AT ONCE INCLUDING THE SET.SEET OPTION, BECAUSE OF REPRODUCIBILITY. (Cntrl + Shift + Enter)
+library(dplyr)
+### IMPORTANT: RUN ALL THE LINES BELOW AT ONCE INCLUDING THE SET.SEET OPTION, BECAUSE OF REPRODUCIBILITY. (Cntrl + Shift + Enter)
 
 
-## If we want to calculate the sum, of the square root of the mean, of two nummeric vectors we could do:
+## If we want to calculate the sum, of the square root of the mean, of two nummeric vectors (each of length = 1000) we could do:
 
 set.seed(12345)    
-zzz <- mean((sqrt(mean(x <- rnorm(10000, mean = 34, sd = 2))))) +
-mean((sqrt(mean(y <- rnorm(10000, mean = 23, sd = 4)))))
+zzz <- sqrt(mean(x <- rnorm(10000, mean = 34, sd = 2))) +
+sqrt(mean(y <- rnorm(10000, mean = 23, sd = 4)))
 zzz
 ```
 
     ## [1] 10.6257
 
 ``` r
-## the above is alomost impossible to read because of all the round brackets, note the closing brackets: 5 of them!!
+## the above is almost impossible to read because of all the round brackets, note the closing brackets: 3 of them!!
 
 
 ## let's try the dplyr way with the %>% (pipe) operator
@@ -2320,9 +1221,9 @@ zzz == qqq
 
     ## [1] TRUE
 
-The dplyr way is a lot better is it not? Do you get what the above (dplyr-way) rules do?
+The dplyr way is a lot better is it not? Do you get what the above (dplyr-way) lines do?
 
-1.  the result of the fist vector (1000 random numbers, with mean of 34 and a sd of 2 is piped into the function mean, which calculates the mean of these 1000 numbers
+1.  the result of the fist vector (1000 random numbers, with mean of 34 and a sd of 2 is piped into the function mean, which calculates the mean of these 1000 numbers (which will be around 34)
 
 2.  From that the square root is taken by piping the mean in the function sqrt()
 
@@ -2330,7 +1231,7 @@ The dplyr way is a lot better is it not? Do you get what the above (dplyr-way) r
 
 4.  The result is qqq
 
-5.  Is qqq equal to zzz, which we calculated the "old-fashioned" mathematical way: YES!
+5.  Is qqq equal to zzz, which we calculated the "old-fashioned" mathematical way? YES!
 
 Let's apply the above to our smoking dataset
 --------------------------------------------
@@ -2421,59 +1322,74 @@ head(faithful)
 hist(faithful$eruptions,breaks = 15)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-27-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-1.png)
 
 ``` r
 hist(faithful$waiting, breaks = 15)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-27-2.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-2.png)
 
 ``` r
 boxplot(faithful$eruptions)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-27-3.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-3.png)
 
 ``` r
 qqnorm(faithful$eruptions);qqline(faithful$eruptions)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-27-4.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-4.png)
 
 ``` r
 plot(faithful$eruptions,type="l")
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-27-5.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-5.png)
 
 ``` r
 plot(faithful$eruptions, faithful$waiting)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-27-6.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-6.png)
 
 Grammar of Graphics (ggplot2 package)
 -------------------------------------
 
 ggplot2 is a data visualization package for the statistical programming language R. Created by Hadley Wickham in 2005, ggplot2 is an implementation of Leland Wilkinson's Grammar of Graphics—a general scheme for data visualization which breaks up graphs into semantic components such as scales and layers. ggplot2 can serve as a replacement for the base graphics in R and contains a number of defaults for web and print display of common scales. Since 2005, ggplot2 has grown in use to become one of the most popular R packages. It is licensed under GNU GPL v2.\[from Wikipedia, September, 2016\]
 
-### **The ggplot2 package is very very versatile and can not be demonstrated to it's full abilities during this short workshop. Here we are barely scratching the surface. If you want to learn more about the power of R, you must start with exploring the posibilities of ggplot2, it is the future of data visualization.**
+### **The ggplot2 package is very very versatile and can not be demonstrated to it's full abilities during this short workshop. Here we are barely scratching the ggplot2 surface. If you want to learn more about the power of R, you must start with exploring the posibilities of ggplot2, it is the future of data visualization.**
 
-A good place to start learning more Grammar of Graphics: <http://www.cookbook-r.com/Graphs/>
+ggplot2 is also very good for creating heat-mas, which are very informative for visualization of large-scale and high deminensional data, e.g. obtained from genomics or proteomics experiments.
 
-We illustrate the workings of ggplot with two demo data-sets: "TootGrowth" and "Household Power Consumption"
+A good place to start learning more on The Grammar of Graphics: <http://www.cookbook-r.com/Graphs/>
+
+We illustrate the workings of ggplot with two demo data-sets:
+
+1.  "TootGrowth"
+2.  "Household Power Consumption"
 
 ``` r
-data("ToothGrowth")
-library(ggplot2)
-g <- ggplot(data = ToothGrowth, aes(len))
-g + geom_histogram() 
+tg <- datasets::ToothGrowth
+head(tg)
 ```
 
-    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+    ##    len supp dose
+    ## 1  4.2   VC  0.5
+    ## 2 11.5   VC  0.5
+    ## 3  7.3   VC  0.5
+    ## 4  5.8   VC  0.5
+    ## 5  6.4   VC  0.5
+    ## 6 10.0   VC  0.5
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-28-1.png)
+``` r
+library(ggplot2)
+g <- ggplot(data = tg, aes(len))
+g + geom_histogram(bins = 25) 
+```
+
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-30-1.png)
 
 The graph shows a histogram of the Toothgrowth data (len = length teeth of Guinea pigs, treated with two different vitamine C food-sources).
 
@@ -2482,20 +1398,20 @@ This looks nice, but what if we would like to add a title to the graph: Simple w
 `+ ggtitle("ToothGrowth")`
 
 ``` r
-g <- ggplot(data = ToothGrowth, aes(len))
+g <- ggplot(data = tg, aes(len))
 g + geom_histogram(bins = 30) + ggtitle("ToothGrowth")
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-31-1.png)
 
 Let's see if we can make a more meaningfull graph, that shows something about the result of the treatment, on teeth growth.
 
 ``` r
-g <- ggplot(data = ToothGrowth, aes(x = dose, y = len, group = supp, colour = supp))
+g <- ggplot(data = tg, aes(x = dose, y = len, group = supp, colour = supp))
 g + geom_point() + ggtitle("ToothGrowth")
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-30-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-32-1.png)
 
 Now we get a scatterplot with colours indicating the different supplement. Already more informative, but not very pretty.
 
@@ -2511,93 +1427,29 @@ str(ToothGrowth)
     ##  $ dose: num  0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 ...
 
 ``` r
-g <- ggplot(data = ToothGrowth, aes(x = dose, y = len, group = 1))
+g <- ggplot(data = tg, aes(x = dose, y = len, group = 1))
 g + geom_point() + 
   facet_wrap(facets = "supp") + 
   geom_smooth() + ggtitle("ToothGrowth")
 ```
 
-    ## Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-    ## parametric, : pseudoinverse used at 0.4925
-
-    ## Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-    ## parametric, : neighborhood radius 1.5075
-
-    ## Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-    ## parametric, : reciprocal condition number 1.5661e-016
-
-    ## Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-    ## parametric, : There are other near singularities as well. 2.2726
-
-    ## Warning in predLoess(object$y, object$x, newx = if
-    ## (is.null(newdata)) object$x else if (is.data.frame(newdata))
-    ## as.matrix(model.frame(delete.response(terms(object)), : pseudoinverse used
-    ## at 0.4925
-
-    ## Warning in predLoess(object$y, object$x, newx = if
-    ## (is.null(newdata)) object$x else if (is.data.frame(newdata))
-    ## as.matrix(model.frame(delete.response(terms(object)), : neighborhood radius
-    ## 1.5075
-
-    ## Warning in predLoess(object$y, object$x, newx = if
-    ## (is.null(newdata)) object$x else if (is.data.frame(newdata))
-    ## as.matrix(model.frame(delete.response(terms(object)), : reciprocal
-    ## condition number 1.5661e-016
-
-    ## Warning in predLoess(object$y, object$x, newx = if
-    ## (is.null(newdata)) object$x else if (is.data.frame(newdata))
-    ## as.matrix(model.frame(delete.response(terms(object)), : There are other
-    ## near singularities as well. 2.2726
-
-    ## Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-    ## parametric, : pseudoinverse used at 0.4925
-
-    ## Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-    ## parametric, : neighborhood radius 1.5075
-
-    ## Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-    ## parametric, : reciprocal condition number 1.5661e-016
-
-    ## Warning in simpleLoess(y, x, w, span, degree = degree, parametric =
-    ## parametric, : There are other near singularities as well. 2.2726
-
-    ## Warning in predLoess(object$y, object$x, newx = if
-    ## (is.null(newdata)) object$x else if (is.data.frame(newdata))
-    ## as.matrix(model.frame(delete.response(terms(object)), : pseudoinverse used
-    ## at 0.4925
-
-    ## Warning in predLoess(object$y, object$x, newx = if
-    ## (is.null(newdata)) object$x else if (is.data.frame(newdata))
-    ## as.matrix(model.frame(delete.response(terms(object)), : neighborhood radius
-    ## 1.5075
-
-    ## Warning in predLoess(object$y, object$x, newx = if
-    ## (is.null(newdata)) object$x else if (is.data.frame(newdata))
-    ## as.matrix(model.frame(delete.response(terms(object)), : reciprocal
-    ## condition number 1.5661e-016
-
-    ## Warning in predLoess(object$y, object$x, newx = if
-    ## (is.null(newdata)) object$x else if (is.data.frame(newdata))
-    ## as.matrix(model.frame(delete.response(terms(object)), : There are other
-    ## near singularities as well. 2.2726
-
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-31-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-33-1.png)
 
 ``` r
 ## ignore the warnings if you get them...
-
 ## clean up the workspace again
 ```
 
-He, that's nice, now we have a panelplot, with in each panel a smoother line and data points, for each tratment. Which vitamine C supplement has the most potent effect on the growth of the teeth of the tested Guinea pigs?
-
-<sub><sub><sub><sub><sub><sub><sub><sub><sub><sub><sub><sub><sub><sub><sub>~</sub></sub></sub></sub></sub></sub></sub></sub></sub></sub></sub></sub></sub></sub><sub><sub><sub><sub><sub><sub><sub><sub><sub><sub><sub><sub><sub><sub><sub>~</sub></sub></sub></sub></sub></sub></sub></sub></sub></sub></sub></sub></sub></sub></sub><sub><sub><sub><sub><sub><sub>~</sub></sub></sub></sub></sub></sub></sub>
+Hey, that's nice, now we have a panelplot, with in each panel a smoother line and data points, for each tratment. Which vitamine C supplement (OJ or VC) has the most potent effect on the growth of the teeth of the tested Guinea pigs?
 
 First, clean up the workspace again.
+------------------------------------
 
 ``` r
 rm(list=ls())
 root <- find_root_file(criterion = is_rstudio_project)
+
+
 
 ## Note: never use this in code that is meant for others!!!
 ```
@@ -2606,11 +1458,11 @@ GRAMMAR OF GRAPHICS DEMO ON A BIGGER DATASET
 ============================================
 
 Want to work on a bigger dataset? I guessed you would want to do so, so I prepared a bit on "big(ger) data below"
-=================================================================================================================
+-----------------------------------------------------------------------------------------------------------------
 
 I have prepared a script that will analyze a big dataset &gt;2 million datapoints on power consumption by US households. The script is called "power\_households.R". The script handles a number of steps: 1) System settings and packages are handeled
 
-1.  Getting the data, the dat is downloaded directly from the web
+1.  Getting the data, the data is downloaded directly from the web
 
 2.  The data is cleaned up and subsets are selected (only data from 48 hrs of power consumption are included)
 
@@ -2677,7 +1529,7 @@ hist(data_twoDays$global_active_power, col = "red",
      xlab = "Global Active Power", ylab = "Frequency", main = "Global Active Power")
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-33-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-35-1.png)
 
 ### Plot 2: ggplot2 example
 
@@ -2714,7 +1566,7 @@ theme_bw() +
 plot2
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-34-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-36-1.png)
 
 ### Plot 3: ggplot2 example
 
@@ -2760,7 +1612,7 @@ theme(panel.grid.major = element_blank(),
 plot3
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-35-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-37-1.png)
 
 ### Plot 4: ggplot2 example
 
@@ -2823,13 +1675,13 @@ theme(panel.grid.major = element_blank(),
 plot5
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-36-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-38-1.png)
 
 ``` r
 plot6
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-36-2.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-38-2.png)
 
 CREATING A PANEL PLOT
 ---------------------
@@ -2839,16 +1691,12 @@ CREATING A PANEL PLOT
 panel <- plot_grid(plot2, plot5, plot3, plot6,
           labels=c("A", "B", "C", "D"), ncol = 2)
 
-png(filename = paste0(root, "/images/panel_energy.png"),
-    res = 300, height = 20, width = 25, units = "cm")
 panel
-dev.off()
 ```
 
-    ## png 
-    ##   2
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-39-1.png)
 
-The above is meant as a demo for the strength of the Grammar of Graphics lingo. There is a lot more to ggplot2 than can be shown in this short demo. As mentioned above, a good place to start learning ggplot2 is
+The above is meant as a demo for the strength of the Grammar of Graphics lingo. There is a lot more to ggplot2 than can be shown in this short demo. As mentioned above, a good place to start learning ggplot2 is:
 
 <http://www.cookbook-r.com/Graphs/>.
 
@@ -2900,12 +1748,10 @@ browseVignettes("IRanges")
 
 ### R code from vignette source 'Biostrings2Classes.Rnw'
 
-### Encoding: ISO8859-1
-
 Create a BString class object
 
 ``` r
-b <- BString("I am a BString object")
+b <- BString(c("I am a BString object"))
 b
 ```
 
@@ -3094,12 +1940,12 @@ protein
 
 Each triplet codes for one amino acid.
 
-Mind the ambiguous amino acids indicated by \*.
+\_Notice the ambiguous amino acids indicated by \*.\_
 
 Views on strings
 ----------------
 
-Views are a way to descibe the subsequences of a longer sequence.
+IRanges Views are a way to describe the subsequences of a longer sequence.
 
 ``` r
 v4 <- Views(dd2, start=3:0, end=5:8)
@@ -3180,22 +2026,25 @@ as(d, "Views")[[1]]
     ##   13-letter "DNAString" instance
     ## seq: TTGAAAA-CTC-N
 
-IRanages package to use views and strings for biological sequences
-==================================================================
+IRanges package to use views and strings for biological sequences
+=================================================================
 
 ### R code from vignette source 'IRangesOverview.Rnw'
-
-### Encoding: ISO8859-1
 
 ``` r
 p_load(IRanges)
 library(IRanges)
+library(Biostrings)
 ```
 
-Generating some dummy sequences
--------------------------------
+Generating dummy DNA sequence
+-----------------------------
 
-Let's look at Rle. What is this for an object. Assume you have a DNA sequence: AAATTGTGTGCCCTTT
+### Encoding long strings and sequences
+
+The storage of large sequences in a friendly, accessible and small format is feasibe for the very long sequences of DNA that we use in Biology. When ragarding a full genome we can easily have sequences over 50 milion bases. Considering the longest chomosome of the human (chromosome 1) is over 200 milion base pairs long, you can appriciate the neccessity to store these strings of nucleotides in a computational-and-storage-friendle format. In R this format is encoded by the Rle class of objects.
+
+Let's look at Rle. Assume you have a short DNA sequence: AAATTGTGTGCCCTTT
 
 This sequence can be converted to a DNAString
 
@@ -3206,14 +2055,6 @@ seq_demo
 
     ##   16-letter "DNAString" instance
     ## seq: AAATTGTGTGCCCTTT
-
-``` r
-Views(seq_demo)
-```
-
-    ##   Views on a 16-letter DNAString subject
-    ## subject: AAATTGTGTGCCCTTT
-    ## views: NONE
 
 let's see what happens if we convert this sequence to an Rle object
 
@@ -3228,16 +2069,88 @@ seq_rle
     ##   Values : A T G T G T G C T
     ## Levels(18): A C G T M R W S Y K V H D B N - + .
 
-Hey!, That is clever! So we can describe a DNAString as a collection of Lengths and Values. So the fist three A nucleotides can be described as Lengths = 3, Value = A, the consecutive two T nucleotides can be described by Lengths = 2, Value = T, and so on...
+Hey!, That is clever! So we can describe a DNAString as a collection of Lengths and Values. The fist three A nucleotides in this sequence can be described as Lengths = 3, Value = A, the consecutive two T nucleotides can be described by Lengths = 2, Value = T, and so on...
 
-This encoding for DNA sequences, or other very long sequences, is used e.g. in sequencing files that contain the genomes. It is a way to condense the information and to prevent writing very very long sequences in a file, that are hard to work with. The sequence encoded in this way is also more easily accessible.
+This encoding for DNA sequences, or other very long sequences, is used e.g. in sequencing files that contain the genomes. It is a way to condense the information and to prevent writing very very long sequences in a file, that are hard to work with. The sequence encoded in this way is also more easily accessible by the computer and this encoding will reduce computation time.
 
-Let's create a sequence
+Let's create a longer sequence and some shorter ones that we want to match to the longer sequence. The shorter sequences ar stored in a dictionary. This disctionary can contain only sequence that are of equal lenth. Although, there are ways to do multiple matchings with sequences of unequal length we will not go into detail on this here.
 
 ``` r
-###################################################
+## Our subject sequence (the longer sequence)
+subject_seq <- DNAString(c("ATTTGTTGATCATCATCATGTTTTATGTTTGTGTGTATTATTATTATTTCCGCGCGTA"))
+
+## the dictionary with a few three-base long sequences
+dictionary <- PDict(c("ATC", "ATG", "ATT", "TAT", "TTA"))
+
+## the actual matching of the dictionary against the subject DNA sequence
+match <- Biostrings::matchPDict(pdict = dictionary, subject = subject_seq)
+names_patterns <- c("ATC", "ATG", "ATT", "TAT", "TTA")
+
+## the names of the pattern are added to the match object
+match@NAMES <- c(names_patterns)
+ str(match)
+```
+
+    ## Formal class 'ByPos_MIndex' [package "Biostrings"] with 7 slots
+    ##   ..@ dups0          :Formal class 'Dups' [package "IRanges"] with 5 slots
+    ##   .. .. ..@ high2low       : int [1:5] NA NA NA NA NA
+    ##   .. .. ..@ low2high       :List of 5
+    ##   .. .. .. ..$ : NULL
+    ##   .. .. .. ..$ : NULL
+    ##   .. .. .. ..$ : NULL
+    ##   .. .. .. ..$ : NULL
+    ##   .. .. .. ..$ : NULL
+    ##   .. .. ..@ elementType    : chr "integer"
+    ##   .. .. ..@ elementMetadata: NULL
+    ##   .. .. ..@ metadata       : list()
+    ##   ..@ ends           :List of 5
+    ##   .. ..$ : int [1:3] 11 14 17
+    ##   .. ..$ : int [1:2] 20 27
+    ##   .. ..$ : int [1:5] 3 39 42 45 48
+    ##   .. ..$ : int [1:5] 26 38 41 44 47
+    ##   .. ..$ : int [1:4] 25 40 43 46
+    ##   ..@ width0         : int [1:5] 3 3 3 3 3
+    ##   ..@ NAMES          : chr [1:5] "ATC" "ATG" "ATT" "TAT" ...
+    ##   ..@ elementType    : chr "IRanges"
+    ##   ..@ elementMetadata: NULL
+    ##   ..@ metadata       : list()
+
+``` r
+ match@NAMES
+```
+
+    ## [1] "ATC" "ATG" "ATT" "TAT" "TTA"
+
+``` r
+ ## contructing an IRangesList from match
+ir <- lapply(match, IRanges::IRanges)
+ir_list <- IRanges::IRangesList(ir)
+
+head(ir_list, 2)
+```
+
+    ## IRangesList of length 2
+    ## $ATC
+    ## IRanges object with 3 ranges and 0 metadata columns:
+    ##           start       end     width
+    ##       <integer> <integer> <integer>
+    ##   [1]         9        11         3
+    ##   [2]        12        14         3
+    ##   [3]        15        17         3
+    ## 
+    ## $ATG
+    ## IRanges object with 2 ranges and 0 metadata columns:
+    ##           start       end     width
+    ##       <integer> <integer> <integer>
+    ##   [1]        18        20         3
+    ##   [2]        25        27         3
+
+Although with the Views you could figure out for each pattern in the dictionary where the match to the subject is located and how many times it is represented in the subject sequence, we could use a plot here to see the details in an overview. Let's make a plot!
+
+The code below is rather complicated, do not worry if you do not understand, you will understand the end-result, anyway.
+
+``` r
 ### code chunk number 31: plotRanges
-###################################################
 IRanges_plot <- function(IRanges_object, sep=0.5, height=1,
                          set_breaks=TRUE, labcol="grey",
                                                 names=NULL, cov=FALSE, clear=FALSE,
@@ -3308,56 +2221,12 @@ IRanges_plot <- function(IRanges_object, sep=0.5, height=1,
     p
 }
 
-
-dict <- PDict(c("ATC", "ATG", "ATT", "TAT", "TTA"))
-subj <- DNAString(c("ATTTGTTGATCATCATCATGTTTTATGTTTGTGTGTATTATTATTATTTCCGCGCGTA"))
-match <- Biostrings::matchPDict(dict, subj)
-names_patterns <- c("ATC", "ATG", "ATT", "TAT", "TTA")
-match@NAMES <- c(names_patterns)
- str(match)
-```
-
-    ## Formal class 'ByPos_MIndex' [package "Biostrings"] with 7 slots
-    ##   ..@ dups0          :Formal class 'Dups' [package "IRanges"] with 5 slots
-    ##   .. .. ..@ high2low       : int [1:5] NA NA NA NA NA
-    ##   .. .. ..@ low2high       :List of 5
-    ##   .. .. .. ..$ : NULL
-    ##   .. .. .. ..$ : NULL
-    ##   .. .. .. ..$ : NULL
-    ##   .. .. .. ..$ : NULL
-    ##   .. .. .. ..$ : NULL
-    ##   .. .. ..@ elementType    : chr "integer"
-    ##   .. .. ..@ elementMetadata: NULL
-    ##   .. .. ..@ metadata       : list()
-    ##   ..@ ends           :List of 5
-    ##   .. ..$ : int [1:3] 11 14 17
-    ##   .. ..$ : int [1:2] 20 27
-    ##   .. ..$ : int [1:5] 3 39 42 45 48
-    ##   .. ..$ : int [1:5] 26 38 41 44 47
-    ##   .. ..$ : int [1:4] 25 40 43 46
-    ##   ..@ width0         : int [1:5] 3 3 3 3 3
-    ##   ..@ NAMES          : chr [1:5] "ATC" "ATG" "ATT" "TAT" ...
-    ##   ..@ elementType    : chr "IRanges"
-    ##   ..@ elementMetadata: NULL
-    ##   ..@ metadata       : list()
-
-``` r
- match@NAMES
-```
-
-    ## [1] "ATC" "ATG" "ATT" "TAT" "TTA"
-
-``` r
- ## contructing an IRangesList from match
-ir <- lapply(match, IRanges::IRanges)
-ir_list <- IRanges::IRangesList(ir)
-
 ## Calling the plot
 plot_iranges <- IRanges_plot(unlist(ir_list))
 plot_iranges
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-51-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-54-1.png)
 
 A coverage plot indicates the depth of coverage of sequence and a number of patterns. Look at the plot to understand how coverage works.
 ----------------------------------------------------------------------------------------------------------------------------------------
@@ -3375,7 +2244,7 @@ coverage_plot <- function(cx, start, end, min.depth, max.depth){
 
 
 ## Get the coverage of the original subject:
-cov3R <- as.integer(IRanges::coverage(match, width=length(subj)))
+cov3R <- as.integer(IRanges::coverage(match, width=length(subject_seq)))
 max(cov3R)
 ```
 
@@ -3402,76 +2271,80 @@ coverplot <- coverage_plot(cx = cov3R,
                            min.depth = 0, max.depth = 5)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-52-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-55-1.png)
+
+The above matching, Views, plotting an IRangesList and coverage are cocepts that play an important role in understanding the methodology of sequencing and how sequence data can be interpreted. If you want to learn more about analysis of sequence data in R, take a look at the BIOCONDUCTOR workflow below.
 
 Sequencing workflow
 ===================
 
 Commonly used workflows can be downloaded from the the BIOCONDUCTOR website. Workflows are installed as packages and demonstrate a data workflow for commond experiments and data types in Life Sciences and Chmeistry. Examples of workflows can be found at:
 
-To start with a Biological workflow on sewquencing data:
+To start with a Biological workflow on sequencing data:
+-------------------------------------------------------
 
 ``` r
-## BiocInstaller::biocValid()
+BiocInstaller::biocValid()
 
 ## Full genome sequences for Homo sapiens (Human) as provided by UCSC (hg19, Feb. 2009) and stored in Biostrings objects.
 
-## url <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz")
+url <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz")
 
-## download(url = url, destfile = "./BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz")
+download.file(url = url, destfile = paste0(root, "/data/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz"))
 
-## source("http://bioconductor.org/biocLite.R")
-
-## ?biocLite
+source("http://bioconductor.org/biocLite.R")
 
 ## installing Human genome from downloaded source file:
 
-install.packages("BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz", repo = NULL, 
-                 type = "source")
-```
+install.packages("./data/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz", repo = NULL, type = "source")
 
-    ## Installing package into 'C:/RWorkingDir/RProjects/ilc_r_workshop/packrat/lib/x86_64-w64-mingw32/3.3.1'
-    ## (as 'lib' is unspecified)
-
-    ## Warning: running command '"C:/PROGRA~1/R/R-33~1.1/bin/x64/R" CMD INSTALL
-    ## -l "C:\RWorkingDir\RProjects\ilc_r_workshop\packrat\lib\x86_64-w64-
-    ## mingw32\3.3.1" "BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz"' had status 1
-
-    ## Warning in install.packages("BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz", :
-    ## installation of package 'BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz' had non-
-    ## zero exit status
-
-``` r
 source("http://bioconductor.org/workflows.R")
-```
-
-    ## Bioconductor version 3.3 (BiocInstaller 1.22.3), ?biocLite for help
-
-    ## A newer version of Bioconductor is available for this version of R,
-    ##   ?BiocUpgrade for help
-
-``` r
-workflowInstall("sequencing", dependencies = TRUE)
-```
-
-    ## Installing package into 'C:/RWorkingDir/RProjects/ilc_r_workshop/packrat/lib/x86_64-w64-mingw32/3.3.1'
-    ## (as 'lib' is unspecified)
-
-    ## package 'sequencing' successfully unpacked and MD5 sums checked
-    ## 
-    ## The downloaded binary packages are in
-    ##  C:\Users\marct\AppData\Local\Temp\RtmpeC4Veb\downloaded_packages
-
-``` r
+workflowInstall("sequencing", dependencies = TRUE, type = "source")
 browseVignettes("sequencing")
 ```
 
-Want to learn more R?
-=====================
+see also <http://bioconductor.org/packages/release/bioc/html/GenomicRanges.html> for learning annotation, gene id's, pathway analysis and much more:
+
+To start working on pathway analysis with KEGG and Bioreactome
+--------------------------------------------------------------
+
+``` r
+url_kegg_package <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/KEGG.db_3.2.3.tar.gz")
+
+dir.create(paste0(root, "/tar_gz"))
+
+download.file(url = url_kegg_package, 
+              destfile = paste0(root, "/tar_gz/KEGG.db_3.2.3.tar.gz"))
+
+install.packages(paste0(root, "/tar_gz/KEGG.db_3.2.3.tar.gz"), repos = NULL, type = "source")
+
+p_load(KEGGREST)
+
+url_reactome_db <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/reactome.db_1.58.0.tar.gz")
+
+download.file(url = url_reactome_db,
+              destfile = paste0(root, "/tar_gz/reactome.db_1.58.0.tar.gz"))
+
+install.packages(paste0(root, "/tar_gz/reactome.db_1.58.0.tar.gz"), repos = NULL, type = "source")
+
+## An example with KEGG
+## from: http://bioconductor.org/packages/release/bioc/vignettes/GenomicRanges/inst/doc/GenomicRangesHOWTOs.R
+
+library(KEGG.db)
+pathways <- toTable(KEGGPATHNAME2ID)
+pathways[grepl("cancer", pathways$path_name, fixed=TRUE),] 
+
+## For the complete how-to: see the link above.
+```
+
+Want to learn more about R and BIOCONDUCTOR?
+============================================
+
+Visit the BIOCONDUCTOR workflows: <https://www.bioconductor.org/help/workflows/>
 
 To learn R interactively visit <http://swirlstats.com/>
 
-There is a enormous amount of information on R freely available on the web. I find it realy helpful to use youtube tutorials, online tutorials, vignettes and workflows (BIOCONDUCTOR.org). Feel free to contact me for questions on which resource is best.
+There is a enormous amount of information on R freely available on the web. I find it realy helpful to use youtube tutorials, online tutorials, vignettes and workflows (BIOCONDUCTOR.org). Feel free to contact me for questions on which resource is best to start with or to advance your skills.
 
 For statistics, which was not covered in this workshop: The book by Andy Field "Discovering Statistics Using R" kept me awake at night!! So it is a good place to start (if you have ambitions to becoming an insomniac).
 
@@ -3505,132 +2378,9 @@ Citations
 
 ``` r
 citation("base")
-```
-
-    ## 
-    ## To cite R in publications use:
-    ## 
-    ##   R Core Team (2016). R: A language and environment for
-    ##   statistical computing. R Foundation for Statistical Computing,
-    ##   Vienna, Austria. URL https://www.R-project.org/.
-    ## 
-    ## A BibTeX entry for LaTeX users is
-    ## 
-    ##   @Manual{,
-    ##     title = {R: A Language and Environment for Statistical Computing},
-    ##     author = {{R Core Team}},
-    ##     organization = {R Foundation for Statistical Computing},
-    ##     address = {Vienna, Austria},
-    ##     year = {2016},
-    ##     url = {https://www.R-project.org/},
-    ##   }
-    ## 
-    ## We have invested a lot of time and effort in creating R, please
-    ## cite it when using it for data analysis. See also
-    ## 'citation("pkgname")' for citing R packages.
-
-``` r
 citation("ggplot2")
-```
-
-    ## 
-    ## To cite ggplot2 in publications, please use:
-    ## 
-    ##   H. Wickham. ggplot2: Elegant Graphics for Data Analysis.
-    ##   Springer-Verlag New York, 2009.
-    ## 
-    ## A BibTeX entry for LaTeX users is
-    ## 
-    ##   @Book{,
-    ##     author = {Hadley Wickham},
-    ##     title = {ggplot2: Elegant Graphics for Data Analysis},
-    ##     publisher = {Springer-Verlag New York},
-    ##     year = {2009},
-    ##     isbn = {978-0-387-98140-6},
-    ##     url = {http://ggplot2.org},
-    ##   }
-
-``` r
 citation("seqinr")
-```
-
-    ## 
-    ## To cite seqinR in publications use:
-    ## 
-    ##   Charif, D. and Lobry, J.R. (2007)
-    ## 
-    ## A BibTeX entry for LaTeX users is
-    ## 
-    ##   @InCollection{,
-    ##     author = {D. Charif and J.R. Lobry},
-    ##     title = {Seqin{R} 1.0-2: a contributed package to the {R} project for statistical computing devoted to biological sequences retrieval and analysis.},
-    ##     booktitle = {Structural approaches to sequence evolution: Molecules, networks, populations},
-    ##     year = {2007},
-    ##     editor = {U. Bastolla and M. Porto and H.E. Roman and M. Vendruscolo},
-    ##     series = {Biological and Medical Physics, Biomedical Engineering},
-    ##     pages = {207-232},
-    ##     address = {New York},
-    ##     publisher = {Springer Verlag},
-    ##     note = {{ISBN :} 978-3-540-35305-8},
-    ##   }
-
-``` r
 citation("dplyr")
-```
-
-    ## 
-    ## To cite package 'dplyr' in publications use:
-    ## 
-    ##   Hadley Wickham and Romain Francois (2016). dplyr: A Grammar of
-    ##   Data Manipulation. R package version 0.5.0.
-    ##   https://CRAN.R-project.org/package=dplyr
-    ## 
-    ## A BibTeX entry for LaTeX users is
-    ## 
-    ##   @Manual{,
-    ##     title = {dplyr: A Grammar of Data Manipulation},
-    ##     author = {Hadley Wickham and Romain Francois},
-    ##     year = {2016},
-    ##     note = {R package version 0.5.0},
-    ##     url = {https://CRAN.R-project.org/package=dplyr},
-    ##   }
-
-``` r
 citation("knitr")
-```
-
-    ## 
-    ## To cite the 'knitr' package in publications use:
-    ## 
-    ##   Yihui Xie (2016). knitr: A General-Purpose Package for Dynamic
-    ##   Report Generation in R. R package version 1.14.
-    ## 
-    ##   Yihui Xie (2015) Dynamic Documents with R and knitr. 2nd
-    ##   edition. Chapman and Hall/CRC. ISBN 978-1498716963
-    ## 
-    ##   Yihui Xie (2014) knitr: A Comprehensive Tool for Reproducible
-    ##   Research in R. In Victoria Stodden, Friedrich Leisch and Roger
-    ##   D. Peng, editors, Implementing Reproducible Computational
-    ##   Research. Chapman and Hall/CRC. ISBN 978-1466561595
-
-``` r
 citation("sequencing")
 ```
-
-    ## Warning in citation("sequencing"): no date field in DESCRIPTION file of
-    ## package 'sequencing'
-
-    ## 
-    ## To cite package 'sequencing' in publications use:
-    ## 
-    ##   Bioconductor Package Maintainer (2016). sequencing: Dummy
-    ##   Package. R package version 0.99.120890.
-    ## 
-    ## A BibTeX entry for LaTeX users is
-    ## 
-    ##   @Manual{,
-    ##     title = {sequencing: Dummy Package},
-    ##     author = {Bioconductor Package Maintainer},
-    ##     year = {2016},
-    ##     note = {R package version 0.99.120890},
-    ##   }
