@@ -20,8 +20,7 @@ The code below will reproduce the circos plot in the presentation.
 
 # You can make slides with R:
 
-open the file "./circos/index.html"
-To see the code: inspect "./cicos/index.Rmd"
+To see the code: inspect "./code/slidify_your_slide_deck.R"
 
 ### *_Important note: R is case-sensitive, meaning that it will matter whether you use capital or lower case, keep this in mind if you get a cryptic warning or error!_*
 
