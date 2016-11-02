@@ -38,9 +38,9 @@ These so called code chunks contain R code that does something: for example: cal
 
 ```{r}
 set.seed(seed = 10)
-numbers <- runif(100, min = 0, max = 50)
+numbers <- runif(1000, min = 0, max = 50)
 mean_numbers <- mean(numbers)
-
+hist(numbers)
 ```
 What happens if we would increase the number of random numbers? What value would we get for the mean? Give it a try!
 
@@ -217,7 +217,7 @@ file.create(paste0(root, "/data/README.md"))
 
 writeLines("# This is my first Markdown README.txt file. \n
 ## This file is now about nothing, but \n
-### It will be about something in the future \n
+### It will be almost about something in the future \n
 ## Markdown is a simple mark-up language", 
 con = paste0(root, "/data/README.md"))
 
@@ -585,6 +585,9 @@ people <- data.frame(age=c(24, 27, 19, 34),
 ### Viewing the contents of a dataframe
 ```{r}
 
+summary(people)
+table(people)
+
 head(people) 			# gives the content of the data frame
 names(people) 
 str(people)
@@ -638,6 +641,7 @@ CSV is a format of a data file that uses commas or semicolons as seprators for t
 library(readr)
 skin <- read_csv(paste0(root, "/data/skincolumns.csv")) 
 str(skin)
+
 
 skin	 # content of the data frame
 dim(skin)
@@ -1037,7 +1041,7 @@ plot6
 
 # creating the panel with plot_grid 
 panel <- plot_grid(plot2, plot5, plot3, plot6,
-          labels=c("A", "B", "C", "D"), ncol = 2)
+          labels=c("A", "C", "B", "D"), ncol = 2)
 
 panel
 
