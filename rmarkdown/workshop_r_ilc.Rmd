@@ -24,12 +24,16 @@ source(paste0(root, "/code/circos_example.R"))
 
 # You can make slides with R:
 
+<<<<<<< HEAD
 ```{r}
 ## opens the file "./circos/index.html"
 ## to see the code: inspect "./cicos/index.Rmd"
 
 source(paste0(root, "circos/index.html"))
 ```
+=======
+To see the code: inspect "./code/slidify_your_slide_deck.R"
+>>>>>>> 1d70534dd0c8fc218a7eb697ebd7b8dcec9dfcd5
 
 ### *_Important note: R is case-sensitive, meaning that it will matter whether you use capital or lower case, keep this in mind if you get a cryptic warning or error!_*
 
