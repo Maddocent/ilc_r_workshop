@@ -172,7 +172,8 @@ p_load(car,
        S4Vectors,
        lattice,
        rmarkdown,
-       GenomicRanges)
+       GenomicRanges,
+       BSgenome)
 
 
 ```
@@ -261,8 +262,6 @@ library(deSolve)
 
 run_app("ant_collective_decision")
  
-install.packages()
-
 
 ```
 
@@ -358,6 +357,7 @@ apropos("mean") # search on more options of or alternatives for a certain functi
 ```{r, eval=FALSE}
 
 example(mean) # to see a worked example
+
 demo(graphics) # demonstration of R functions
 
 ```
@@ -1104,7 +1104,7 @@ browseVignettes("IRanges")
 Create a BString class object
 ```{r}
 
-b <- BString("I am a BString object")
+b <- BString(c("I am a BString object"))
 b
 length(b)
 class(b)
@@ -1429,10 +1429,10 @@ source("http://bioconductor.org/biocLite.R")
 
 ## installing Human genome from downloaded source file:
 
-install.packages("BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz", repo = NULL, type = "source")
+install.packages("./data/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz", repo = NULL, type = "source")
 
 source("http://bioconductor.org/workflows.R")
-workflowInstall("sequencing", dependencies = TRUE)
+workflowInstall("sequencing", dependencies = TRUE, type = "source")
 browseVignettes("sequencing")
 
 ```
@@ -1440,7 +1440,7 @@ browseVignettes("sequencing")
 see also http://bioconductor.org/packages/release/bioc/html/GenomicRanges.html for learning annotation, gene id's, pathway analysis and much more:
 
 ## To start working on pathway analysis with KEGG and Bioreactome
-```{r}
+```{r, eval=FALSE}
 
 url_kegg_package <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/KEGG.db_3.2.3.tar.gz")
 
@@ -1511,7 +1511,7 @@ Author: Marc A.T. Teunis, 2016
 For commercial applications contact the author at marc.teunis@hu.nl
 
 # Citations
-```{r}
+```{r, eval=FALSE}
 
 citation("base")
 citation("ggplot2")
