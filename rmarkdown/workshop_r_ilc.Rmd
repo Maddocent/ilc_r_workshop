@@ -233,9 +233,9 @@ To load a package manually:
 
 Please note the difference in use of _"double-quotes"_ above.
 
-##################
+###########################################
 # Start Tutorial
-##################
+############################################
 
 # Shiny Apps
 Shiny is an open source application that can powerfully illustrate the use of R to generate visualizations. Here we look at an example on decision making in ants on two food sources. The sliders in the app are parameters specific for the food source. The graph shows the change in the number of ants visiting the food source.
