@@ -98,30 +98,12 @@ If you are working on a corporate laptop (HU laptop) follow the steps below:
 RStudio has the function to create projects that hold all your files in one place. Here we will create a project and set-up it's structure.
 
 ### Initializing a new project
-Follow the steps outlined below (from the README.md file). This will (fingers crossed!!) transfer the files for this workshop to your project directory. 
+Follow the steps outlined in the README.md file. This will (fingers crossed!!) transfer the files for this workshop to your project directory. 
 
 To view the README.md file visit:
 https://github.com/Maddocent/ilc_r_workshop/blob/master/README.md
 
-**Follow these steps first before continuing**
-
-To get all the files needed for the workshop follow the steps below:
-
- -> Go to www.github.com
-
- -> Create a user name and password for yourself
-
- -> Log in to github
-
- -> go to www.github.com/maddocent/ilc_r_workshop
-
- -> Fork this repo to your own account
-
- -> Choose "File" -> "New Project" -> "Version Control"
- 
- -> Paste the link to YOUR FORK of the repo in the "url" field, and press enter 
-
- -> Fetching the files will start and the files will appear in your project
+**Follow the steps above first before continuing**
 
 Did it work? Please let me know if not.
 
@@ -216,7 +198,7 @@ file.create(paste0(root, "/data/README.md"))
 
 writeLines("# This is my first Markdown README.txt file. \n
 ## This file is now about nothing, but \n
-### It will be almost about something in the future \n
+### It will be about something in the future \n
 ## Markdown is a simple mark-up language", 
 con = paste0(root, "/data/README.md"))
 
