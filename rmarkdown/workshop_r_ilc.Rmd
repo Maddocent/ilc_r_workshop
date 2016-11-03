@@ -1425,44 +1425,45 @@ BiocInstaller::biocValid()
 
 ## Full genome sequences for Homo sapiens (Human) as provided by UCSC (hg19, Feb. 2009) and stored in Biostrings objects.
 
-url <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz")
+## url <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz")
 
-download.file(url = url, destfile = paste0(root, "/data/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz"))
+## download.file(url = url, destfile = paste0(root, "/data/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz"))
 
 source("http://bioconductor.org/biocLite.R")
 
 ## installing Human genome from downloaded source file:
 
-install.packages("./data/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz", repo = NULL, type = "source")
+## install.packages("./data/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz", 
+##                 repo = NULL, type = "source")
 
-source("http://bioconductor.org/workflows.R")
-workflowInstall("sequencing", dependencies = TRUE, type = "source")
-browseVignettes("sequencing")
+## source("http://bioconductor.org/workflows.R")
+## workflowInstall("sequencing", dependencies = TRUE, type = "source")
+## browseVignettes("sequencing")
 
 ```
 
-see also http://bioconductor.org/packages/release/bioc/html/GenomicRanges.html for learning annotation, gene id's, pathway analysis and much more:
+see also http://bioconductor.org/packages/release/bioc/html/GenomicRanges.html for learning annotation, gene IDs, pathway analysis and much more:
 
 ## To start working on pathway analysis with KEGG and Bioreactome
 ```{r, eval=FALSE}
+library(pacman)
+## url_kegg_package <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/KEGG.db_3.2.3.tar.gz")
 
-url_kegg_package <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/KEGG.db_3.2.3.tar.gz")
+## dir.create(paste0(root, "/tar_gz"))
 
-dir.create(paste0(root, "/tar_gz"))
+## download.file(url = url_kegg_package, 
+##              destfile = paste0(root, "/tar_gz/KEGG.db_3.2.3.tar.gz"))
 
-download.file(url = url_kegg_package, 
-              destfile = paste0(root, "/tar_gz/KEGG.db_3.2.3.tar.gz"))
-
-install.packages(paste0(root, "/tar_gz/KEGG.db_3.2.3.tar.gz"), repos = NULL, type = "source")
+## install.packages(paste0(root, "/tar_gz/KEGG.db_3.2.3.tar.gz"), repos = NULL, type = "source")
 
 p_load(KEGGREST)
 
-url_reactome_db <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/reactome.db_1.58.0.tar.gz")
+## url_reactome_db <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/reactome.db_1.58.0.tar.gz")
 
-download.file(url = url_reactome_db,
-              destfile = paste0(root, "/tar_gz/reactome.db_1.58.0.tar.gz"))
+## download.file(url = url_reactome_db,
+##              destfile = paste0(root, "/tar_gz/reactome.db_1.58.0.tar.gz"))
 
-install.packages(paste0(root, "/tar_gz/reactome.db_1.58.0.tar.gz"), repos = NULL, type = "source")
+## install.packages(paste0(root, "/tar_gz/reactome.db_1.58.0.tar.gz"), repos = NULL, type = "source")
 
 ## An example with KEGG
 ## from: http://bioconductor.org/packages/release/bioc/vignettes/GenomicRanges/inst/doc/GenomicRangesHOWTOs.R
