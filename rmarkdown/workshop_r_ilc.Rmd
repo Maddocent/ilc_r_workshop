@@ -243,11 +243,15 @@ Shiny is an open source application that can powerfully illustrate the use of R 
 
 ```{r, shiny_example, eval=FALSE}
 
-if (!require("devtools")) install.packages("devtools")
+if (!require("devtools")) install.packages("devtools", dependencies = TRUE)
 devtools::install_github("swarm-lab/teachR", dependencies = TRUE)
-if (!require("ggvis")) install.packages("ggvis")
-if (!require("deSolve")) install.packages("deSolve")
+if (!require("ggvis")) install.packages("ggvis", dependencies = TRUE)
+if (!require("deSolve")) install.packages("deSolve", dependencies = TRUE)
+if (!require("httpuv")) install.packages("httpuv", dependencies = TRUE)
+if (!require("xtable")) install.packages("xtable", dependencies = TRUE)
 
+
+library(httpuv)
 library(ggvis)
 library(teachR)
 library(deSolve)
