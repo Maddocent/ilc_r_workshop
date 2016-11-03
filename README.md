@@ -12,9 +12,9 @@ To get all the files needed for the workshop follow the steps below:
 
  -> Log in to github
 
- -> go to www.github.com/maddocent/ilc_r_workshop
+ -> Go to www.github.com/maddocent/ilc_r_workshop
 
- -> copy the link to this repository under the button _"Clone or download"_ 
+ -> Copy the link to this repository under the button _"Clone or download"_ 
  
  -> Choose "File" -> "New Project" -> "Version Control"
  
