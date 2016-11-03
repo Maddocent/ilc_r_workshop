@@ -1,13 +1,15 @@
 An introduction to data analysis using R
 ================
 Marc A.T. Teunis
-2016-11-02
+2016-11-03
 
 ``` r
 require("rprojroot") || utils::install.packages("rprojroot")
 ```
 
     ## Loading required package: rprojroot
+
+    ## Warning: package 'rprojroot' was built under R version 3.3.2
 
     ## [1] TRUE
 
@@ -26,6 +28,13 @@ source(paste0(root, "/code/circos_example.R"))
 
 ### **Important note: R is case-sensitive, meaning that it will matter whether you use capital or lower case, keep this in mind if you get a cryptic warning or error!**
 
+########################################################## 
+
+Getting Started
+===============
+
+########################################################## 
+
 How to run the code in the tutorial below?
 ==========================================
 
@@ -41,11 +50,12 @@ These so called code chunks contain R code that does something: for example: cal
 
 ``` r
 set.seed(seed = 10)
-numbers <- runif(100, min = 0, max = 50)
+numbers <- runif(1000, min = 0, max = 50)
 mean_numbers <- mean(numbers)
+hist(numbers)
 ```
 
-What happens if we would increase the number of random numbers? What value would we get for the mean? Give it a try!
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-2-1.png) What happens if we would increase the number of random numbers? What value would we get for the mean? Give it a try!
 
 Run a code chucks as follows: place the cursor somewhere in a code chunk and between the ```` ```{r} ```` and the ```` ``` ```` and press the keys:
 
@@ -163,8 +173,7 @@ require("latticeExtra") || utils::install.packages("latticeExtra")
 
 ``` r
 library(latticeExtra)
-# installs additonal R packages (CRAN and BIOCONDUCTOR packages)
-
+# installs additonal R packages (CRAN)
 p_load(car,
        dplyr,
        downloader,
@@ -177,18 +186,11 @@ p_load(car,
        reshape2, 
        RCurl, 
        knitr,
-       Biostrings,
        tibble,
-       XVector,
-       BiocGenerics,
-       xlsx,
-       rJava,
-       IRanges,
-       S4Vectors,
        lattice,
-       rmarkdown,
-       GenomicRanges,
-       BSgenome)
+        rmarkdown,
+       xlsx,
+       rJava)
 ```
 
 Project folders
@@ -209,7 +211,7 @@ project_folders <- as.list(paste(root,
 project_folders[[1]]
 ```
 
-    ## [1] "/Users/raypieters/ilc_r_workshop/code"
+    ## [1] "C:/RWorkingDir/Projects/ilc_r_workshop/code"
 
 ``` r
 mkdir <- function(path){
@@ -241,7 +243,7 @@ lapply(project_folders, mkdir)
 ``` r
 # if a folder is not already in your project this will state "TRUE", and "FALSE" if the folder already exist. 
 
-## because you cloned the project from Github, the folders (including)     will already be there
+## because you cloned the project from Github, the folders will already be there
 ```
 
 ### My first README.txt file
@@ -257,7 +259,7 @@ file.create(paste0(root, "/data/README.md"))
 ``` r
 writeLines("# This is my first Markdown README.txt file. \n
 ## This file is now about nothing, but \n
-### It will be about something in the future \n
+### It will be almost about something in the future \n
 ## Markdown is a simple mark-up language", 
 con = paste0(root, "/data/README.md"))
 ```
@@ -563,7 +565,7 @@ z5
 
     ## [1] -1
 
-You can get the individual items of a vector by using the index "[](#section-2)"
+You can get the individual items of a vector by using the index "[](#section-6)"
 
 ``` r
 x<-c(8,5,10,13,2,7,15,3,20,8);x # create vector with 10 variables
@@ -853,6 +855,166 @@ people <- data.frame(age=c(24, 27, 19, 34),
 ### Viewing the contents of a dataframe
 
 ``` r
+summary(people)
+```
+
+    ##       age        sex       weight          names  
+    ##  Min.   :19.00   F:2   Min.   :55.00   Christa:1  
+    ##  1st Qu.:22.75   M:2   1st Qu.:61.75   John   :1  
+    ##  Median :25.50         Median :67.00   Matt   :1  
+    ##  Mean   :26.00         Mean   :67.25   Suzan  :1  
+    ##  3rd Qu.:28.75         3rd Qu.:72.50              
+    ##  Max.   :34.00         Max.   :80.00
+
+``` r
+table(people)
+```
+
+    ## , , weight = 55, names = Christa
+    ## 
+    ##     sex
+    ## age  F M
+    ##   19 0 0
+    ##   24 0 0
+    ##   27 0 0
+    ##   34 0 0
+    ## 
+    ## , , weight = 64, names = Christa
+    ## 
+    ##     sex
+    ## age  F M
+    ##   19 0 0
+    ##   24 1 0
+    ##   27 0 0
+    ##   34 0 0
+    ## 
+    ## , , weight = 70, names = Christa
+    ## 
+    ##     sex
+    ## age  F M
+    ##   19 0 0
+    ##   24 0 0
+    ##   27 0 0
+    ##   34 0 0
+    ## 
+    ## , , weight = 80, names = Christa
+    ## 
+    ##     sex
+    ## age  F M
+    ##   19 0 0
+    ##   24 0 0
+    ##   27 0 0
+    ##   34 0 0
+    ## 
+    ## , , weight = 55, names = John
+    ## 
+    ##     sex
+    ## age  F M
+    ##   19 0 0
+    ##   24 0 0
+    ##   27 0 0
+    ##   34 0 0
+    ## 
+    ## , , weight = 64, names = John
+    ## 
+    ##     sex
+    ## age  F M
+    ##   19 0 0
+    ##   24 0 0
+    ##   27 0 0
+    ##   34 0 0
+    ## 
+    ## , , weight = 70, names = John
+    ## 
+    ##     sex
+    ## age  F M
+    ##   19 0 0
+    ##   24 0 0
+    ##   27 0 0
+    ##   34 0 1
+    ## 
+    ## , , weight = 80, names = John
+    ## 
+    ##     sex
+    ## age  F M
+    ##   19 0 0
+    ##   24 0 0
+    ##   27 0 0
+    ##   34 0 0
+    ## 
+    ## , , weight = 55, names = Matt
+    ## 
+    ##     sex
+    ## age  F M
+    ##   19 0 0
+    ##   24 0 0
+    ##   27 0 0
+    ##   34 0 0
+    ## 
+    ## , , weight = 64, names = Matt
+    ## 
+    ##     sex
+    ## age  F M
+    ##   19 0 0
+    ##   24 0 0
+    ##   27 0 0
+    ##   34 0 0
+    ## 
+    ## , , weight = 70, names = Matt
+    ## 
+    ##     sex
+    ## age  F M
+    ##   19 0 0
+    ##   24 0 0
+    ##   27 0 0
+    ##   34 0 0
+    ## 
+    ## , , weight = 80, names = Matt
+    ## 
+    ##     sex
+    ## age  F M
+    ##   19 0 1
+    ##   24 0 0
+    ##   27 0 0
+    ##   34 0 0
+    ## 
+    ## , , weight = 55, names = Suzan
+    ## 
+    ##     sex
+    ## age  F M
+    ##   19 0 0
+    ##   24 0 0
+    ##   27 1 0
+    ##   34 0 0
+    ## 
+    ## , , weight = 64, names = Suzan
+    ## 
+    ##     sex
+    ## age  F M
+    ##   19 0 0
+    ##   24 0 0
+    ##   27 0 0
+    ##   34 0 0
+    ## 
+    ## , , weight = 70, names = Suzan
+    ## 
+    ##     sex
+    ## age  F M
+    ##   19 0 0
+    ##   24 0 0
+    ##   27 0 0
+    ##   34 0 0
+    ## 
+    ## , , weight = 80, names = Suzan
+    ## 
+    ##     sex
+    ## age  F M
+    ##   19 0 0
+    ##   24 0 0
+    ##   27 0 0
+    ##   34 0 0
+
+``` r
 head(people)            # gives the content of the data frame
 ```
 
@@ -886,7 +1048,7 @@ people$age # gives the content of the variable "age" from the data frame ""
 
 ### Using Index on Dataframes
 
-Using the index "[](#section-2)" on a dataframe is a bit tricky. The dataframe always consists of rows and columns. Indexing a dataframe goes like:
+Using the index "[](#section-6)" on a dataframe is a bit tricky. The dataframe always consists of rows and columns. Indexing a dataframe goes like:
 
 `dataframe[row number(s), column number(s)]`
 
@@ -1689,7 +1851,7 @@ CREATING A PANEL PLOT
 ``` r
 # creating the panel with plot_grid 
 panel <- plot_grid(plot2, plot5, plot3, plot6,
-          labels=c("A", "B", "C", "D"), ncol = 2)
+          labels=c("A", "C", "B", "D"), ncol = 2)
 
 panel
 ```
@@ -1708,9 +1870,26 @@ and
 
 <https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf>
 
-The reason why I do not show examples from other plotting systems is that I think ggplot2 is the most advaced system that best puts the principles of "reproducible research" in practice.
+The reason why I do not show examples from other plotting systems is that I think ggplot2 is the most advanced system that best puts the principles of "reproducible research" in practice.
 
-    # START BIONCONDUCTOR DEMO 
+################################################################ 
+
+START BIONCONDUCTOR DEMO
+========================
+
+################################################################ 
+
+Bioconductor packages installation
+
+``` r
+p_load(Biostrings,
+       XVector,
+       BiocGenerics,
+       IRanges,
+       S4Vectors,
+       GenomicRanges,
+       BSgenome)
+```
 
 **First, clear the workspace to have an overview!**
 ---------------------------------------------------
@@ -1732,14 +1911,14 @@ As mentioned above www.bioconductor.org, but also packages from CRAN and package
 
 Lets' work with an example from the Bioconductor package "Biostrings" To get help on packages and learn about BIOCONDUCTOR workflows visit: <https://www.bioconductor.org/help/workflows/>
 
-Today we will show a little on the workflows: "Multiple Alignment" To get started we need two packages
+Below we will show a little on the workflows: "Multiple Alignment" and "Sequencing / Pathway analysis. To get started we need two "BIOCONDUCTOR" packages:
 
 ``` r
 library(Biostrings)
 library(IRanges)
 ```
 
-To view the vignettes (from which I distilled the code chuncks below)
+To view the vignettes (from which I distilled the code chunks below)
 
 ``` r
 browseVignettes("Biostrings")
@@ -2226,7 +2405,7 @@ plot_iranges <- IRanges_plot(unlist(ir_list))
 plot_iranges
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-54-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-55-1.png)
 
 A coverage plot indicates the depth of coverage of sequence and a number of patterns. Look at the plot to understand how coverage works.
 ----------------------------------------------------------------------------------------------------------------------------------------
@@ -2271,7 +2450,7 @@ coverplot <- coverage_plot(cx = cov3R,
                            min.depth = 0, max.depth = 5)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-55-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-56-1.png)
 
 The above matching, Views, plotting an IRangesList and coverage are cocepts that play an important role in understanding the methodology of sequencing and how sequence data can be interpreted. If you want to learn more about analysis of sequence data in R, take a look at the BIOCONDUCTOR workflow below.
 

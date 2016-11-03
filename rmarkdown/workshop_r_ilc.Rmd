@@ -24,6 +24,10 @@ source(paste0(root, "/code/circos_example.R"))
 
 ### *_Important note: R is case-sensitive, meaning that it will matter whether you use capital or lower case, keep this in mind if you get a cryptic warning or error!_*
 
+##########################################################
+# Getting Started
+##########################################################
+
 # How to run the code in the tutorial below?
 
 This document contains code chunks that start with
@@ -145,8 +149,7 @@ library(pacman)
 
 require("latticeExtra") || utils::install.packages("latticeExtra")
 library(latticeExtra)
-# installs additonal R packages (CRAN and BIOCONDUCTOR packages)
-
+# installs additonal R packages (CRAN)
 p_load(car,
        dplyr,
        downloader,
@@ -159,20 +162,12 @@ p_load(car,
        reshape2, 
        RCurl, 
        knitr,
-       Biostrings,
        tibble,
-       XVector,
-       BiocGenerics,
-       xlsx,
-       rJava,
-       IRanges,
-       S4Vectors,
        lattice,
-       rmarkdown,
-       GenomicRanges,
-       BSgenome)
-
-
+        rmarkdown,
+       xlsx,
+       rJava)
+       
 ```
 
 ## Project folders
@@ -201,7 +196,7 @@ lapply(project_folders, mkdir)
 
 # if a folder is not already in your project this will state "TRUE", and "FALSE" if the folder already exist. 
 
-## because you cloned the project from Github, the folders (including)     will already be there
+## because you cloned the project from Github, the folders will already be there
 
 ```
 
@@ -1057,11 +1052,26 @@ and
 
 https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf 
 
-The reason why I do not show examples from other plotting systems is that I think ggplot2 is the most advaced system that best puts the principles of "reproducible research" in practice.
+The reason why I do not show examples from other plotting systems is that I think ggplot2 is the most advanced system that best puts the principles of "reproducible research" in practice.
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+################################################################
 # START BIONCONDUCTOR DEMO 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+################################################################
+
+Bioconductor packages installation   
+```{r}       
+
+p_load(Biostrings,
+       XVector,
+       BiocGenerics,
+       IRanges,
+       S4Vectors,
+       GenomicRanges,
+       BSgenome)
+
+
+```
+
 
 ## **First, clear the workspace to have an overview!**
 

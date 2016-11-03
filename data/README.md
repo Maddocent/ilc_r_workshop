@@ -2,6 +2,6 @@
 
 ## This file is now about nothing, but 
 
-### It will be about something in the future 
+### It will be almost about something in the future 
 
 ## Markdown is a simple mark-up language
