@@ -14,8 +14,8 @@ To get all the files needed for the workshop follow the steps below:
 
  -> go to www.github.com/maddocent/ilc_r_workshop
 
- -> Fork this repo to your own account
-
+ -> copy the link to this repository under the button _"Clone or download"_ 
+ 
  -> Choose "File" -> "New Project" -> "Version Control"
  
  -> Paste the link to YOUR FORK of the repo in the "url" field, and press enter 
