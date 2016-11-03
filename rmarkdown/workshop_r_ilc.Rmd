@@ -1522,9 +1522,9 @@ swirl()
 One of the biggest advantages of using a system like R and RStudio over e.g. MS Excel or other spreadsheet applications is the reproducibility. You can run and re-run code as often as you like, tweaking it on the fly. Furthermore, you can exactly replicate things you have done in the nearby, or further away future. 
 A big step forward in the way we work with data, if you ask me, is to introduce this concept of "Reproducible research" into our teachings. 
 
-**To my opinion, every future technician, scientist, or professional that works with data, will have to have some form of introducton in the "Reproducible Research" concept. And, yes! Will have to learn a bit about programming!!**  
+**To my opinion, every future technician, scientist, or professional that works with data, will have to have some form of introduction in the "Reproducible Research" concept. And, yes! will have to learn a bit about programming**  
 
-__Everybody a programmer__, will you join me?
+__Everybody a programmer!__, will you join me?
 
 And lastly: if you feel ready to take on this challenge, look me up and let's start a new **pRoject**.
 
