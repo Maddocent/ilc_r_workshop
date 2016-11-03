@@ -18,6 +18,6 @@ To get all the files needed for the workshop follow the steps below:
  
  -> Choose "File" -> "New Project" -> "Version Control"
  
- -> Paste the link to YOUR FORK of the repo in the "url" field, and press enter 
+ -> Paste the link from the clipboard to he "url" field, and press enter 
 
  -> Fetching the files will start and the files will appear in your project
