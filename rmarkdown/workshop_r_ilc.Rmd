@@ -142,6 +142,8 @@ knitr::opts_knit$set(root.dir = root)
 ```{r, installing_packages, error=FALSE, message=FALSE, warning=FALSE}
 
 # load packages at startup
+require("devtools") || utils::install.packages("devtools")
+library(devtools)
 
 # installs "pacman" if not installed
 require("pacman") || utils::install.packages("pacman")
@@ -149,7 +151,12 @@ library(pacman)
 
 require("latticeExtra") || utils::install.packages("latticeExtra")
 library(latticeExtra)
+
+```
+
 # installs additonal R packages (CRAN)
+
+```{r}
 p_load(car,
        dplyr,
        downloader,
