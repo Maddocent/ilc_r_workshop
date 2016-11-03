@@ -90,9 +90,6 @@ If you are working on a corporate laptop (HU laptop) follow the steps below:
  2) Locate "System"
  3) Choose
 
-
-
-
 ## Setting up a project
 RStudio has the function to create projects that hold all your files in one place. Here we will create a project and set-up it's structure.
 
@@ -1086,15 +1083,15 @@ Lets' work with an example from the Bioconductor package "Biostrings"
 To get help on packages and learn about BIOCONDUCTOR workflows visit:
 https://www.bioconductor.org/help/workflows/
 
-Today we will show a little on the workflows: "Multiple Alignment"
-To get started we need two packages
+Below we will show a little on the workflows: "Multiple Alignment" 
+and "Sequencing / Pathway analysis. To get started we need two "BIOCONDUCTOR" packages:
 
 ```{r}
 library(Biostrings)
 library(IRanges)
 ``` 
 
-To view the vignettes (from which I distilled the code chuncks below)
+To view the vignettes (from which I distilled the code chunks below)
 ```{r}
 
 browseVignettes("Biostrings")
