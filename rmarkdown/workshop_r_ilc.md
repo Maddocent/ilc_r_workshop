@@ -9,8 +9,6 @@ require("rprojroot") || utils::install.packages("rprojroot")
 
     ## Loading required package: rprojroot
 
-    ## Warning: package 'rprojroot' was built under R version 3.3.2
-
     ## [1] TRUE
 
 ``` r
@@ -156,6 +154,13 @@ Installing required packages
 
 ``` r
 # load packages at startup
+require("devtools") || utils::install.packages("devtools")
+```
+
+    ## [1] TRUE
+
+``` r
+library(devtools)
 
 # installs "pacman" if not installed
 require("pacman") || utils::install.packages("pacman")
@@ -173,7 +178,12 @@ require("latticeExtra") || utils::install.packages("latticeExtra")
 
 ``` r
 library(latticeExtra)
-# installs additonal R packages (CRAN)
+```
+
+installs additonal R packages (CRAN)
+====================================
+
+``` r
 p_load(car,
        dplyr,
        downloader,
@@ -211,7 +221,7 @@ project_folders <- as.list(paste(root,
 project_folders[[1]]
 ```
 
-    ## [1] "C:/RWorkingDir/Projects/ilc_r_workshop/code"
+    ## [1] "C:/RWorkingDir/RProjects/ilc_r_workshop2/code"
 
 ``` r
 mkdir <- function(path){
@@ -283,12 +293,12 @@ To load a package manually:
 
 Please note the difference in use of *"double-quotes"* above.
 
-################## 
+########################################### 
 
 Start Tutorial
 ==============
 
-################## 
+############################################ 
 
 Shiny Apps
 ==========
@@ -296,11 +306,15 @@ Shiny Apps
 Shiny is an open source application that can powerfully illustrate the use of R to generate visualizations. Here we look at an example on decision making in ants on two food sources. The sliders in the app are parameters specific for the food source. The graph shows the change in the number of ants visiting the food source.
 
 ``` r
-if (!require("devtools")) install.packages("devtools")
+if (!require("devtools")) install.packages("devtools", dependencies = TRUE)
 devtools::install_github("swarm-lab/teachR", dependencies = TRUE)
-if (!require("ggvis")) install.packages("ggvis")
-if (!require("deSolve")) install.packages("deSolve")
+if (!require("ggvis")) install.packages("ggvis", dependencies = TRUE)
+if (!require("deSolve")) install.packages("deSolve", dependencies = TRUE)
+if (!require("httpuv")) install.packages("httpuv", dependencies = TRUE)
+if (!require("xtable")) install.packages("xtable", dependencies = TRUE)
 
+
+library(httpuv)
 library(ggvis)
 library(teachR)
 library(deSolve)
@@ -699,13 +713,13 @@ summary(m1)
 plot(c, d, ylim=c(0,13))
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-12-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-13-1.png)
 
 ``` r
 plot(c, d, ylim=c(0,13), abline(m1))  #abline plots the correaltion model in the graph
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-12-2.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-13-2.png)
 
 ``` r
 m1$coefficients
@@ -1484,37 +1498,37 @@ head(faithful)
 hist(faithful$eruptions,breaks = 15)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-30-1.png)
 
 ``` r
 hist(faithful$waiting, breaks = 15)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-2.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-30-2.png)
 
 ``` r
 boxplot(faithful$eruptions)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-3.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-30-3.png)
 
 ``` r
 qqnorm(faithful$eruptions);qqline(faithful$eruptions)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-4.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-30-4.png)
 
 ``` r
 plot(faithful$eruptions,type="l")
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-5.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-30-5.png)
 
 ``` r
 plot(faithful$eruptions, faithful$waiting)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-29-6.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-30-6.png)
 
 Grammar of Graphics (ggplot2 package)
 -------------------------------------
@@ -1551,7 +1565,7 @@ g <- ggplot(data = tg, aes(len))
 g + geom_histogram(bins = 25) 
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-30-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-31-1.png)
 
 The graph shows a histogram of the Toothgrowth data (len = length teeth of Guinea pigs, treated with two different vitamine C food-sources).
 
@@ -1564,7 +1578,7 @@ g <- ggplot(data = tg, aes(len))
 g + geom_histogram(bins = 30) + ggtitle("ToothGrowth")
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-31-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-32-1.png)
 
 Let's see if we can make a more meaningfull graph, that shows something about the result of the treatment, on teeth growth.
 
@@ -1573,7 +1587,7 @@ g <- ggplot(data = tg, aes(x = dose, y = len, group = supp, colour = supp))
 g + geom_point() + ggtitle("ToothGrowth")
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-32-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-33-1.png)
 
 Now we get a scatterplot with colours indicating the different supplement. Already more informative, but not very pretty.
 
@@ -1595,7 +1609,7 @@ g + geom_point() +
   geom_smooth() + ggtitle("ToothGrowth")
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-33-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-34-1.png)
 
 ``` r
 ## ignore the warnings if you get them...
@@ -1691,7 +1705,7 @@ hist(data_twoDays$global_active_power, col = "red",
      xlab = "Global Active Power", ylab = "Frequency", main = "Global Active Power")
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-35-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-36-1.png)
 
 ### Plot 2: ggplot2 example
 
@@ -1728,7 +1742,7 @@ theme_bw() +
 plot2
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-36-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-37-1.png)
 
 ### Plot 3: ggplot2 example
 
@@ -1774,7 +1788,7 @@ theme(panel.grid.major = element_blank(),
 plot3
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-37-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-38-1.png)
 
 ### Plot 4: ggplot2 example
 
@@ -1837,13 +1851,13 @@ theme(panel.grid.major = element_blank(),
 plot5
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-38-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-39-1.png)
 
 ``` r
 plot6
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-38-2.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-39-2.png)
 
 CREATING A PANEL PLOT
 ---------------------
@@ -1856,7 +1870,7 @@ panel <- plot_grid(plot2, plot5, plot3, plot6,
 panel
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-39-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-40-1.png)
 
 The above is meant as a demo for the strength of the Grammar of Graphics lingo. There is a lot more to ggplot2 than can be shown in this short demo. As mentioned above, a good place to start learning ggplot2 is:
 
@@ -2405,7 +2419,7 @@ plot_iranges <- IRanges_plot(unlist(ir_list))
 plot_iranges
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-55-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-56-1.png)
 
 A coverage plot indicates the depth of coverage of sequence and a number of patterns. Look at the plot to understand how coverage works.
 ----------------------------------------------------------------------------------------------------------------------------------------
@@ -2450,7 +2464,7 @@ coverplot <- coverage_plot(cx = cov3R,
                            min.depth = 0, max.depth = 5)
 ```
 
-![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-56-1.png)
+![](workshop_r_ilc_files/figure-markdown_github/unnamed-chunk-57-1.png)
 
 The above matching, Views, plotting an IRangesList and coverage are cocepts that play an important role in understanding the methodology of sequencing and how sequence data can be interpreted. If you want to learn more about analysis of sequence data in R, take a look at the BIOCONDUCTOR workflow below.
 
