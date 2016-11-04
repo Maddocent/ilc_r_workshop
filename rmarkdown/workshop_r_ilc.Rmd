@@ -42,7 +42,7 @@ These so called code chunks contain R code that does something: for example: cal
 
 ```{r}
 set.seed(seed = 10)
-numbers <- runif(1000, min = 0, max = 50)
+numbers <- runif(100000, min = 0, max = 50)
 mean_numbers <- mean(numbers)
 hist(numbers)
 ```
