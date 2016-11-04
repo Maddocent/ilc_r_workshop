@@ -42,7 +42,7 @@ These so called code chunks contain R code that does something: for example: cal
 
 ```{r}
 set.seed(seed = 10)
-numbers <- runif(100000, min = 0, max = 50)
+numbers <- runif(100, min = 0, max = 50)
 mean_numbers <- mean(numbers)
 hist(numbers)
 ```
@@ -327,7 +327,7 @@ Vignettes are long explanations and demos of a package. Commonly, a vignette con
 
 ### Getting Help for R functions and packages
 ```{r, eval=FALSE}
-
+install.packages("dplyr")
 library(dplyr)
 library(ggplot2)
 ??dplyr
@@ -627,6 +627,9 @@ library(readr)
 skin <- read_csv(paste0(root, "/data/skincolumns.csv")) 
 str(skin)
 
+?read.csv
+
+read.csv("file.name", na.strings = c("999", "888", "NA"))
 
 skin	 # content of the data frame
 dim(skin)
@@ -1185,6 +1188,9 @@ r == d
 
 gene <- DNAString(c("ATGAAATTTGGGCGCGCTTTAAAATGGGCGCTGAACTCTTTCCCCCGCGCGCTTGTGTGTGAAATATATATGTAATAAATATTGCCCCCGCGCGCGTTTGTGTGGGGCTCGCCGCGCTTTTAG"))
                   
+
+
+length(gene)
 protein <- Biostrings::translate(gene)                  
 gene
 
