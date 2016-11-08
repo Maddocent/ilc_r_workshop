@@ -132,8 +132,9 @@ The above will result in the creation of an object in the _Global Environment_ n
 
 ## Knitr options 
 ```{r, knitr_setup, warning=FALSE, error=FALSE, message=FALSE}
-require("knitr") || utils::install.packages("knitr")
+if (!require("knitr")) utils::install.packages("knitr")
 library(knitr)
+
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FALSE)
 knitr::opts_knit$set(root.dir = root)
 ```
@@ -142,32 +143,46 @@ knitr::opts_knit$set(root.dir = root)
 ```{r, installing_packages, error=FALSE, message=FALSE, warning=FALSE}
 
 # load packages at startup
+if (!require ("devtools")) utils::install.packages( "devtools", dependencies = TRUE)
+library(devtools)
 
-# installs "pacman" if not installed
-require("pacman") || utils::install.packages("pacman")
+if (!require("pacman")) utils::install.packages("pacman", dependencies = TRUE)
 library(pacman)
 
-require("latticeExtra") || utils::install.packages("latticeExtra")
-library(latticeExtra)
+if (!require("git2r")) utils::install.packages("git2r", dependencies = TRUE)
+library(git2r)
+
+if (!require("httr")) utils::install.packages("httr", dependencies = TRUE)
+library(httr)
+
+if (!require("rvest")) utils::install.packages("rvest", dependencies = TRUE)
+library(httr)
+
+if (!require("xml2")) utils::install.packages("xml2", dependencies = TRUE)
+library(httr)
+
+if(!require("tidyverse")) utils::install.packages("tidyverse", dependencies = TRUE)
+library(tidyverse)
+
 # installs additonal R packages (CRAN)
 p_load(car,
-       dplyr,
+       lattice,
+       latticeExtra,
        downloader,
        lubridate,
        gridExtra,
-       cowplot,
-       readr,
        gplots, 
-       ggplot2, 
        reshape2, 
        RCurl, 
        knitr,
-       tibble,
-       lattice,
-        rmarkdown,
-       xlsx,
-       rJava)
+       rmarkdown)
        
+```
+
+## Installed packages
+```{r}
+installed_packages <- installed.packages()
+print(as.data.frame(installed_packages))
 ```
 
 ## Project folders
