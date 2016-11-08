@@ -42,7 +42,7 @@ These so called code chunks contain R code that does something: for example: cal
 
 ```{r}
 set.seed(seed = 10)
-numbers <- runif(1000, min = 0, max = 50)
+numbers <- runif(100, min = 0, max = 50)
 mean_numbers <- mean(numbers)
 hist(numbers)
 ```
@@ -98,30 +98,12 @@ If you are working on a corporate laptop (HU laptop) follow the steps below:
 RStudio has the function to create projects that hold all your files in one place. Here we will create a project and set-up it's structure.
 
 ### Initializing a new project
-Follow the steps outlined below (from the README.md file). This will (fingers crossed!!) transfer the files for this workshop to your project directory. 
+Follow the steps outlined in the README.md file. This will (fingers crossed!!) transfer the files for this workshop to your project directory. 
 
 To view the README.md file visit:
 https://github.com/Maddocent/ilc_r_workshop/blob/master/README.md
 
-**Follow these steps first before continuing**
-
-To get all the files needed for the workshop follow the steps below:
-
- -> Go to www.github.com
-
- -> Create a user name and password for yourself
-
- -> Log in to github
-
- -> go to www.github.com/maddocent/ilc_r_workshop
-
- -> Fork this repo to your own account
-
- -> Choose "File" -> "New Project" -> "Version Control"
- 
- -> Paste the link to YOUR FORK of the repo in the "url" field, and press enter 
-
- -> Fetching the files will start and the files will appear in your project
+**Follow the steps above first before continuing**
 
 Did it work? Please let me know if not.
 
@@ -143,12 +125,17 @@ knitr::opts_knit$set(root.dir = root)
 ```{r, installing_packages, error=FALSE, message=FALSE, warning=FALSE}
 
 # load packages at startup
+<<<<<<< HEAD
 if (!require ("devtools")) utils::install.packages( "devtools", dependencies = TRUE)
+=======
+require("devtools") || utils::install.packages("devtools")
+>>>>>>> b1427695ec4b26cb1fceef4dfa7864126a34980f
 library(devtools)
 
 if (!require("pacman")) utils::install.packages("pacman", dependencies = TRUE)
 library(pacman)
 
+<<<<<<< HEAD
 if (!require("git2r")) utils::install.packages("git2r", dependencies = TRUE)
 library(git2r)
 
@@ -163,8 +150,16 @@ library(httr)
 
 if(!require("tidyverse")) utils::install.packages("tidyverse", dependencies = TRUE)
 library(tidyverse)
+=======
+require("latticeExtra") || utils::install.packages("latticeExtra")
+library(latticeExtra)
+
+```
+>>>>>>> b1427695ec4b26cb1fceef4dfa7864126a34980f
 
 # installs additonal R packages (CRAN)
+
+```{r}
 p_load(car,
        lattice,
        latticeExtra,
@@ -224,7 +219,7 @@ file.create(paste0(root, "/data/README.md"))
 
 writeLines("# This is my first Markdown README.txt file. \n
 ## This file is now about nothing, but \n
-### It will be almost about something in the future \n
+### It will be about something in the future \n
 ## Markdown is a simple mark-up language", 
 con = paste0(root, "/data/README.md"))
 
@@ -248,9 +243,9 @@ To load a package manually:
 
 Please note the difference in use of _"double-quotes"_ above.
 
-##################
+###########################################
 # Start Tutorial
-##################
+############################################
 
 # Shiny Apps
 Shiny is an open source application that can powerfully illustrate the use of R to generate visualizations. Here we look at an example on decision making in ants on two food sources. The sliders in the app are parameters specific for the food source. The graph shows the change in the number of ants visiting the food source.
@@ -258,11 +253,15 @@ Shiny is an open source application that can powerfully illustrate the use of R 
 
 ```{r, shiny_example, eval=FALSE}
 
-if (!require("devtools")) install.packages("devtools")
+if (!require("devtools")) install.packages("devtools", dependencies = TRUE)
 devtools::install_github("swarm-lab/teachR", dependencies = TRUE)
-if (!require("ggvis")) install.packages("ggvis")
-if (!require("deSolve")) install.packages("deSolve")
+if (!require("ggvis")) install.packages("ggvis", dependencies = TRUE)
+if (!require("deSolve")) install.packages("deSolve", dependencies = TRUE)
+if (!require("httpuv")) install.packages("httpuv", dependencies = TRUE)
+if (!require("xtable")) install.packages("xtable", dependencies = TRUE)
 
+
+library(httpuv)
 library(ggvis)
 library(teachR)
 library(deSolve)
@@ -349,7 +348,7 @@ Vignettes are long explanations and demos of a package. Commonly, a vignette con
 
 ### Getting Help for R functions and packages
 ```{r, eval=FALSE}
-
+install.packages("dplyr")
 library(dplyr)
 library(ggplot2)
 ??dplyr
@@ -649,6 +648,9 @@ library(readr)
 skin <- read_csv(paste0(root, "/data/skincolumns.csv")) 
 str(skin)
 
+?read.csv
+
+read.csv("file.name", na.strings = c("999", "888", "NA"))
 
 skin	 # content of the data frame
 dim(skin)
@@ -1207,6 +1209,9 @@ r == d
 
 gene <- DNAString(c("ATGAAATTTGGGCGCGCTTTAAAATGGGCGCTGAACTCTTTCCCCCGCGCGCTTGTGTGTGAAATATATATGTAATAAATATTGCCCCCGCGCGCGTTTGTGTGGGGCTCGCCGCGCTTTTAG"))
                   
+
+
+length(gene)
 protein <- Biostrings::translate(gene)                  
 gene
 
@@ -1447,44 +1452,45 @@ BiocInstaller::biocValid()
 
 ## Full genome sequences for Homo sapiens (Human) as provided by UCSC (hg19, Feb. 2009) and stored in Biostrings objects.
 
-url <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz")
+## url <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz")
 
-download.file(url = url, destfile = paste0(root, "/data/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz"))
+## download.file(url = url, destfile = paste0(root, "/data/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz"))
 
 source("http://bioconductor.org/biocLite.R")
 
 ## installing Human genome from downloaded source file:
 
-install.packages("./data/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz", repo = NULL, type = "source")
+## install.packages("./data/BSgenome.Hsapiens.UCSC.hg19_1.4.0.tar.gz", 
+##                 repo = NULL, type = "source")
 
-source("http://bioconductor.org/workflows.R")
-workflowInstall("sequencing", dependencies = TRUE, type = "source")
-browseVignettes("sequencing")
+## source("http://bioconductor.org/workflows.R")
+## workflowInstall("sequencing", dependencies = TRUE, type = "source")
+## browseVignettes("sequencing")
 
 ```
 
-see also http://bioconductor.org/packages/release/bioc/html/GenomicRanges.html for learning annotation, gene id's, pathway analysis and much more:
+see also http://bioconductor.org/packages/release/bioc/html/GenomicRanges.html for learning annotation, gene IDs, pathway analysis and much more:
 
 ## To start working on pathway analysis with KEGG and Bioreactome
 ```{r, eval=FALSE}
+library(pacman)
+## url_kegg_package <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/KEGG.db_3.2.3.tar.gz")
 
-url_kegg_package <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/KEGG.db_3.2.3.tar.gz")
+## dir.create(paste0(root, "/tar_gz"))
 
-dir.create(paste0(root, "/tar_gz"))
+## download.file(url = url_kegg_package, 
+##              destfile = paste0(root, "/tar_gz/KEGG.db_3.2.3.tar.gz"))
 
-download.file(url = url_kegg_package, 
-              destfile = paste0(root, "/tar_gz/KEGG.db_3.2.3.tar.gz"))
-
-install.packages(paste0(root, "/tar_gz/KEGG.db_3.2.3.tar.gz"), repos = NULL, type = "source")
+## install.packages(paste0(root, "/tar_gz/KEGG.db_3.2.3.tar.gz"), repos = NULL, type = "source")
 
 p_load(KEGGREST)
 
-url_reactome_db <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/reactome.db_1.58.0.tar.gz")
+## url_reactome_db <- c("http://bioconductor.org/packages/release/data/annotation/src/contrib/reactome.db_1.58.0.tar.gz")
 
-download.file(url = url_reactome_db,
-              destfile = paste0(root, "/tar_gz/reactome.db_1.58.0.tar.gz"))
+## download.file(url = url_reactome_db,
+##              destfile = paste0(root, "/tar_gz/reactome.db_1.58.0.tar.gz"))
 
-install.packages(paste0(root, "/tar_gz/reactome.db_1.58.0.tar.gz"), repos = NULL, type = "source")
+## install.packages(paste0(root, "/tar_gz/reactome.db_1.58.0.tar.gz"), repos = NULL, type = "source")
 
 ## An example with KEGG
 ## from: http://bioconductor.org/packages/release/bioc/vignettes/GenomicRanges/inst/doc/GenomicRangesHOWTOs.R
@@ -1524,11 +1530,11 @@ swirl()
 # Now what?
 
 One of the biggest advantages of using a system like R and RStudio over e.g. MS Excel or other spreadsheet applications is the reproducibility. You can run and re-run code as often as you like, tweaking it on the fly. Furthermore, you can exactly replicate things you have done in the nearby, or further away future. 
-A big step forward in the way we would have to work with data, if you ask me, is to introduce this concept of "Reproducible research" into our teachings. 
+A big step forward in the way we work with data, if you ask me, is to introduce this concept of "Reproducible research" into our teachings. 
 
-**To my opinion, every future technician, scientist, or professional that works with data, will have to have some form of introducton in the "Reproducible Research" concept. And, yes! Will have to learn a bit about programming!!**  
+**To my opinion, every future technician, scientist, or professional that works with data, will have to have some form of introduction in the "Reproducible Research" concept. And, yes! will have to learn a bit about programming**  
 
-__Everybody a programmer__, will you join me?
+__Everybody a programmer!__, will you join me?
 
 And lastly: if you feel ready to take on this challenge, look me up and let's start a new **pRoject**.
 
