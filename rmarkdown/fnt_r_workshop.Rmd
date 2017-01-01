@@ -124,55 +124,6 @@ the webaddress is: https://rserver.innovativetesting.nl
 Did it work? Please let me know if not.
 
 ## Installing required packages
-```{r, installing_packages, error=FALSE, message=FALSE, warning=FALSE}
-
-# load packages at startup
-
-if (!require ("devtools")) utils::install.packages( "devtools", dependencies = TRUE)
-require("devtools") || utils::install.packages("devtools")
-
-library(devtools)
-
-if (!require("pacman")) utils::install.packages("pacman", dependencies = TRUE)
-library(pacman)
-
-
-if (!require("git2r")) utils::install.packages("git2r", dependencies = TRUE)
-library(git2r)
-
-if (!require("httr")) utils::install.packages("httr", dependencies = TRUE)
-library(httr)
-
-if (!require("rvest")) utils::install.packages("rvest", dependencies = TRUE)
-library(httr)
-
-if (!require("xml2")) utils::install.packages("xml2", dependencies = TRUE)
-library(httr)
-
-if(!require("tidyverse")) utils::install.packages("tidyverse", dependencies = TRUE)
-library(tidyverse)
-
-require("latticeExtra") || utils::install.packages("latticeExtra")
-library(latticeExtra)
-
-```
-
-
-# installs additonal R packages (CRAN)
-```{r}
-p_load(car,
-       lattice,
-       latticeExtra,
-       downloader,
-       lubridate,
-       gridExtra,
-       gplots, 
-       reshape2, 
-       RCurl, 
-       knitr,
-       rmarkdown)
-       
-```
 
 ## Installed packages
 ```{r}
@@ -226,7 +177,10 @@ There are many, many more examples on nice shiny apps that can illustrate e.g. c
 See e.g. the example on different chemical educational shiny apps:
 HTTP://dpuadweb.depauw.edu/harvey_web/shiny.html
 
-# Visual respresentation of Data
+# Visual respresentations
+
+## Build in datasets in R
+#### Cars - "mpg"
 
 ```{r}
 ggplot(data = mpg) + 

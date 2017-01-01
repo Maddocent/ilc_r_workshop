@@ -4,7 +4,7 @@ library(ggplot2)
 
 devtools::install_github("dgrtwo/gganimate")
 
-## install.packages("ImageMagick")
+##install.packages("ImageMagick")
  install.packages("gganimate")
 library(gganimate)
 
