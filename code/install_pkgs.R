@@ -34,7 +34,8 @@ p_load(car,
        rmarkdown,
        circlize,
        devtools,
-       lubridate
+       lubridate,
+       ciclize
        )
 
 ## downloading required datasets, will create dir "data" if nessecary
