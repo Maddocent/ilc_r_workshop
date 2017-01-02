@@ -1,0 +1,56 @@
+---
+title: "removed_chunks"
+author: "Marc A.T. Teunis"
+date: "2-1-2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Shiny Apps
+Shiny is an open source application that can powerfully illustrate the use of R to generate visualizations. Here we look at an example on decision making in ants on two food sources. The sliders in the app are parameters specific for the food source. The graph shows the change in the number of ants visiting the food source.
+
+
+```{r, shiny_example, eval=FALSE}
+
+if (!require("devtools")) install.packages("devtools", dependencies = TRUE)
+devtools::install_github("swarm-lab/teachR", dependencies = TRUE)
+if (!require("ggvis")) install.packages("ggvis", dependencies = TRUE)
+if (!require("deSolve")) install.packages("deSolve", dependencies = TRUE)
+if (!require("httpuv")) install.packages("httpuv", dependencies = TRUE)
+if (!require("xtable")) install.packages("xtable", dependencies = TRUE)
+
+
+library(httpuv)
+library(ggvis)
+library(teachR)
+library(deSolve)
+
+run_app("ant_collective_decision")
+ 
+
+```
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

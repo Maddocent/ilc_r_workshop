@@ -7,6 +7,12 @@ output:
   html_document: default
 ---
 
+```{r, root_1, include=FALSE}
+require("rprojroot") || utils::install.packages("rprojroot")
+library(rprojroot)
+root <- find_root_file(criterion = is_rstudio_project)
+```
+
 ```{r, knitr_setup, warning=FALSE, error=FALSE, message=FALSE, include=FALSE}
 if (!require("knitr")) utils::install.packages("knitr")
 library(knitr)
@@ -16,13 +22,7 @@ knitr::opts_knit$set(root.dir = root)
 ```
 
 
-```{r, root_1}
-require("rprojroot") || utils::install.packages("rprojroot")
-library(rprojroot)
-root <- find_root_file(criterion = is_rstudio_project)
-```
-
-Let's look a an R plot example  first before doing anything else:
+Let's look a an R plot example first before doing anything else:
 The code below will reproduce the circos plot in the presentation.
 
 ```{r, eval = FALSE}
@@ -51,7 +51,7 @@ These so called code chunks contain R code that does something: for example: cal
 
 ```{r}
 set.seed(seed = 10)
-numbers <- runif(10, min = 0, max = 50)
+numbers <- runif(10000000, min = 0, max = 50)
 mean_numbers <- mean(numbers)
 
 mean_df <- as.data.frame(numbers)
@@ -83,17 +83,19 @@ You can also run a piece of code by selecting the code by dragging the cursor an
 
 `Cntrl` and `Enter` simultaneously.
 
-_*Try running the code chunck above to see if your guess of the mean was right. Now change the number of random numbers from 100 to 10000. What happens to the mean?*_
+_*Try running the code chunck above to see if your guess of the mean was right. Now change the number of random numbers from 100 to 10000. What happens to the mean? What happends if yopu keep increasing the amount of numbers generated?*_
 
 # Introduction
-This walkthrough is part of the workshop "Data Analysis using R and Cloud Computing". The workshop is meant as an introduction to R and to be able to use R for data exploration on your own data, obtained in a research project.
+This walkthrough is part of the workshop "Data Analysis using R and Cloud Computing". The workshop is meant as an introduction to R and to be able to use R for data exploration on your own data, obtained in a research project. It also shows the strngths of using cloud computing in an educational setting.
 
 ## Cloud server for RStudio
-During the workshop, we will be using a preinstalled version of the R-IDE (integrated development environment) RStudio. This version runs on a remote server and has all the add-ons that are needed to run the code already installed. You can login with the credentials supplied at the beginning of the workshop.
+During the workshop, we will be using a preinstalled version of the R-IDE (integrated development environment) RStudio. This version runs on a remote server and has all the add-ons that are needed to run the code. You can login with the credentials supplied at the beginning of the workshop. 
 
 The advantage of cloud servers is that the users do not need to install anything on their own laptops. They will be able to access the IDE, using their preferred web-browser on their computer. No installation of packages is neccessary.
 
 ## Contents of the workshop
+The files needed for this workshop need to be downloaded first. Follow the steps below to get started!
+
 There will be too much in this tutorial to be covered in whole during the workshop. The complete walkthough in this document covers many topic in R. It demonstrates how to run code, write functions, work with data-objects, load in data, clean and summarize data, make visualizations, work with "bigger" data sets and also work with biological data. Too much to cover in so little time, so I will make a selection.  
 
 ## Further reading
@@ -113,11 +115,10 @@ the webaddress is: https://rserver.innovativetesting.nl
 ### Cloning the material from Github.com
 
  1. Create an account on Github.com
- 2. Login in to github.com and go to www.github.com/aushogeschoolutrecht.nl/fnt_r_workshop
+ 2. Login in to github.com and go to www.github.com/maddocent/ilc_r_workshop
  3. Copy the _clone_ link
  4. Start a new project in RStudio-server, choose _"Version Control"_
- 5. Uncheck the options: "packrat" and "git", we do not need them now
- 6. Let the clone finish
+ 5. Let the clone finish
 
 # **Follow the steps above first before continuing**
 
@@ -126,14 +127,13 @@ Did it work? Please let me know if not.
 ## Installing required packages
 
 ## Installed packages
+To see all packages that are already installed:
 ```{r}
 installed_packages <- installed.packages()
 print(as.data.frame(installed_packages))
 ```
 
-
 ## Installing and loading additional packages
-The code chunk below will take care of installing and loading all packages necessary for this tutorial. 
 
 If you want to install a package manually, run:
 
@@ -141,7 +141,7 @@ If you want to install a package manually, run:
 
 To load a package manually:
 
-`library(package-name)` 
+`library(package-name)` or `library("package_name")` 
 
 Please note the difference in use of _"double-quotes"_ above.
 
@@ -149,35 +149,14 @@ Please note the difference in use of _"double-quotes"_ above.
 # Start Tutorial
 ############################################
 
-# Shiny Apps
-Shiny is an open source application that can powerfully illustrate the use of R to generate visualizations. Here we look at an example on decision making in ants on two food sources. The sliders in the app are parameters specific for the food source. The graph shows the change in the number of ants visiting the food source.
+## Shiny apps
+Shiny is an open source application that can powerfully illustrate the use of R to generate visualizations.
 
-
-```{r, shiny_example, eval=FALSE}
-
-if (!require("devtools")) install.packages("devtools", dependencies = TRUE)
-devtools::install_github("swarm-lab/teachR", dependencies = TRUE)
-if (!require("ggvis")) install.packages("ggvis", dependencies = TRUE)
-if (!require("deSolve")) install.packages("deSolve", dependencies = TRUE)
-if (!require("httpuv")) install.packages("httpuv", dependencies = TRUE)
-if (!require("xtable")) install.packages("xtable", dependencies = TRUE)
-
-
-library(httpuv)
-library(ggvis)
-library(teachR)
-library(deSolve)
-
-run_app("ant_collective_decision")
- 
-
-```
-
-There are many, many more examples on nice shiny apps that can illustrate e.g. complex mathematical or statistical models. See HTTP://shiny.rstudio.com/ 
+There are many, many examples on nice shiny apps that can illustrate e.g. complex mathematical or statistical models. See HTTP://shiny.rstudio.com/ 
 See e.g. the example on different chemical educational shiny apps:
 HTTP://dpuadweb.depauw.edu/harvey_web/shiny.html
 
-# Visual respresentations
+## Visual respresentations
 
 ## Build in datasets in R
 #### Cars - "mpg"
