@@ -11,7 +11,8 @@ require("latticeExtra") || utils::install.packages("latticeExtra")
 library(latticeExtra)
 
 # installs additonal R packages (CRAN and BIOCONDUCTOR packages)
-p_load(car,
+p_load(maps,
+       car,
        dplyr,
        grid,
        downloader,
@@ -34,9 +35,8 @@ p_load(car,
        rmarkdown,
        circlize,
        devtools,
-       lubridate,
-       ciclize
-       )
+       lubridate
+        )
 
 ## downloading required datasets, will create dir "data" if nessecary
 library(downloader)
