@@ -11,8 +11,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 *_This text was reproduced and adapted from "R for Data Science" by Hadley Wickam, 2016_*
 
-## First steps
+To view the book: http://r4ds.had.co.nz/ 
 
+# First steps
 Let's use our first graph to answer a question: Do cars with big engines use more fuel than cars with small engines? You probably already have an answer, but try to make your answer precise. What does the relationship between engine size and fuel efficiency look like? Is it positive? Negative? Linear? Nonlinear?
 
 ### The `mpg` data frame

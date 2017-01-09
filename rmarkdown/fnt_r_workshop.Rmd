@@ -6,14 +6,15 @@ output:
   github_document: default
   html_document: default
 ---
-
 ```{r, root_1, include=FALSE}
+## defines the root of the project for later use
 require("rprojroot") || utils::install.packages("rprojroot")
 library(rprojroot)
 root <- find_root_file(criterion = is_rstudio_project)
 ```
 
 ```{r, knitr_setup, warning=FALSE, error=FALSE, message=FALSE, include=FALSE}
+## setting knitr options
 if (!require("knitr")) utils::install.packages("knitr")
 library(knitr)
 
@@ -21,10 +22,9 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FAL
 knitr::opts_knit$set(root.dir = root)
 ```
 
-
 Let's look a an R plot example first before doing anything else:
 The code below will reproduce the circos plot in the presentation.
-
+Do you recognize the plot from the presentation?
 ```{r, eval = FALSE}
 
 ## to call this plot run
@@ -49,66 +49,7 @@ and end with
 ` ``` `
 These so called code chunks contain R code that does something: for example: calculate the mean of 100 random numbers between 0 and 50. Without running the code, can you guess what the mean will approximately be?
 
-```{r}
-set.seed(seed = 10)
-numbers_high_sd <- rnorm(100, mean = 10, sd = 3)
-numbers_low_sd <- rnorm(100, mean = 10, sd = 0.5)
-
-
-distribution <- as.data.frame(numbers)
-
-## create histogram of object "numbers"
-library(ggplot2)
-g <-ggplot(distribution, aes(x=numbers_high_sd)) 
-
-# Histogram with density instead of count on y-axis
-plot <- g + 
-    geom_histogram(aes(y=..density..),      
-                   binwidth=.5,
-                   colour="black", fill="white") +
-    geom_density(alpha=.2, fill="#FF6666") + xlab("value")  
-# Overlay with transparent density plot 
-plot
-```
-What happens if we would increase the number of random numbers? What value would we get for the mean? Give it a try!
-
-How would the distribution look if the standard deviation is not 3 but 0.5. Run the code below to see the difference.
-
-```{r}
-
-
-wide <-ggplot(distribution, aes(x=numbers_high_sd)) 
-
-# Histogram with density instead of count on y-axis
-wide <- wide + 
-    geom_histogram(aes(y=..density..),      
-                   binwidth=.5,
-                   colour="black", fill="white") +
-    geom_density(alpha=.2, fill="#FF6666") + xlab("value") 
-
-wide
-
-tight <-ggplot(distribution, aes(x=numbers_low_sd)) 
-
-tight <- tight + 
-    geom_histogram(aes(y=..density..),      
-                   binwidth=.1,
-                   colour="black", fill="white") +
-    geom_density(alpha=.5, fill="#FF6666") + xlab("value") 
-
-
-tight + wide
-?geom_density
-?col2rgb
-?fill
-col2rgb("blue")
-
-# Overlay with transparent density plot 
-plot
-```
-
-
-Run a code chucks as follows:
+## Run a code chucks as follows:
 place the cursor somewhere in a code chunk and between the 
 ` ```{r} ` and the ` ``` ` and press the keys: 
 
@@ -125,8 +66,6 @@ press the keys:
 You can also run a piece of code by selecting the code by dragging the cursor and left-click mouse, and entering:
 
 `Cntrl` and `Enter` simultaneously.
-
-_*Try running the code chunck above to see if your guess of the mean was right. Now change the number of random numbers from 100 to 10000. What happens to the mean? What happends if yopu keep increasing the amount of numbers generated?*_
 
 # Introduction
 This walkthrough is part of the workshop "Data Analysis using R and Cloud Computing". The workshop is meant as an introduction to R and to be able to use R for data exploration on your own data, obtained in a research project. It also shows the strngths of using cloud computing in an educational setting.
@@ -149,13 +88,13 @@ This document is an R-markdown document. It is a nice way to create documents co
 
 # Getting Started
 ## RStudio Server Instance 
-An RStudio Server Image had been launched on a remote server at Trans.IP (VULTR.com).
+An RStudio Server Image had been launched on a remote server at Trans.IP (VULTR.com). This will ensure that everybody can follow the demo, without having to install anything on your computer.
 
 ## To login to this server:
 login into the rserver with the credentials you recieved upon entering the room:
-the webaddress is: https://rserver.innovativetesting.nl
+the webaddress is: rserver.innovativetesting.nl
 
-### Cloning the material from Github.com
+## Cloning the material from Github.com
 
  1. Create an account on Github.com
  2. Login in to github.com and go to www.github.com/maddocent/ilc_r_workshop
@@ -163,53 +102,499 @@ the webaddress is: https://rserver.innovativetesting.nl
  4. Start a new project in RStudio-server, choose _"Version Control"_
  5. Let the clone finish
 
-# **Follow the steps above first before continuing**
+**Follow the steps above first before continuing**
 
 Did it work? Please let me know if not.
 
 ## Installing required packages
+There will be no need to install aditonional R add-ons. everything has already been installed on the cloud server.
 
 ## Installed packages
 To see all packages that are already installed:
 ```{r}
 installed_packages <- installed.packages()
-print(as.data.frame(installed_packages))
+print(as_tibble(installed_packages))
 ```
 
 ## Installing and loading additional packages
 
 If you want to install a package manually, run:
 
-`install.packages("package-name")`
+`install.packages("package_name")`
 
 To load a package manually:
 
-`library(package-name)` or `library("package_name")` 
+`library(package_name)` or `library("package_name")` 
 
 Please note the difference in use of _"double-quotes"_ above.
 
-###########################################
-# Start Tutorial
-############################################
+# R Graphics
+## Histograms and normal distributions
+Run the code below. 
 
-## Shiny apps
+- See what happens if you increase the number of datapoints from 1000 to 100000 in the function `normal <- rnorm(1000, ...)`. What happens to the plot? 
+- What does changing the `sd` argument do?
+- What does changing the `binwidth=.01` parameter in the call for the plot do? Try setting it to a higher or lower number 
+- Can you guess what `set.seed` does?
+
+```{r}
+set.seed(seed = 10)
+normal <- rnorm(1000, mean = 10, sd = 4)
+
+normal <- as.data.frame(normal)
+
+## create histogram of object "numbers"
+library(ggplot2)
+g <-ggplot(normal, aes(x=normal)) 
+
+# Histogram with density instead of count on y-axis
+plot <- g + 
+    geom_histogram(aes(y=..density..),      
+                   binwidth=1,
+                   colour="black", fill="white") +
+    geom_density(alpha=.2, fill="#FF6666") + xlab("value")  
+# Overlay with transparent density plot 
+plot
+```
+
+## Other distributions examples
+There are other distributions that the normal distribution. 
+```{r}
+distributions <- data.frame(std.normal=rnorm(10000, m=0, sd=1),
+                     wide.normal=rnorm(10000, m=0, sd=2),
+                     exponent=rexp(10000, rate=2),
+                     uniform=runif(10000, min=-3, max=3)
+                     )
+
+
+```
+
+The plots depict two additional distributions. Can you think of one or two other distrubutions, not included?
+```{r}
+
+# Exponential decay distribution plot
+plot_exp <- ggplot(distributions, aes(x= exponent)) +
+  geom_histogram(aes(y=..density..),      
+                   binwidth=1,
+                   colour="black", fill="white") +
+    geom_density(alpha=.2, fill="blue") + xlab("value")  
+
+# Uniform distribution density plot 
+plot_uniform <- ggplot(distributions, aes(x= uniform)) +
+  geom_histogram(aes(y=..density..),      
+                   binwidth=1,
+                   colour="black", fill="white") +
+    geom_density(alpha=.2, fill="green") + xlab("value")  
+
+# Panel with both plots 
+
+cowplot::plot_grid(plot_exp, plot_uniform, labels = c("Exponential", "Uniform"), hjust = -1)
+
+```
+
+## Bimodal distributions
+There is one other distribution that I want to show.
+We will look at this distribution using one of R's build-in datasets: the eruptions of the Yellowstone Geyser "Old Faithful". Information on the dataset can be found running the command `?faithful` in the console.
+
+``` {r}
+ library(mixtools)
+data(faithful)
+faithful
+
+plot_faithful <- ggplot(faithful, aes(x= waiting)) +
+  geom_histogram(aes(y=..density..),      
+                   binwidth=1,
+                   colour="black", fill="white") +
+    geom_density(alpha=.2, fill="darkgreen") + xlab("Minutes") + 
+  ggtitle("Waiting time between eruptions")  
+
+plot_faithful
+
+``` 
+
+Which conclusion can you derive from this plot about the waiting time?
+
+# Shiny apps
 Shiny is an open source application that can powerfully illustrate the use of R to generate visualizations.
 
 There are many, many examples on nice shiny apps that can illustrate e.g. complex mathematical or statistical models. See HTTP://shiny.rstudio.com/ 
 See e.g. the example on different chemical educational shiny apps:
 HTTP://dpuadweb.depauw.edu/harvey_web/shiny.html
 
-## Visual respresentations
+# Visual respresentations
+*_The text below was partly reproduced and adapted from "R for Data Science" by Garrett Grolemund and Hadley Wickam, 2016_*
+
+To view the book: http://r4ds.had.co.nz/ 
 
 ## Build in datasets in R
-#### Cars - "mpg"
+For this exercise we will use the "mpg" (miles per gallon) dataset, available in R.
+
+To get info on the dataset: `?mpg` 
+
+To load the dataset:
+```{r}
+library(tidyverse)
+mpg
+```
+
+## Fuel consumption vs engine size
+Let's use our first graph to answer a question: Do cars with big engines use more fuel than cars with small engines? You probably already have an answer, but try to make your answer precise. What does the relationship between engine size and fuel efficiency look like? Is it positive? Negative? Linear? Nonlinear?
+
+Among the variables in `mpg` are:
+
+ 1. `displ`, a car's engine size (*_displacement_*), in litres.
+
+ 2. `hwy`, a car's fuel efficiency on the highway, in miles per gallon (mpg). 
+
+A car with a low fuel efficiency consumes more fuel than a car with a high fuel efficiency when they travel the same distance. 
+
+### Creating a ggplot
+
+To plot `mpg`, run this code to put `displ` on the x-axis and `hwy` on the y-axis:
 
 ```{r}
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy))
 ```
 
+The plot shows a negative relationship between engine size (`displ`) and fuel efficiency (`hwy`). 
 
+With ggplot2, you begin a plot with the function `ggplot()`. The first argument of `ggplot()` is the dataset to use in the graph. 
+
+You complete your graph by adding one or more layers to `ggplot()`. The function `geom_point()` adds a layer of points to your plot, which creates a scatterplot. ggplot2 comes with many geom functions that each add a different type of layer to a plot. 
+
+Each geom function in ggplot2 takes a `mapping` argument. This defines how variables in your dataset are mapped to visual properties. The `mapping` argument is always paired with `aes()`, and the `x` and `y` arguments of `aes()` specify which variables to map to the x and y axes. ggplot2 looks for the mapped variable in the `data` argument, in this case, `mpg`.
+
+## Aesthetic mappings
+
+In the plot below, one group of points (highlighted in red) seems to fall outside of the linear trend. These cars have a higher mileage than you might expect. How can you explain these cars? 
+
+```{r, echo = FALSE}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) +
+  geom_point() + 
+  geom_point(data = dplyr::filter(mpg, displ > 5, hwy > 20), colour = "red", size = 2.2)
+```
+
+Let's hypothesize that the cars are hybrids. One way to test this hypothesis is to look at the `class` value for each car. The `class` variable of the `mpg` dataset classifies cars into groups such as compact, midsize, and SUV. If the outlying points are hybrids, they should be classified as compact cars or, perhaps, subcompact cars (keep in mind that this data was collected before hybrid trucks and SUVs became popular).
+
+You can add a third variable, like `class`, to a two dimensional scatterplot by mapping it to an __aesthetic__. An aesthetic is a visual property of the objects in your plot. Aesthetics include things like the size, the shape, or the color of your points. 
+
+You can convey information about your data by mapping the aesthetics in your plot to the variables in your dataset. For example, you can map the colors of your points to the `class` variable to reveal the class of each car.
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = class))
+```
+
+To map an aesthetic to a variable, associate the name of the aesthetic to the name of the variable inside `aes()`. ggplot2 will automatically assign a unique level of the aesthetic (here a unique color) to each unique value of the variable, a process known as __scaling__. ggplot2 will also add a legend that explains which levels correspond to which values.
+
+The colors reveal that many of the unusual points are two-seater cars. These cars don't seem like hybrids, and are, in fact, sports cars! Sports cars have large engines like SUVs and pickup trucks, but small bodies like midsize and compact cars, which improves their gas mileage. In hindsight, these cars were unlikely to be hybrids since hybrids have smaller engine sizes.
+
+Or we could have mapped `class` to the _alpha_ aesthetic, which controls the transparency of the points, or the shape of the points.
+
+```{r, fig.align = 'default', warning = FALSE, fig.asp = 1/2}
+
+# class as colour shades with setting alpha 
+alpha <- ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, alpha = class))
+
+# class as shapes
+shape <- ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, shape = class))
+
+library(cowplot)
+
+cowplot::plot_grid(alpha, shape, labels = c("alpha", "shape"), 
+                   hjust = -3.0)
+
+
+
+```
+
+What happened to the SUVs? ggplot2 will only use six shapes at a time. By default, additional groups will go unplotted when you use the shape aesthetic.
+
+You can also _set_ the aesthetic properties of your geom manually. For example, we can make all of the points in our plot blue and an open triangle (see shapes below):
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), color = "blue", shape = 21)
+```
+
+Here, the color doesn't convey information about a variable, but only changes the appearance of the plot. 
+
+ - What happens if you change 24 to 21?
+ - why are certain blue point darker than others?
+
+You'll need to pick a value that makes sense for that aesthetic:
+
+* The name of a color as a character string.
+
+* The size of a point in mm.
+
+* The shape of a point as a number, as shown below:
+
+```{r shapes, echo = FALSE, out.width = "75%", fig.asp = 1/3, fig.cap="R has 25 built in shapes that are identified by numbers. There are some seeming duplicates: for example, 0, 15, and 22 are all squares. The difference comes from the interaction of the `colour` and `fill` aesthetics. The hollow shapes (0--14) have a border determined by `colour`; the solid shapes (15--18) are filled with `colour`; the filled shapes (21--24) have a border of `colour` and are filled with `fill`.", warning = FALSE}
+shapes <- tibble(
+  shape = c(0, 1, 2, 5, 3, 4, 6:19, 22, 21, 24, 23, 20),
+  x = (0:24 %/% 5) / 2,
+  y = (-(0:24 %% 5)) / 4
+)
+ggplot(shapes, aes(x, y)) + 
+  geom_point(aes(shape = shape), size = 5, fill = "red") +
+  geom_text(aes(label = shape), hjust = 0, nudge_x = 0.15) +
+  scale_shape_identity() +
+  expand_limits(x = 4.1) +
+  scale_x_continuous(NULL, breaks = NULL) + 
+  scale_y_continuous(NULL, breaks = NULL, limits = c(-1.2, 0.2)) + 
+  theme_minimal() +
+  theme(aspect.ratio = 1/2.75)
+```
+
+## Problems writing R code and getting help
+
+Writing R code can be challenging and espacially in the beginning you will get mind-boggling errors. R is extremely picky about capitals and every opening `(` must be matched by a closing `)`. Mind that `.` is the decimal placeholder!  
+
+If you're stuck, try the help. You can get help about any R function by running `?function_name` and `?package_name` or `??package_name` , skip down to the examples and look for code that matches what you're trying to do.
+
+Another great tool is Google: trying googling the error message, as it's likely someone else has had the same problem, and has gotten help online.
+
+## Facets
+
+One way to add additional variables is with aesthetics. Another way, particularly useful for categorical variables, is to split your plot into __facets__, subplots that each display one subset of the data. 
+
+To facet your plot by a single variable, use `facet_wrap()`. The first argument of `facet_wrap()` should be a formula, which you create with `~` followed by a variable name (here "formula" is the name of a data structure in R, not a synonym for "equation"). The variable that you pass to `facet_wrap()` should be discrete. 
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_wrap(~ class, nrow = 2)
+```
+
+To facet your plot on the combination of two variables, add `facet_grid()` to your plot call. The first argument of `facet_grid()` is also a formula. This time the formula should contain two variable names separated by a `~`. 
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_grid(drv ~ cyl)
+```
+
+## Geometric objects
+
+How are these two plots similar? 
+
+```{r echo = FALSE, out.width = "50%", fig.align="default", message = FALSE}
+scatter <- ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))
+
+smooth <- ggplot(data = mpg) + 
+  geom_smooth(mapping = aes(x = displ, y = hwy))
+
+cowplot::plot_grid(scatter, smooth, labels = (c("scatter", "smooth")), hjust = -2)
+
+```
+
+## Grammar of Graphics
+
+Both plots contain the same x variable, the same y variable, and both describe the same data. But the plots are not identical. Each plot uses a different visual object to represent the data. In ggplot2 syntax, we say that they use different __geoms__.
+
+A __geom__ is the geometrical object that a plot uses to represent data. People often describe plots by the type of geom that the plot uses. For example, bar charts use bar geoms, line charts use line geoms, boxplots use boxplot geoms, and so on. Scatterplots break the trend; they use the point geom. As we see above, you can use different geoms to plot the same data. The plot on the left uses the point geom, and the plot on the right uses the smooth geom, a smooth line fitted to the data. 
+
+Every geom function in ggplot2 takes a `mapping` argument. However, not every aesthetic works with every geom. You could set the shape of a point, but you couldn't set the "shape" of a line. On the other hand, you _could_ set the linetype of a line. `geom_smooth()` will draw a different line, with a different linetype, for each unique value of the variable that you map to linetype.
+
+```{r message = FALSE}
+ggplot(data = mpg) + 
+  geom_smooth(mapping = aes(x = displ, y = hwy, linetype = drv))
+```
+
+Here `geom_smooth()` separates the cars into three lines based on their `drv` value, which describes a car's drivetrain. One line describes all of the points with a `4` value, one line describes all of the points with an `f` value, and one line describes all of the points with an `r` value. Here, `4` stands for four-wheel drive, `f` for front-wheel drive, and `r` for rear-wheel drive.
+
+If this sounds strange, we can make it more clear by overlaying the lines on top of the raw data and then coloring everything according to `drv`. 
+
+```{r echo = FALSE, message = FALSE}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy, color = drv)) + 
+  geom_point() +
+  geom_smooth(mapping = aes(linetype = drv))
+```
+
+Notice that this plot contains three geoms in the same graph! 
+
+ggplot2 provides over 30 geoms, and extension packages provide even more (see <https://www.ggplot2-exts.org> for a sampling). The best way to get a comprehensive overview is the ggplot2 cheatsheet, which you can find at <http://rstudio.com/cheatsheets>. To learn more about any single geom, use help: `?geom_smooth`.
+
+To display multiple geoms in the same plot, add multiple geom functions to `ggplot()`:
+
+
+```{r, eval = FALSE}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  geom_smooth()
+
+# note the mapping of the aes in ggplot here. We can do individual mapping to the geoms seperately but in this way we save typing and increase readibility of the code.
+```
+
+If you place mappings in a geom function, ggplot2 will treat them as local mappings for the layer. It will use these mappings to extend or overwrite the global mappings _for that layer only_. This makes it possible to display different aesthetics in different layers.
+
+```{r, message = FALSE}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point(mapping = aes(color = class)) + 
+  geom_smooth()
+```
+
+You can use the same idea to specify different `data` for each layer. Here, our smooth line displays just a subset of the `mpg` dataset, the subcompact cars. The local data argument in `geom_smooth()` overrides the global data argument in `ggplot()` for that layer only.
+
+```{r, message = FALSE}
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point(mapping = aes(color = class)) + 
+  geom_smooth(data = filter(mpg, class == "subcompact"), se = FALSE)
+```
+
+(You'll learn how `filter()` works in the next chapter: for now, just know that this command selects only the subcompact cars.)
+
+## Statistical transformations
+
+Next, let's take a look at a bar chart. Bar charts seem simple, but they are interesting because they reveal something subtle about plots. Consider a basic bar chart, as drawn with `geom_bar()`. The following chart displays the total number of diamonds in the `diamonds` dataset, grouped by `cut`. The `diamonds` dataset comes in ggplot2 and contains information about ~54,000 diamonds, including the `price`, `carat`, `color`, `clarity`, and `cut` of each diamond. The chart shows that more diamonds are available with high quality cuts than with low quality cuts. 
+
+```{r}
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut))
+```
+
+On the x-axis, the chart displays `cut`, a variable from `diamonds`. On the y-axis, it displays count, but count is not a variable in `diamonds`! Where does count come from? Many graphs, like scatterplots, plot the raw values of your dataset. Other graphs, like bar charts, calculate new values to plot:
+
+ * bar charts, histograms, and frequency polygons bin your data 
+  and then plot bin counts, the number of points that fall in each bin.
+
+ * smoothers fit a model to your data and then plot predictions from the
+  model.
+
+ * boxplots compute a robust summary of the distribution and then display a 
+  specially formatted box.
+
+ggplot2 provides over 20 stats for you to use. Each stat is a function, so you can get help in usual way, e.g. `?stat_bin`. To see a complete list of stats, try the ggplot2 cheatsheet.
+
+## Position adjustments
+
+There's one more piece of magic associated with bar charts. You can colour a bar chart using either the `colour` aesthetic, or more usefully, `fill`:
+
+```{r out.width = "50%", fig.align = "default"}
+colours <- ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, colour = cut))
+
+more_colours <- ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = cut))
+
+panel3 <- cowplot::plot_grid(colours, more_colours, labels = c("colours", 
+"even more colours"), hjust = -1)
+
+panel3
+```
+
+Note what happens if you map the fill aesthetic to another variable, like `clarity`: the bars are automatically stacked. Each colored rectangle represents a combination of `cut` and `clarity`.
+
+```{r}
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = clarity))
+```
+
+The stacking is performed automatically by the __position adjustment__ specified by the `position` argument. If you don't want a stacked bar chart, you can use one of three other options: `"identity"`, `"dodge"` or `"fill"`.
+
+*   `position = "identity"` will place each object exactly where it falls in 
+    the context of the graph. This is not very useful for bars, because it
+    overlaps them. To see that overlapping we either need to make the bars
+    slightly transparent by setting `alpha` to a small value, or completely
+    transparent by setting `fill = NA`.
+    
+```{r out.width = "50%", fig.align = "default"}
+  stacked <- ggplot(data = diamonds, mapping = aes(x = cut, fill = clarity)) + 
+      geom_bar(alpha = 1/5, position = "identity")
+  
+  stacked_not_filled <- ggplot(data = diamonds, mapping = aes(x = cut, colour = clarity)) + 
+      geom_bar(fill = NA, position = "identity")
+    
+cowplot::plot_grid(stacked, stacked_not_filled)    
+    
+    
+```
+    
+    The identity position adjustment is more useful for 2d geoms, like points,
+    where it is the default.
+    
+ * `position = "fill"` works like stacking, but makes each set of stacked bars
+    the same height. This makes it easier to compare proportions across 
+    groups.
+
+```{r}
+    ggplot(data = diamonds) + 
+      geom_bar(mapping = aes(x = cut, fill = clarity), position = "fill")
+```
+
+ * `position = "dodge"` places overlapping objects directly _beside_ one 
+    another. This makes it easier to compare individual values.
+
+```{r}
+    ggplot(data = diamonds) + 
+      geom_bar(mapping = aes(x = cut, fill = clarity), position = "dodge")
+```
+
+There's one other type of adjustment that's not useful for bar charts, but it can be very useful for scatterplots. Recall our first scatterplot. Did you notice that the plot displays only 126 points, even though there are 234 observations in the dataset?
+
+```{r echo = FALSE}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))
+```
+
+The values of `hwy` and `displ` are rounded so the points appear on a grid and many points overlap each other. This problem is known as __overplotting__. This arrangement makes it hard to see where the mass of the data is. Are the data points spread equally throughout the graph, or is there one special combination of `hwy` and `displ` that contains 109 values? 
+
+You can avoid this gridding by setting the position adjustment to "jitter".  `position = "jitter"` adds a small amount of random noise to each point. This spreads the points out because no two points are likely to receive the same amount of random noise.
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), position = "jitter")
+```
+
+Adding randomness seems like a strange way to improve your plot, but while it makes your graph less accurate at small scales, it makes your graph _more_ revealing at large scales. Because this is such a useful operation, ggplot2 comes with a shorthand for `geom_point(position = "jitter")`: `geom_jitter()`.
+
+To learn more about a position adjustment, look up the help page associated with each adjustment: `?position_dodge`, `?position_fill`, `?position_identity`, `?position_jitter`, and `?position_stack`.
+
+## The layered grammar of graphics
+
+In the previous sections, you learned much more than how to make scatterplots, bar charts, and boxplots. You learned a foundation that you can use to make _any_ type of plot with ggplot2. To see this, let's add position adjustments, stats, coordinate systems, and faceting to our code template:
+
+```
+ggplot(data = <DATA>) + 
+  <GEOM_FUNCTION>(
+     mapping = aes(<MAPPINGS>),
+     stat = <STAT>, 
+     position = <POSITION>
+  ) +
+  <COORDINATE_FUNCTION> +
+  <FACET_FUNCTION>
+```
+
+Our new template takes seven parameters, the bracketed words that appear in the template. In practice, you rarely need to supply all seven parameters to make a graph because ggplot2 will provide useful defaults for everything except the data, the mappings, and the geom function.
+
+The seven parameters in the template compose the grammar of graphics, a formal system for building plots. The grammar of graphics is based on the insight that you can uniquely describe _any_ plot as a combination of a dataset, a geom, a set of mappings, a stat, a position adjustment, a coordinate system, and a faceting scheme. 
+
+To see how this works, consider how you could build a basic plot from scratch: you could start with a dataset and then transform it into the information that you want to display (with a stat).
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 
 
