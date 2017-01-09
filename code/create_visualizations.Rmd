@@ -2,7 +2,7 @@
 title: "Create visualizations with R"
 author: "Marc A.T.eunis, adapted from R for Data Science by Hadley Wickam"
 date: "2-1-2017"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
