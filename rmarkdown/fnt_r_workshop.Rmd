@@ -51,19 +51,62 @@ These so called code chunks contain R code that does something: for example: cal
 
 ```{r}
 set.seed(seed = 10)
-numbers <- runif(10000000, min = 0, max = 50)
-mean_numbers <- mean(numbers)
+numbers_high_sd <- rnorm(100, mean = 10, sd = 3)
+numbers_low_sd <- rnorm(100, mean = 10, sd = 0.5)
 
-mean_df <- as.data.frame(numbers)
+
+distribution <- as.data.frame(numbers)
 
 ## create histogram of object "numbers"
 library(ggplot2)
-g <- ggplot(data = mean_df, mapping = aes(x = numbers))
-plot <- g + geom_histogram(color = "green")
-plot
+g <-ggplot(distribution, aes(x=numbers_high_sd)) 
 
+# Histogram with density instead of count on y-axis
+plot <- g + 
+    geom_histogram(aes(y=..density..),      
+                   binwidth=.5,
+                   colour="black", fill="white") +
+    geom_density(alpha=.2, fill="#FF6666") + xlab("value")  
+# Overlay with transparent density plot 
+plot
 ```
 What happens if we would increase the number of random numbers? What value would we get for the mean? Give it a try!
+
+How would the distribution look if the standard deviation is not 3 but 0.5. Run the code below to see the difference.
+
+```{r}
+
+
+wide <-ggplot(distribution, aes(x=numbers_high_sd)) 
+
+# Histogram with density instead of count on y-axis
+wide <- wide + 
+    geom_histogram(aes(y=..density..),      
+                   binwidth=.5,
+                   colour="black", fill="white") +
+    geom_density(alpha=.2, fill="#FF6666") + xlab("value") 
+
+wide
+
+tight <-ggplot(distribution, aes(x=numbers_low_sd)) 
+
+tight <- tight + 
+    geom_histogram(aes(y=..density..),      
+                   binwidth=.1,
+                   colour="black", fill="white") +
+    geom_density(alpha=.5, fill="#FF6666") + xlab("value") 
+
+
+tight + wide
+?geom_density
+?col2rgb
+?fill
+col2rgb("blue")
+
+# Overlay with transparent density plot 
+plot
+```
+
 
 Run a code chucks as follows:
 place the cursor somewhere in a code chunk and between the 
@@ -546,15 +589,12 @@ library(readr)
 skin <- read_csv(paste0(root, "/data/skincolumns.csv")) 
 str(skin)
 
-?read.csv
 
-read.csv("file.name", na.strings = c("999", "888", "NA"))
-
-skin	 # content of the data frame
+head(skin)	 # content of the data frame
 dim(skin)
 attributes(skin)
 summary(skin)
-?read_csv 	 # help on the function
+## ?read_csv 	 # help on the function
 
 ## dataset contains an NA, some functions do not work with NAs:
 mean(skin$`Genotype A`)
@@ -603,7 +643,7 @@ summary(smoking)
 
 ### Subsetting data frame
 ```{r}
-
+library(tidyverse)
 names(smoking)
 smoking_male <- smoking %>% filter(genderf == "male")
 smoking_age_gender <- smoking %>% select(genderf, agecf)
@@ -975,7 +1015,7 @@ The reason why I do not show examples from other plotting systems is that I thin
 
 Bioconductor packages installation   
 ```{r}       
-
+library(pacman)
 p_load(Biostrings,
        XVector,
        BiocGenerics,
