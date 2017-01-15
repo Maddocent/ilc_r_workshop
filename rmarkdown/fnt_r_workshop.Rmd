@@ -23,16 +23,6 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, error = FALSE, message = FAL
 knitr::opts_knit$set(root.dir = root)
 ```
 
-Let's look a an R plot example first before doing anything else:
-The code below will reproduce the circos plot in the presentation.
-Do you recognize the plot from the presentation?
-```{r, eval = FALSE}
-
-## to call this plot run
-## this line without the 2 ##:
-source(paste0(root, "/code/circos_example.R"))
-```
-
 ### *_Important note: R is case-sensitive, meaning that it will matter whether you use capital or lower case, keep this in mind if you get a cryptic warning or error!_*
 
 ##########################################################
@@ -71,21 +61,31 @@ You can also run a piece of code by selecting the code by dragging the cursor an
 # Introduction
 This walkthrough is part of the workshop "Data Analysis using R and Cloud Computing". The workshop is meant as an introduction to R and to be able to use R for data exploration on your own data, obtained in a research project. It also shows the strngths of using cloud computing in an educational setting.
 
+Let's look a an R plot example first before doing anything else:
+The code below will reproduce the circos plot in the presentation.
+Do you recognize the plot from the presentation?
+```{r, eval = FALSE}
+source(paste0(root, "/code/circos_example.R"))
+```
+
 ## Cloud server for RStudio
 During the workshop, we will be using a preinstalled version of the R-IDE (integrated development environment) RStudio. This version runs on a remote server and has all the add-ons that are needed to run the code. You can login with the credentials supplied at the beginning of the workshop. 
 
-The advantage of cloud servers is that the users do not need to install anything on their own laptops. They will be able to access the IDE, using their preferred web-browser on their computer. No installation of packages is neccessary.
+The advantage of cloud servers is that the users do not need to install anything on their own laptops. They will be able to access the IDE, using their preferred web-browser on their computer. No installation of packages or further steps are needed.
 
 ## Contents of the workshop
-The files needed for this workshop need to be downloaded first. Follow the steps below to get started!
+The files needed for this workshop need to be downloaded from github first. Follow the steps below to get started!
 
 There will be too much in this tutorial to be covered in whole during the workshop. The complete walkthough in this document covers many topic in R. It demonstrates how to run code, write functions, work with data-objects, load in data, clean and summarize data, make visualizations, work with "bigger" data sets and also work with biological data. Too much to cover in so little time, so I will make a selection.  
 
 ## Further reading
-At the end of the document you will get tips on how to proceed (with R if you like). A good start could be to repeat this tutorial in full and at your own pace, after that it will be up to you how you will move foRward. 
+At the end of the document you will get tips on how to proceed (with R if you like). A good start could be to repeat this tutorial in full and at your own pace, after that it will be up to you how you will move foRward. See also the folder "documentation" for further info. 
 
 ## About this document: Literate programming
 This document is an R-markdown document. It is a nice way to create documents containing normal text, code and output of that code together. It is a form of so-called _"Literate Programming"_, which is part of the "Reproducible research" philosophy.
+R Markdown can also include and interpret LaTeX, which is used much in the technical fields. 
+
+see:  for example
 
 # Getting Started
 ## RStudio Server Instance 
@@ -101,7 +101,9 @@ the webaddress is: rserver.innovativetesting.nl
  2. Login in to github.com and go to www.github.com/maddocent/ilc_r_workshop
  3. Copy the _clone_ link
  4. Start a new project in RStudio-server, choose _"Version Control"_
+ 5. Copy the 'clone' link in the 'url' field, press enter
  5. Let the clone finish
+ 
 
 **Follow the steps above first before continuing**
 
