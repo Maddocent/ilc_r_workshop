@@ -1,16 +1,35 @@
 Data analysis using R and Cloud Computing
 ================
 Marc A.T. Teunis
-2017-01-04
+2017-01-15
 
-Let's look a an R plot example first before doing anything else: The code below will reproduce the circos plot in the presentation.
+<style type="text/css">
 
-``` r
-## to call this plot run
-## this line without the 2 ##:
-source(paste0(root, "/code/circos_example.R"))
-```
-
+body{ /* Normal  */
+   font-size: 16px;
+}
+td {  /* Table  */
+   font-size: 12px;
+}
+h1 { /* Header 1 */
+ font-size: 28px;
+ color: DarkBlue;
+}
+h2 { /* Header 2 */
+ font-size: 22px;
+ color: DarkBlue;
+}
+h3 { /* Header 3 */
+ font-size: 18px;
+ color: DarkBlue;
+}
+code.r{ /* Code block */
+  font-size: 16px;
+}
+pre { /* Code block */
+  font-size: 16px
+}
+</style>
 ### **Important note: R is case-sensitive, meaning that it will matter whether you use capital or lower case, keep this in mind if you get a cryptic warning or error!**
 
 ########################################################## 
@@ -25,29 +44,16 @@ How to run the code in the tutorial below?
 
 This document contains code chunks that start with
 
-```` ```{r, .....options......} ````
+```` ```{r, ...options...} ````
 
 and end with
 
 ```` ``` ```` These so called code chunks contain R code that does something: for example: calculate the mean of 100 random numbers between 0 and 50. Without running the code, can you guess what the mean will approximately be?
 
-``` r
-set.seed(seed = 10)
-numbers <- runif(100, min = 0, max = 50)
-mean_numbers <- mean(numbers)
+Run a code chucks as follows:
+-----------------------------
 
-mean_df <- as.data.frame(numbers)
-
-## create histogram of object "numbers"
-library(ggplot2)
-g <- ggplot(data = mean_df, mapping = aes(x = numbers))
-plot <- g + geom_histogram(color = "green")
-plot
-```
-
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-2-1.png) What happens if we would increase the number of random numbers? What value would we get for the mean? Give it a try!
-
-Run a code chucks as follows: place the cursor somewhere in a code chunk and between the ```` ```{r} ```` and the ```` ``` ```` and press the keys:
+place the cursor somewhere in a code chunk and between the ```` ```{r} ```` and the ```` ``` ```` and press the keys:
 
 `Ctrl` `Shift` and `Enter` simultaneously.
 
@@ -61,65 +67,69 @@ You can also run a piece of code by selecting the code by dragging the cursor an
 
 `Cntrl` and `Enter` simultaneously.
 
-**Try running the code chunck above to see if your guess of the mean was right. Now change the number of random numbers from 100 to 10000. What happens to the mean? What happends if yopu keep increasing the amount of numbers generated?**
-
 Introduction
 ============
 
-This walkthrough is part of the workshop "Data Analysis using R and Cloud Computing". The workshop is meant as an introduction to R and to be able to use R for data exploration on your own data, obtained in a research project. It also shows the strngths of using cloud computing in an educational setting.
+This walkthrough is part of the workshop "Data Analysis using R and Cloud Computing". The workshop is meant as an introduction to R and to be able to use R for data exploration on your own data, obtained in a research project. It also shows the strengths of using cloud computing in an educational setting.
+
+Let's look a sophisticated R plot example first before doing anything else: The code below will reproduce the circos plot in the presentation. Do you recognize the plot from the presentation?
+
+``` r
+source(paste0(root, "/code/circos_example.R"))
+```
 
 Cloud server for RStudio
 ------------------------
 
 During the workshop, we will be using a preinstalled version of the R-IDE (integrated development environment) RStudio. This version runs on a remote server and has all the add-ons that are needed to run the code. You can login with the credentials supplied at the beginning of the workshop.
 
-The advantage of cloud servers is that the users do not need to install anything on their own laptops. They will be able to access the IDE, using their preferred web-browser on their computer. No installation of packages is neccessary.
+The advantage of cloud servers is that the users do not need to install anything on their own laptops. They will be able to access the IDE, using their preferred web-browser on their computer. No installation of packages or further steps are needed.
 
 Contents of the workshop
 ------------------------
 
-The files needed for this workshop need to be downloaded first. Follow the steps below to get started!
+The files needed for this workshop need to be downloaded from github first. Follow the steps below to get started!
 
 There will be too much in this tutorial to be covered in whole during the workshop. The complete walkthough in this document covers many topic in R. It demonstrates how to run code, write functions, work with data-objects, load in data, clean and summarize data, make visualizations, work with "bigger" data sets and also work with biological data. Too much to cover in so little time, so I will make a selection.
 
 Further reading
 ---------------
 
-At the end of the document you will get tips on how to proceed (with R if you like). A good start could be to repeat this tutorial in full and at your own pace, after that it will be up to you how you will move foRward.
+At the end of the document you will get tips on how to proceed (with R if you like). A good start could be to repeat this tutorial in full and at your own pace, after that it will be up to you how you will move foRward. See also the folder "documentation" for further info.
 
 About this document: Literate programming
 -----------------------------------------
 
-This document is an R-markdown document. It is a nice way to create documents containing normal text, code and output of that code together. It is a form of so-called *"Literate Programming"*, which is part of the "Reproducible research" philosophy.
-
-Getting Started
-===============
+This document is an R-markdown document. It is a nice way to create documents containing normal text, code and output of that code together. It is a form of so-called *"Literate Programming"*, which is part of the "Reproducible research" philosophy. R Markdown can also include and interpret LaTeX, which is used much in the technical fields. see: for example the file "./rpres/example\_LaTeX\_example.html". Open the file in a Web browser.
 
 RStudio Server Instance
 -----------------------
 
-An RStudio Server Image had been launched on a remote server at Trans.IP (VULTR.com).
+An RStudio Server Image had been launched on a remote server at Trans.IP (VULTR.com). This will ensure that everybody can follow the demo, without having to install anything on your computer.
 
 To login to this server:
 ------------------------
 
-login into the rserver with the credentials you recieved upon entering the room: the webaddress is: <https://rserver.innovativetesting.nl>
+login into the rserver with the credentials you recieved upon entering the room: the webaddress is: rserver.innovativetesting.nl
 
-### Cloning the material from Github.com
+Cloning the material from Github.com
+------------------------------------
 
-1.  Create an account on Github.com
+1.  Create an account on www.github.com
 2.  Login in to github.com and go to www.github.com/maddocent/ilc\_r\_workshop
 3.  Copy the *clone* link
 4.  Start a new project in RStudio-server, choose *"Version Control"*
-5.  Let the clone finish
+5.  Copy the 'clone' link in the 'url' field, press enter
+6.  Let the clone finish
 
 **Follow the steps above first before continuing**
-==================================================
 
 Did it work? Please let me know if not.
 
 Installing required packages
 ----------------------------
+
+There will be no need to install aditonional R add-ons. everything has already been installed on the cloud server.
 
 Installed packages
 ------------------
@@ -127,2065 +137,535 @@ Installed packages
 To see all packages that are already installed:
 
 ``` r
+library(tidyverse)
 installed_packages <- installed.packages()
-print(as.data.frame(installed_packages))
+print(as_tibble(installed_packages))
 ```
 
-    ##                                                 Package
-    ## deSolve                                         deSolve
-    ## ggvis                                             ggvis
-    ## scatterplot3d                             scatterplot3d
-    ## shinythemes                                 shinythemes
-    ## teachR                                           teachR
-    ## AnnotationDbi                             AnnotationDbi
-    ## AnnotationHub                             AnnotationHub
-    ## assertthat                                   assertthat
-    ## backports                                     backports
-    ## base                                               base
-    ## base64enc                                     base64enc
-    ## BH                                                   BH
-    ## bibtex                                           bibtex
-    ## Biobase                                         Biobase
-    ## BiocGenerics                               BiocGenerics
-    ## BiocInstaller                             BiocInstaller
-    ## BiocParallel                               BiocParallel
-    ## biomaRt                                         biomaRt
-    ## Biostrings                                   Biostrings
-    ## bitops                                           bitops
-    ## boot                                               boot
-    ## brew                                               brew
-    ## broom                                             broom
-    ## BSgenome                                       BSgenome
-    ## BSgenome.Hsapiens.UCSC.hg19 BSgenome.Hsapiens.UCSC.hg19
-    ## car                                                 car
-    ## caTools                                         caTools
-    ## circlize                                       circlize
-    ## class                                             class
-    ## cluster                                         cluster
-    ## codetools                                     codetools
-    ## colorspace                                   colorspace
-    ## compiler                                       compiler
-    ## cowplot                                         cowplot
-    ## crayon                                           crayon
-    ## curl                                               curl
-    ## datasets                                       datasets
-    ## DBI                                                 DBI
-    ## devtools                                       devtools
-    ## dichromat                                     dichromat
-    ## digest                                           digest
-    ## doParallel                                   doParallel
-    ## downloader                                   downloader
-    ## dplyr                                             dplyr
-    ## evaluate                                       evaluate
-    ## filehash                                       filehash
-    ## forcats                                         forcats
-    ## foreach                                         foreach
-    ## foreign                                         foreign
-    ## formatR                                         formatR
-    ## futile.logger                             futile.logger
-    ## futile.options                           futile.options
-    ## gdata                                             gdata
-    ## GenomeInfoDb                               GenomeInfoDb
-    ## GenomicAlignments                     GenomicAlignments
-    ## GenomicFeatures                         GenomicFeatures
-    ## GenomicRanges                             GenomicRanges
-    ## ggplot2                                         ggplot2
-    ## git2r                                             git2r
-    ## GlobalOptions                             GlobalOptions
-    ## gplots                                           gplots
-    ## graphics                                       graphics
-    ## grDevices                                     grDevices
-    ## grid                                               grid
-    ## gridBase                                       gridBase
-    ## gridExtra                                     gridExtra
-    ## gtable                                           gtable
-    ## gtools                                           gtools
-    ## haven                                             haven
-    ## highr                                             highr
-    ## hms                                                 hms
-    ## htmltools                                     htmltools
-    ## htmlwidgets                                 htmlwidgets
-    ## httpuv                                           httpuv
-    ## httr                                               httr
-    ## hunspell                                       hunspell
-    ## hwriter                                         hwriter
-    ## igraph                                           igraph
-    ## interactiveDisplayBase           interactiveDisplayBase
-    ## IRanges                                         IRanges
-    ## irlba                                             irlba
-    ## iterators                                     iterators
-    ## jsonlite                                       jsonlite
-    ## KernSmooth                                   KernSmooth
-    ## knitcitations                             knitcitations
-    ## knitr                                             knitr
-    ## labeling                                       labeling
-    ## lambda.r                                       lambda.r
-    ## lattice                                         lattice
-    ## latticeExtra                               latticeExtra
-    ## lazyeval                                       lazyeval
-    ## lme4                                               lme4
-    ## lubridate                                     lubridate
-    ## magrittr                                       magrittr
-    ## maps                                               maps
-    ## markdown                                       markdown
-    ## MASS                                               MASS
-    ## Matrix                                           Matrix
-    ## MatrixModels                               MatrixModels
-    ## memoise                                         memoise
-    ## methods                                         methods
-    ## mgcv                                               mgcv
-    ## mime                                               mime
-    ## minqa                                             minqa
-    ## mnormt                                           mnormt
-    ## modelr                                           modelr
-    ## munsell                                         munsell
-    ## nlme                                               nlme
-    ## nloptr                                           nloptr
-    ## NMF                                                 NMF
-    ## nnet                                               nnet
-    ## openssl                                         openssl
-    ## pacman                                           pacman
-    ## parallel                                       parallel
-    ## pbkrtest                                       pbkrtest
-    ## pkgmaker                                       pkgmaker
-    ## plogr                                             plogr
-    ## plyr                                               plyr
-    ## praise                                           praise
-    ## psych                                             psych
-    ## purrr                                             purrr
-    ## quantreg                                       quantreg
-    ## R6                                                   R6
-    ## RColorBrewer                               RColorBrewer
-    ## Rcpp                                               Rcpp
-    ## RcppEigen                                     RcppEigen
-    ## RCurl                                             RCurl
-    ## readr                                             readr
-    ## readxl                                           readxl
-    ## RefManageR                                   RefManageR
-    ## registry                                       registry
-    ## reshape2                                       reshape2
-    ## rex                                                 rex
-    ## RJSONIO                                         RJSONIO
-    ## rmarkdown                                     rmarkdown
-    ## RNAseqData.HNRNPC.bam.chr14 RNAseqData.HNRNPC.bam.chr14
-    ## rngtools                                       rngtools
-    ## roxygen2                                       roxygen2
-    ## rpart                                             rpart
-    ## rprojroot                                     rprojroot
-    ## Rsamtools                                     Rsamtools
-    ## RSQLite                                         RSQLite
-    ## rstudioapi                                   rstudioapi
-    ## rtracklayer                                 rtracklayer
-    ## rvest                                             rvest
-    ## S4Vectors                                     S4Vectors
-    ## scales                                           scales
-    ## selectr                                         selectr
-    ## sequencing                                   sequencing
-    ## shape                                             shape
-    ## shiny                                             shiny
-    ## ShortRead                                     ShortRead
-    ## snow                                               snow
-    ## sourcetools                                 sourcetools
-    ## SparseM                                         SparseM
-    ## spatial                                         spatial
-    ## splines                                         splines
-    ## stats                                             stats
-    ## stats4                                           stats4
-    ## stringdist                                   stringdist
-    ## stringi                                         stringi
-    ## stringr                                         stringr
-    ## SummarizedExperiment               SummarizedExperiment
-    ## survival                                       survival
-    ## tcltk                                             tcltk
-    ## testit                                           testit
-    ## testthat                                       testthat
-    ## tibble                                           tibble
-    ## tidyr                                             tidyr
-    ## tidyverse                                     tidyverse
-    ## tools                                             tools
-    ## utils                                             utils
-    ## VariantAnnotation                     VariantAnnotation
-    ## webshot                                         webshot
-    ## whisker                                         whisker
-    ## withr                                             withr
-    ## XML                                                 XML
-    ## xml2                                               xml2
-    ## xtable                                           xtable
-    ## XVector                                         XVector
-    ## yaml                                               yaml
-    ## zlibbioc                                       zlibbioc
-    ##                                                                            LibPath
-    ## deSolve                     /home/FNT_ond_01/R/x86_64-redhat-linux-gnu-library/3.3
-    ## ggvis                       /home/FNT_ond_01/R/x86_64-redhat-linux-gnu-library/3.3
-    ## scatterplot3d               /home/FNT_ond_01/R/x86_64-redhat-linux-gnu-library/3.3
-    ## shinythemes                 /home/FNT_ond_01/R/x86_64-redhat-linux-gnu-library/3.3
-    ## teachR                      /home/FNT_ond_01/R/x86_64-redhat-linux-gnu-library/3.3
-    ## AnnotationDbi                                                 /usr/lib64/R/library
-    ## AnnotationHub                                                 /usr/lib64/R/library
-    ## assertthat                                                    /usr/lib64/R/library
-    ## backports                                                     /usr/lib64/R/library
-    ## base                                                          /usr/lib64/R/library
-    ## base64enc                                                     /usr/lib64/R/library
-    ## BH                                                            /usr/lib64/R/library
-    ## bibtex                                                        /usr/lib64/R/library
-    ## Biobase                                                       /usr/lib64/R/library
-    ## BiocGenerics                                                  /usr/lib64/R/library
-    ## BiocInstaller                                                 /usr/lib64/R/library
-    ## BiocParallel                                                  /usr/lib64/R/library
-    ## biomaRt                                                       /usr/lib64/R/library
-    ## Biostrings                                                    /usr/lib64/R/library
-    ## bitops                                                        /usr/lib64/R/library
-    ## boot                                                          /usr/lib64/R/library
-    ## brew                                                          /usr/lib64/R/library
-    ## broom                                                         /usr/lib64/R/library
-    ## BSgenome                                                      /usr/lib64/R/library
-    ## BSgenome.Hsapiens.UCSC.hg19                                   /usr/lib64/R/library
-    ## car                                                           /usr/lib64/R/library
-    ## caTools                                                       /usr/lib64/R/library
-    ## circlize                                                      /usr/lib64/R/library
-    ## class                                                         /usr/lib64/R/library
-    ## cluster                                                       /usr/lib64/R/library
-    ## codetools                                                     /usr/lib64/R/library
-    ## colorspace                                                    /usr/lib64/R/library
-    ## compiler                                                      /usr/lib64/R/library
-    ## cowplot                                                       /usr/lib64/R/library
-    ## crayon                                                        /usr/lib64/R/library
-    ## curl                                                          /usr/lib64/R/library
-    ## datasets                                                      /usr/lib64/R/library
-    ## DBI                                                           /usr/lib64/R/library
-    ## devtools                                                      /usr/lib64/R/library
-    ## dichromat                                                     /usr/lib64/R/library
-    ## digest                                                        /usr/lib64/R/library
-    ## doParallel                                                    /usr/lib64/R/library
-    ## downloader                                                    /usr/lib64/R/library
-    ## dplyr                                                         /usr/lib64/R/library
-    ## evaluate                                                      /usr/lib64/R/library
-    ## filehash                                                      /usr/lib64/R/library
-    ## forcats                                                       /usr/lib64/R/library
-    ## foreach                                                       /usr/lib64/R/library
-    ## foreign                                                       /usr/lib64/R/library
-    ## formatR                                                       /usr/lib64/R/library
-    ## futile.logger                                                 /usr/lib64/R/library
-    ## futile.options                                                /usr/lib64/R/library
-    ## gdata                                                         /usr/lib64/R/library
-    ## GenomeInfoDb                                                  /usr/lib64/R/library
-    ## GenomicAlignments                                             /usr/lib64/R/library
-    ## GenomicFeatures                                               /usr/lib64/R/library
-    ## GenomicRanges                                                 /usr/lib64/R/library
-    ## ggplot2                                                       /usr/lib64/R/library
-    ## git2r                                                         /usr/lib64/R/library
-    ## GlobalOptions                                                 /usr/lib64/R/library
-    ## gplots                                                        /usr/lib64/R/library
-    ## graphics                                                      /usr/lib64/R/library
-    ## grDevices                                                     /usr/lib64/R/library
-    ## grid                                                          /usr/lib64/R/library
-    ## gridBase                                                      /usr/lib64/R/library
-    ## gridExtra                                                     /usr/lib64/R/library
-    ## gtable                                                        /usr/lib64/R/library
-    ## gtools                                                        /usr/lib64/R/library
-    ## haven                                                         /usr/lib64/R/library
-    ## highr                                                         /usr/lib64/R/library
-    ## hms                                                           /usr/lib64/R/library
-    ## htmltools                                                     /usr/lib64/R/library
-    ## htmlwidgets                                                   /usr/lib64/R/library
-    ## httpuv                                                        /usr/lib64/R/library
-    ## httr                                                          /usr/lib64/R/library
-    ## hunspell                                                      /usr/lib64/R/library
-    ## hwriter                                                       /usr/lib64/R/library
-    ## igraph                                                        /usr/lib64/R/library
-    ## interactiveDisplayBase                                        /usr/lib64/R/library
-    ## IRanges                                                       /usr/lib64/R/library
-    ## irlba                                                         /usr/lib64/R/library
-    ## iterators                                                     /usr/lib64/R/library
-    ## jsonlite                                                      /usr/lib64/R/library
-    ## KernSmooth                                                    /usr/lib64/R/library
-    ## knitcitations                                                 /usr/lib64/R/library
-    ## knitr                                                         /usr/lib64/R/library
-    ## labeling                                                      /usr/lib64/R/library
-    ## lambda.r                                                      /usr/lib64/R/library
-    ## lattice                                                       /usr/lib64/R/library
-    ## latticeExtra                                                  /usr/lib64/R/library
-    ## lazyeval                                                      /usr/lib64/R/library
-    ## lme4                                                          /usr/lib64/R/library
-    ## lubridate                                                     /usr/lib64/R/library
-    ## magrittr                                                      /usr/lib64/R/library
-    ## maps                                                          /usr/lib64/R/library
-    ## markdown                                                      /usr/lib64/R/library
-    ## MASS                                                          /usr/lib64/R/library
-    ## Matrix                                                        /usr/lib64/R/library
-    ## MatrixModels                                                  /usr/lib64/R/library
-    ## memoise                                                       /usr/lib64/R/library
-    ## methods                                                       /usr/lib64/R/library
-    ## mgcv                                                          /usr/lib64/R/library
-    ## mime                                                          /usr/lib64/R/library
-    ## minqa                                                         /usr/lib64/R/library
-    ## mnormt                                                        /usr/lib64/R/library
-    ## modelr                                                        /usr/lib64/R/library
-    ## munsell                                                       /usr/lib64/R/library
-    ## nlme                                                          /usr/lib64/R/library
-    ## nloptr                                                        /usr/lib64/R/library
-    ## NMF                                                           /usr/lib64/R/library
-    ## nnet                                                          /usr/lib64/R/library
-    ## openssl                                                       /usr/lib64/R/library
-    ## pacman                                                        /usr/lib64/R/library
-    ## parallel                                                      /usr/lib64/R/library
-    ## pbkrtest                                                      /usr/lib64/R/library
-    ## pkgmaker                                                      /usr/lib64/R/library
-    ## plogr                                                         /usr/lib64/R/library
-    ## plyr                                                          /usr/lib64/R/library
-    ## praise                                                        /usr/lib64/R/library
-    ## psych                                                         /usr/lib64/R/library
-    ## purrr                                                         /usr/lib64/R/library
-    ## quantreg                                                      /usr/lib64/R/library
-    ## R6                                                            /usr/lib64/R/library
-    ## RColorBrewer                                                  /usr/lib64/R/library
-    ## Rcpp                                                          /usr/lib64/R/library
-    ## RcppEigen                                                     /usr/lib64/R/library
-    ## RCurl                                                         /usr/lib64/R/library
-    ## readr                                                         /usr/lib64/R/library
-    ## readxl                                                        /usr/lib64/R/library
-    ## RefManageR                                                    /usr/lib64/R/library
-    ## registry                                                      /usr/lib64/R/library
-    ## reshape2                                                      /usr/lib64/R/library
-    ## rex                                                           /usr/lib64/R/library
-    ## RJSONIO                                                       /usr/lib64/R/library
-    ## rmarkdown                                                     /usr/lib64/R/library
-    ## RNAseqData.HNRNPC.bam.chr14                                   /usr/lib64/R/library
-    ## rngtools                                                      /usr/lib64/R/library
-    ## roxygen2                                                      /usr/lib64/R/library
-    ## rpart                                                         /usr/lib64/R/library
-    ## rprojroot                                                     /usr/lib64/R/library
-    ## Rsamtools                                                     /usr/lib64/R/library
-    ## RSQLite                                                       /usr/lib64/R/library
-    ## rstudioapi                                                    /usr/lib64/R/library
-    ## rtracklayer                                                   /usr/lib64/R/library
-    ## rvest                                                         /usr/lib64/R/library
-    ## S4Vectors                                                     /usr/lib64/R/library
-    ## scales                                                        /usr/lib64/R/library
-    ## selectr                                                       /usr/lib64/R/library
-    ## sequencing                                                    /usr/lib64/R/library
-    ## shape                                                         /usr/lib64/R/library
-    ## shiny                                                         /usr/lib64/R/library
-    ## ShortRead                                                     /usr/lib64/R/library
-    ## snow                                                          /usr/lib64/R/library
-    ## sourcetools                                                   /usr/lib64/R/library
-    ## SparseM                                                       /usr/lib64/R/library
-    ## spatial                                                       /usr/lib64/R/library
-    ## splines                                                       /usr/lib64/R/library
-    ## stats                                                         /usr/lib64/R/library
-    ## stats4                                                        /usr/lib64/R/library
-    ## stringdist                                                    /usr/lib64/R/library
-    ## stringi                                                       /usr/lib64/R/library
-    ## stringr                                                       /usr/lib64/R/library
-    ## SummarizedExperiment                                          /usr/lib64/R/library
-    ## survival                                                      /usr/lib64/R/library
-    ## tcltk                                                         /usr/lib64/R/library
-    ## testit                                                        /usr/lib64/R/library
-    ## testthat                                                      /usr/lib64/R/library
-    ## tibble                                                        /usr/lib64/R/library
-    ## tidyr                                                         /usr/lib64/R/library
-    ## tidyverse                                                     /usr/lib64/R/library
-    ## tools                                                         /usr/lib64/R/library
-    ## utils                                                         /usr/lib64/R/library
-    ## VariantAnnotation                                             /usr/lib64/R/library
-    ## webshot                                                       /usr/lib64/R/library
-    ## whisker                                                       /usr/lib64/R/library
-    ## withr                                                         /usr/lib64/R/library
-    ## XML                                                           /usr/lib64/R/library
-    ## xml2                                                          /usr/lib64/R/library
-    ## xtable                                                        /usr/lib64/R/library
-    ## XVector                                                       /usr/lib64/R/library
-    ## yaml                                                          /usr/lib64/R/library
-    ## zlibbioc                                                      /usr/lib64/R/library
-    ##                                 Version    Priority
-    ## deSolve                            1.14        <NA>
-    ## ggvis                             0.4.3        <NA>
-    ## scatterplot3d                    0.3-37        <NA>
-    ## shinythemes                       1.1.1        <NA>
-    ## teachR                              0.1        <NA>
-    ## AnnotationDbi                    1.36.0        <NA>
-    ## AnnotationHub                     2.6.4        <NA>
-    ## assertthat                          0.1        <NA>
-    ## backports                         1.0.4        <NA>
-    ## base                              3.3.2        base
-    ## base64enc                         0.1-3        <NA>
-    ## BH                             1.62.0-1        <NA>
-    ## bibtex                            0.4.0        <NA>
-    ## Biobase                          2.34.0        <NA>
-    ## BiocGenerics                     0.20.0        <NA>
-    ## BiocInstaller                    1.24.0        <NA>
-    ## BiocParallel                      1.8.1        <NA>
-    ## biomaRt                          2.30.0        <NA>
-    ## Biostrings                       2.42.1        <NA>
-    ## bitops                            1.0-6        <NA>
-    ## boot                             1.3-18 recommended
-    ## brew                              1.0-6        <NA>
-    ## broom                             0.4.1        <NA>
-    ## BSgenome                         1.42.0        <NA>
-    ## BSgenome.Hsapiens.UCSC.hg19       1.4.0        <NA>
-    ## car                               2.1-4        <NA>
-    ## caTools                          1.17.1        <NA>
-    ## circlize                          0.3.9        <NA>
-    ## class                            7.3-14 recommended
-    ## cluster                           2.0.5 recommended
-    ## codetools                        0.2-15 recommended
-    ## colorspace                        1.3-2        <NA>
-    ## compiler                          3.3.2        base
-    ## cowplot                           0.7.0        <NA>
-    ## crayon                            1.3.2        <NA>
-    ## curl                                2.3        <NA>
-    ## datasets                          3.3.2        base
-    ## DBI                               0.5-1        <NA>
-    ## devtools                         1.12.0        <NA>
-    ## dichromat                         2.0-0        <NA>
-    ## digest                           0.6.10        <NA>
-    ## doParallel                       1.0.10        <NA>
-    ## downloader                          0.4        <NA>
-    ## dplyr                             0.5.0        <NA>
-    ## evaluate                           0.10        <NA>
-    ## filehash                            2.3        <NA>
-    ## forcats                           0.1.1        <NA>
-    ## foreach                           1.4.3        <NA>
-    ## foreign                          0.8-67 recommended
-    ## formatR                             1.4        <NA>
-    ## futile.logger                     1.4.3        <NA>
-    ## futile.options                    1.0.0        <NA>
-    ## gdata                            2.17.0        <NA>
-    ## GenomeInfoDb                     1.10.2        <NA>
-    ## GenomicAlignments                1.10.0        <NA>
-    ## GenomicFeatures                  1.26.2        <NA>
-    ## GenomicRanges                    1.26.1        <NA>
-    ## ggplot2                           2.2.0        <NA>
-    ## git2r                            0.16.0        <NA>
-    ## GlobalOptions                    0.0.10        <NA>
-    ## gplots                            3.0.1        <NA>
-    ## graphics                          3.3.2        base
-    ## grDevices                         3.3.2        base
-    ## grid                              3.3.2        base
-    ## gridBase                          0.4-7        <NA>
-    ## gridExtra                         2.2.1        <NA>
-    ## gtable                            0.2.0        <NA>
-    ## gtools                            3.5.0        <NA>
-    ## haven                             1.0.0        <NA>
-    ## highr                               0.6        <NA>
-    ## hms                                 0.3        <NA>
-    ## htmltools                         0.3.5        <NA>
-    ## htmlwidgets                         0.8        <NA>
-    ## httpuv                            1.3.3        <NA>
-    ## httr                              1.2.1        <NA>
-    ## hunspell                            2.3        <NA>
-    ## hwriter                           1.3.2        <NA>
-    ## igraph                            1.0.1        <NA>
-    ## interactiveDisplayBase           1.12.0        <NA>
-    ## IRanges                           2.8.1        <NA>
-    ## irlba                             2.1.2        <NA>
-    ## iterators                         1.0.8        <NA>
-    ## jsonlite                            1.1        <NA>
-    ## KernSmooth                      2.23-15 recommended
-    ## knitcitations                     1.0.7        <NA>
-    ## knitr                            1.15.1        <NA>
-    ## labeling                            0.3        <NA>
-    ## lambda.r                          1.1.9        <NA>
-    ## lattice                         0.20-34 recommended
-    ## latticeExtra                     0.6-28        <NA>
-    ## lazyeval                          0.2.0        <NA>
-    ## lme4                             1.1-12        <NA>
-    ## lubridate                         1.6.0        <NA>
-    ## magrittr                            1.5        <NA>
-    ## maps                              3.1.1        <NA>
-    ## markdown                          0.7.7        <NA>
-    ## MASS                             7.3-45 recommended
-    ## Matrix                          1.2-7.1 recommended
-    ## MatrixModels                      0.4-1        <NA>
-    ## memoise                           1.0.0        <NA>
-    ## methods                           3.3.2        base
-    ## mgcv                             1.8-15 recommended
-    ## mime                                0.5        <NA>
-    ## minqa                             1.2.4        <NA>
-    ## mnormt                            1.5-5        <NA>
-    ## modelr                            0.1.0        <NA>
-    ## munsell                           0.4.3        <NA>
-    ## nlme                            3.1-128 recommended
-    ## nloptr                            1.0.4        <NA>
-    ## NMF                              0.20.6        <NA>
-    ## nnet                             7.3-12 recommended
-    ## openssl                           0.9.5        <NA>
-    ## pacman                            0.4.1        <NA>
-    ## parallel                          3.3.2        base
-    ## pbkrtest                          0.4-6        <NA>
-    ## pkgmaker                           0.22        <NA>
-    ## plogr                             0.1-1        <NA>
-    ## plyr                              1.8.4        <NA>
-    ## praise                            1.0.0        <NA>
-    ## psych                             1.6.9        <NA>
-    ## purrr                             0.2.2        <NA>
-    ## quantreg                           5.29        <NA>
-    ## R6                                2.2.0        <NA>
-    ## RColorBrewer                      1.1-2        <NA>
-    ## Rcpp                             0.12.8        <NA>
-    ## RcppEigen                     0.3.2.9.0        <NA>
-    ## RCurl                          1.95-4.8        <NA>
-    ## readr                             1.0.0        <NA>
-    ## readxl                            0.1.1        <NA>
-    ## RefManageR                       0.13.1        <NA>
-    ## registry                            0.3        <NA>
-    ## reshape2                          1.4.2        <NA>
-    ## rex                               1.1.1        <NA>
-    ## RJSONIO                           1.3-0        <NA>
-    ## rmarkdown                           1.3        <NA>
-    ## RNAseqData.HNRNPC.bam.chr14      0.12.0        <NA>
-    ## rngtools                          1.2.4        <NA>
-    ## roxygen2                          5.0.1        <NA>
-    ## rpart                            4.1-10 recommended
-    ## rprojroot                           1.1        <NA>
-    ## Rsamtools                        1.26.1        <NA>
-    ## RSQLite                           1.1-1        <NA>
-    ## rstudioapi                          0.6        <NA>
-    ## rtracklayer                      1.34.1        <NA>
-    ## rvest                             0.3.2        <NA>
-    ## S4Vectors                        0.12.1        <NA>
-    ## scales                            0.4.1        <NA>
-    ## selectr                           0.3-1        <NA>
-    ## sequencing                  0.99.120890        <NA>
-    ## shape                             1.4.2        <NA>
-    ## shiny                            0.14.2        <NA>
-    ## ShortRead                        1.32.0        <NA>
-    ## snow                              0.4-2        <NA>
-    ## sourcetools                       0.1.5        <NA>
-    ## SparseM                            1.74        <NA>
-    ## spatial                          7.3-11 recommended
-    ## splines                           3.3.2        base
-    ## stats                             3.3.2        base
-    ## stats4                            3.3.2        base
-    ## stringdist                      0.9.4.4        <NA>
-    ## stringi                           1.1.2        <NA>
-    ## stringr                           1.1.0        <NA>
-    ## SummarizedExperiment              1.4.0        <NA>
-    ## survival                         2.39-5 recommended
-    ## tcltk                             3.3.2        base
-    ## testit                              0.6        <NA>
-    ## testthat                          1.0.2        <NA>
-    ## tibble                              1.2        <NA>
-    ## tidyr                             0.6.0        <NA>
-    ## tidyverse                         1.0.0        <NA>
-    ## tools                             3.3.2        base
-    ## utils                             3.3.2        base
-    ## VariantAnnotation                1.20.2        <NA>
-    ## webshot                           0.3.2        <NA>
-    ## whisker                           0.3-2        <NA>
-    ## withr                             1.0.2        <NA>
-    ## XML                            3.98-1.5        <NA>
-    ## xml2                              1.0.0        <NA>
-    ## xtable                            1.8-2        <NA>
-    ## XVector                          0.14.0        <NA>
-    ## yaml                             2.1.14        <NA>
-    ## zlibbioc                         1.20.0        <NA>
-    ##                                                                                                                                                                                                                                                        Depends
-    ## deSolve                                                                                                                                                                                                                                          R (>= 2.15.0)
-    ## ggvis                                                                                                                                                                                                                                               R (>= 3.0)
-    ## scatterplot3d                                                                                                                                                                                                                                     R (>= 2.7.0)
-    ## shinythemes                                                                                                                                                                                                                                       R (>= 3.0.0)
-    ## teachR                                                                                                                                                                                                                                                    <NA>
-    ## AnnotationDbi                                                                                                                                                   R (>= 2.7.0), methods, utils, stats4, BiocGenerics (>=\n0.15.10), Biobase (>= 1.17.0), IRanges
-    ## AnnotationHub                                                                                                                                                                                                                        BiocGenerics (>= 0.15.10)
-    ## assertthat                                                                                                                                                                                                                                                <NA>
-    ## backports                                                                                                                                                                                                                                         R (>= 3.0.0)
-    ## base                                                                                                                                                                                                                                                      <NA>
-    ## base64enc                                                                                                                                                                                                                                         R (>= 2.9.0)
-    ## BH                                                                                                                                                                                                                                                        <NA>
-    ## bibtex                                                                                                                                                                                                                                            R (>= 3.0.2)
-    ## Biobase                                                                                                                                                                                                            R (>= 2.10), BiocGenerics (>= 0.3.2), utils
-    ## BiocGenerics                                                                                                                                                                                                         methods, utils, graphics, stats, parallel
-    ## BiocInstaller                                                                                                                                                                                                                                     R (>= 3.3.0)
-    ## BiocParallel                                                                                                                                                                                                                                           methods
-    ## biomaRt                                                                                                                                                                                                                                                methods
-    ## Biostrings                                                                                                                                   R (>= 2.8.0), methods, BiocGenerics (>= 0.15.6), S4Vectors (>=\n0.11.1), IRanges (>= 2.5.27), XVector (>= 0.11.6)
-    ## bitops                                                                                                                                                                                                                                                    <NA>
-    ## boot                                                                                                                                                                                                                             R (>= 3.0.0), graphics, stats
-    ## brew                                                                                                                                                                                                                                                      <NA>
-    ## broom                                                                                                                                                                                                                                                     <NA>
-    ## BSgenome                                                 R (>= 2.8.0), methods, BiocGenerics (>= 0.13.8), S4Vectors (>=\n0.9.36), IRanges (>= 2.1.33), GenomeInfoDb (>= 1.3.19),\nGenomicRanges (>= 1.23.15), Biostrings (>= 2.35.3), rtracklayer\n(>= 1.25.8)
-    ## BSgenome.Hsapiens.UCSC.hg19                                                                                                                                                                                                               BSgenome (>= 1.33.5)
-    ## car                                                                                                                                                                                                                                               R (>= 3.2.0)
-    ## caTools                                                                                                                                                                                                                                           R (>= 2.2.0)
-    ## circlize                                                                                                                                                                                                                               R (>= 2.10.0), graphics
-    ## class                                                                                                                                                                                                                               R (>= 3.0.0), stats, utils
-    ## cluster                                                                                                                                                                                                                                           R (>= 3.0.1)
-    ## codetools                                                                                                                                                                                                                                           R (>= 2.1)
-    ## colorspace                                                                                                                                                                                                                              R (>= 2.13.0), methods
-    ## compiler                                                                                                                                                                                                                                                  <NA>
-    ## cowplot                                                                                                                                                                                                                      R (>= 3.3.0), ggplot2 (>= 2.1.0),
-    ## crayon                                                                                                                                                                                                                                                    <NA>
-    ## curl                                                                                                                                                                                                                                              R (>= 3.0.0)
-    ## datasets                                                                                                                                                                                                                                                  <NA>
-    ## DBI                                                                                                                                                                                                                                     R (>= 2.15.0), methods
-    ## devtools                                                                                                                                                                                                                                          R (>= 3.0.2)
-    ## dichromat                                                                                                                                                                                                                                   R (>= 2.10), stats
-    ## digest                                                                                                                                                                                                                                            R (>= 2.4.1)
-    ## doParallel                                                                                                                                                                             R (>= 2.14.0), foreach(>= 1.2.0), iterators(>= 1.0.0),\nparallel, utils
-    ## downloader                                                                                                                                                                                                                                                <NA>
-    ## dplyr                                                                                                                                                                                                                                             R (>= 3.1.2)
-    ## evaluate                                                                                                                                                                                                                                          R (>= 3.0.2)
-    ## filehash                                                                                                                                                                                                                                 R (>= 3.0.0), methods
-    ## forcats                                                                                                                                                                                                                                            R (>= 2.10)
-    ## foreach                                                                                                                                                                                                                                           R (>= 2.5.0)
-    ## foreign                                                                                                                                                                                                                                           R (>= 3.0.0)
-    ## formatR                                                                                                                                                                                                                                           R (>= 3.0.2)
-    ## futile.logger                                                                                                                                                                                                                                     R (>= 3.0.0)
-    ## futile.options                                                                                                                                                                                                                                    R (>= 2.8.0)
-    ## gdata                                                                                                                                                                                                                                             R (>= 2.3.0)
-    ## GenomeInfoDb                                                                                                                                                       R (>= 3.1), methods, BiocGenerics (>= 0.13.8), S4Vectors (>=\n0.9.25), IRanges (>= 1.99.26)
-    ## GenomicAlignments           R (>= 2.10), methods, BiocGenerics (>= 0.15.3), S4Vectors (>=\n0.9.40), IRanges (>= 2.5.36), GenomeInfoDb (>= 1.1.20),\nGenomicRanges (>= 1.25.6), SummarizedExperiment (>= 0.3.1),\nBiostrings (>= 2.37.1), Rsamtools (>= 1.21.4)
-    ## GenomicFeatures                                                                                        BiocGenerics (>= 0.1.0), S4Vectors (>= 0.9.47), IRanges (>=\n2.3.21), GenomeInfoDb (>= 1.5.16), GenomicRanges (>= 1.21.32),\nAnnotationDbi (>= 1.33.15)
-    ## GenomicRanges                                                                                                                    R (>= 2.10), methods, stats4, BiocGenerics (>= 0.17.5),\nS4Vectors (>= 0.9.47), IRanges (>= 2.7.8), GenomeInfoDb (>=\n1.1.20)
-    ## ggplot2                                                                                                                                                                                                                                             R (>= 3.1)
-    ## git2r                                                                                                                                                                                                                                    R (>= 3.0.2), methods
-    ## GlobalOptions                                                                                                                                                                                                                           R (>= 2.10.0), methods
-    ## gplots                                                                                                                                                                                                                                              R (>= 3.0)
-    ## graphics                                                                                                                                                                                                                                                  <NA>
-    ## grDevices                                                                                                                                                                                                                                                 <NA>
-    ## grid                                                                                                                                                                                                                                                      <NA>
-    ## gridBase                                                                                                                                                                                                                                          R (>= 2.3.0)
-    ## gridExtra                                                                                                                                                                                                                                                 <NA>
-    ## gtable                                                                                                                                                                                                                                             R (>= 2.14)
-    ## gtools                                                                                                                                                                                                                                             R (>= 2.10)
-    ## haven                                                                                                                                                                                                                                             R (>= 3.1.0)
-    ## highr                                                                                                                                                                                                                                             R (>= 3.0.2)
-    ## hms                                                                                                                                                                                                                                                       <NA>
-    ## htmltools                                                                                                                                                                                                                                        R (>= 2.14.1)
-    ## htmlwidgets                                                                                                                                                                                                                                               <NA>
-    ## httpuv                                                                                                                                                                                                                                  R (>= 2.15.1), methods
-    ## httr                                                                                                                                                                                                                                              R (>= 3.0.0)
-    ## hunspell                                                                                                                                                                                                                                                  <NA>
-    ## hwriter                                                                                                                                                                                                                                           R (>= 2.6.0)
-    ## igraph                                                                                                                                                                                                                                                 methods
-    ## interactiveDisplayBase                                                                                                                                                                                                      R (>= 2.10), methods, BiocGenerics
-    ## IRanges                                                                                                                                                                 R (>= 3.1.0), methods, utils, stats, BiocGenerics (>= 0.19.1),\nS4Vectors (>= 0.11.19)
-    ## irlba                                                                                                                                                                                                                                                   Matrix
-    ## iterators                                                                                                                                                                                                                                  R (>= 2.5.0), utils
-    ## jsonlite                                                                                                                                                                                                                                               methods
-    ## KernSmooth                                                                                                                                                                                                                                 R (>= 2.5.0), stats
-    ## knitcitations                                                                                                                                                                                                                                       R (>= 3.0)
-    ## knitr                                                                                                                                                                                                                                             R (>= 3.1.0)
-    ## labeling                                                                                                                                                                                                                                                  <NA>
-    ## lambda.r                                                                                                                                                                                                                                          R (>= 3.0.0)
-    ## lattice                                                                                                                                                                                                                                           R (>= 3.0.0)
-    ## latticeExtra                                                                                                                                                                                                              R (>= 2.10.0), lattice, RColorBrewer
-    ## lazyeval                                                                                                                                                                                                                                          R (>= 3.1.0)
-    ## lme4                                                                                                                                                                                                           R (>= 3.0.2), Matrix (>= 1.1.1), methods, stats
-    ## lubridate                                                                                                                                                                                                                                methods, R (>= 3.0.0)
-    ## magrittr                                                                                                                                                                                                                                                  <NA>
-    ## maps                                                                                                                                                                                                                                             R (>= 2.14.0)
-    ## markdown                                                                                                                                                                                                                                         R (>= 2.11.1)
-    ## MASS                                                                                                                                                                                                           R (>= 3.1.0), grDevices, graphics, stats, utils
-    ## Matrix                                                                                                                                                                                                                                            R (>= 3.0.1)
-    ## MatrixModels                                                                                                                                                                                                                                      R (>= 3.0.1)
-    ## memoise                                                                                                                                                                                                                                                   <NA>
-    ## methods                                                                                                                                                                                                                                                   <NA>
-    ## mgcv                                                                                                                                                                                                                           R (>= 2.14.0), nlme (>= 3.1-64)
-    ## mime                                                                                                                                                                                                                                                      <NA>
-    ## minqa                                                                                                                                                                                                                                                     <NA>
-    ## mnormt                                                                                                                                                                                                                                            R (>= 2.2.0)
-    ## modelr                                                                                                                                                                                                                                            R (>= 3.1.0)
-    ## munsell                                                                                                                                                                                                                                                   <NA>
-    ## nlme                                                                                                                                                                                                                                              R (>= 3.0.2)
-    ## nloptr                                                                                                                                                                                                                                                    <NA>
-    ## NMF                                                                                                                                                                  R (>= 3.0.0), methods, utils, pkgmaker (>= 0.20), registry,\nrngtools (>= 1.2.3), cluster
-    ## nnet                                                                                                                                                                                                                               R (>= 2.14.0), stats, utils
-    ## openssl                                                                                                                                                                                                                                                   <NA>
-    ## pacman                                                                                                                                                                                                                                            R (>= 3.0.2)
-    ## parallel                                                                                                                                                                                                                                                  <NA>
-    ## pbkrtest                                                                                                                                                                                                                        R (>= 3.2.3), lme4 (>= 1.1.10)
-    ## pkgmaker                                                                                                                                                                                                                         R (>= 3.0.0), stats, registry
-    ## plogr                                                                                                                                                                                                                                                     <NA>
-    ## plyr                                                                                                                                                                                                                                              R (>= 3.1.0)
-    ## praise                                                                                                                                                                                                                                                    <NA>
-    ## psych                                                                                                                                                                                                                                              R (>= 2.10)
-    ## purrr                                                                                                                                                                                                                                                     <NA>
-    ## quantreg                                                                                                                                                                                                                            R (>= 2.6), stats, SparseM
-    ## R6                                                                                                                                                                                                                                                  R (>= 3.0)
-    ## RColorBrewer                                                                                                                                                                                                                                      R (>= 2.0.0)
-    ## Rcpp                                                                                                                                                                                                                                              R (>= 3.0.0)
-    ## RcppEigen                                                                                                                                                                                                                                        R (>= 2.15.1)
-    ## RCurl                                                                                                                                                                                                                            R (>= 3.0.0), methods, bitops
-    ## readr                                                                                                                                                                                                                                             R (>= 3.0.2)
-    ## readxl                                                                                                                                                                                                                                                    <NA>
-    ## RefManageR                                                                                                                                                                                                                                          R (>= 3.0)
-    ## registry                                                                                                                                                                                                                                          R (>= 2.6.0)
-    ## reshape2                                                                                                                                                                                                                                                  <NA>
-    ## rex                                                                                                                                                                                                                                                       <NA>
-    ## RJSONIO                                                                                                                                                                                                                                                   <NA>
-    ## rmarkdown                                                                                                                                                                                                                                           R (>= 3.0)
-    ## RNAseqData.HNRNPC.bam.chr14                                                                                                                                                                                                                               <NA>
-    ## rngtools                                                                                                                                                                                                             R (>= 3.0.0), methods, pkgmaker (>= 0.20)
-    ## roxygen2                                                                                                                                                                                                                                          R (>= 3.0.2)
-    ## rpart                                                                                                                                                                                                                R (>= 2.15.0), graphics, stats, grDevices
-    ## rprojroot                                                                                                                                                                                                                                         R (>= 3.0.0)
-    ## Rsamtools                                                                                                                                                                 methods, GenomeInfoDb (>= 1.1.3), GenomicRanges (>= 1.21.6),\nBiostrings (>= 2.37.1)
-    ## RSQLite                                                                                                                                                                                                                                           R (>= 3.1.0)
-    ## rstudioapi                                                                                                                                                                                                                                                <NA>
-    ## rtracklayer                                                                                                                                                                                                    R (>= 3.3), methods, GenomicRanges (>= 1.21.20)
-    ## rvest                                                                                                                                                                                                                                       R (>= 3.0.1), xml2
-    ## S4Vectors                                                                                                                                                                              R (>= 3.3.0), methods, utils, stats, stats4, BiocGenerics (>=\n0.15.10)
-    ## scales                                                                                                                                                                                                                                             R (>= 2.13)
-    ## selectr                                                                                                                                                                                                                                          R (>= 2.15.2)
-    ## sequencing                                                                                                                                                                                                                                        R (>= 3.3.1)
-    ## shape                                                                                                                                                                                                                                       R (>= 2.01), stats
-    ## shiny                                                                                                                                                                                                                                    R (>= 3.0.0), methods
-    ## ShortRead                                                                                                                                 BiocGenerics (>= 0.11.3), BiocParallel, Biostrings (>=\n2.37.1), Rsamtools (>= 1.21.4), GenomicAlignments (>= 1.5.4)
-    ## snow                                                                                                                                                                                                                                      R (>= 2.13.1), utils
-    ## sourcetools                                                                                                                                                                                                                                       R (>= 3.0.2)
-    ## SparseM                                                                                                                                                                                                                                   R (>= 2.15), methods
-    ## spatial                                                                                                                                                                                                                   R (>= 3.0.0), graphics, stats, utils
-    ## splines                                                                                                                                                                                                                                                   <NA>
-    ## stats                                                                                                                                                                                                                                                     <NA>
-    ## stats4                                                                                                                                                                                                                                                    <NA>
-    ## stringdist                                                                                                                                                                                                                                       R (>= 2.15.3)
-    ## stringi                                                                                                                                                                                                                                          R (>= 2.13.1)
-    ## stringr                                                                                                                                                                                                                                            R (>= 2.14)
-    ## SummarizedExperiment                                                                                                                                                                                  R (>= 3.2), methods, GenomicRanges (>= 1.23.15), Biobase
-    ## survival                                                                                                                                                                                                                                         R (>= 2.13.0)
-    ## tcltk                                                                                                                                                                                                                                                     <NA>
-    ## testit                                                                                                                                                                                                                                                    <NA>
-    ## testthat                                                                                                                                                                                                                                          R (>= 3.1.0)
-    ## tibble                                                                                                                                                                                                                                            R (>= 3.1.2)
-    ## tidyr                                                                                                                                                                                                                                             R (>= 3.1.0)
-    ## tidyverse                                                                                                                                                                                                                                                 <NA>
-    ## tools                                                                                                                                                                                                                                                     <NA>
-    ## utils                                                                                                                                                                                                                                                     <NA>
-    ## VariantAnnotation                                                                              R (>= 2.8.0), methods, BiocGenerics (>= 0.15.3), GenomeInfoDb\n(>= 1.7.1), GenomicRanges (>= 1.19.47), SummarizedExperiment\n(>= 0.3.1), Rsamtools (>= 1.23.10)
-    ## webshot                                                                                                                                                                                                                                             R (>= 3.0)
-    ## whisker                                                                                                                                                                                                                                                   <NA>
-    ## withr                                                                                                                                                                                                                                             R (>= 3.0.2)
-    ## XML                                                                                                                                                                                                                              R (>= 2.13.0), methods, utils
-    ## xml2                                                                                                                                                                                                                                              R (>= 3.1.0)
-    ## xtable                                                                                                                                                                                                                                           R (>= 2.10.0)
-    ## XVector                                                                                                                                                           R (>= 2.8.0), methods, BiocGenerics (>= 0.19.2), S4Vectors (>=\n0.9.29), IRanges (>= 2.5.27)
-    ## yaml                                                                                                                                                                                                                                                      <NA>
-    ## zlibbioc                                                                                                                                                                                                                                                  <NA>
-    ##                                                                                                                                                                                                                                                                            Imports
-    ## deSolve                                                                                                                                                                                                                                        methods, graphics, grDevices, stats
-    ## ggvis                                                                                                                                                    assertthat, jsonlite (>= 0.9.11), shiny (>= 0.11.1), magrittr,\ndplyr (>= 0.4.0), lazyeval, htmltools (>= 0.2.4), methods
-    ## scatterplot3d                                                                                                                                                                                                                                           grDevices, graphics, stats
-    ## shinythemes                                                                                                                                                                                                                                                        shiny (>= 0.11)
-    ## teachR                                                                                                                                                                                                            \nshiny (>= 0.11.1),\npacman (>= 0.4.1),\nshinythemes (>= 1.1.1)
-    ## AnnotationDbi                                                                                                                                                                         methods, utils, DBI, RSQLite, stats4, BiocGenerics, Biobase,\nS4Vectors (>= 0.9.25), IRanges
-    ## AnnotationHub                                                                                                                                                     utils, methods, grDevices, RSQLite, BiocInstaller,\nAnnotationDbi, S4Vectors, interactiveDisplayBase, httr, yaml
-    ## assertthat                                                                                                                                                                                                                                                                    <NA>
-    ## backports                                                                                                                                                                                                                                                                     <NA>
-    ## base                                                                                                                                                                                                                                                                          <NA>
-    ## base64enc                                                                                                                                                                                                                                                                     <NA>
-    ## BH                                                                                                                                                                                                                                                                            <NA>
-    ## bibtex                                                                                                                                                                                                                                                                        <NA>
-    ## Biobase                                                                                                                                                                                                                                                                    methods
-    ## BiocGenerics                                                                                                                                                                                                                             methods, utils, graphics, stats, parallel
-    ## BiocInstaller                                                                                                                                                                                                                                                                 <NA>
-    ## BiocParallel                                                                                                                                                                                                                           stats, utils, futile.logger, parallel, snow
-    ## biomaRt                                                                                                                                                                                                                                           utils, XML, RCurl, AnnotationDbi
-    ## Biostrings                                                                                                                                                                                                        graphics, methods, stats, utils, BiocGenerics, IRanges,\nXVector
-    ## bitops                                                                                                                                                                                                                                                                        <NA>
-    ## boot                                                                                                                                                                                                                                                                          <NA>
-    ## brew                                                                                                                                                                                                                                                                          <NA>
-    ## broom                                                                                                                                                                                                                  plyr, dplyr, tidyr, psych, stringr, reshape2, nlme, methods
-    ## BSgenome                                                                                                                                       methods, utils, stats, BiocGenerics, S4Vectors, IRanges,\nXVector, GenomeInfoDb, GenomicRanges, Biostrings, Rsamtools,\nrtracklayer
-    ## BSgenome.Hsapiens.UCSC.hg19                                                                                                                                                                                                                                               BSgenome
-    ## car                                                                                                                                                                                            MASS, mgcv, nnet, pbkrtest (>= 0.4-4), quantreg, grDevices,\nutils, stats, graphics
-    ## caTools                                                                                                                                                                                                                                                                     bitops
-    ## circlize                                                                                                                                                                                     GlobalOptions (>= 0.0.10), shape, grDevices, utils, stats,\ncolorspace, methods, grid
-    ## class                                                                                                                                                                                                                                                                         MASS
-    ## cluster                                                                                                                                                                                                                                          graphics, grDevices, stats, utils
-    ## codetools                                                                                                                                                                                                                                                                     <NA>
-    ## colorspace                                                                                                                                                                                                                                                     graphics, grDevices
-    ## compiler                                                                                                                                                                                                                                                                      <NA>
-    ## cowplot                                                                                                                                                                                            grid (>= 3.0.0), gtable (>= 0.1.2), plyr (>= 1.8.2),\ngrDevices, methods, utils
-    ## crayon                                                                                                                                                                                                                                                   grDevices, methods, utils
-    ## curl                                                                                                                                                                                                                                                                          <NA>
-    ## datasets                                                                                                                                                                                                                                                                      <NA>
-    ## DBI                                                                                                                                                                                                                                                                           <NA>
-    ## devtools                                                                                                                             httr (>= 0.4), utils, tools, methods, memoise (>= 1.0.0),\nwhisker, digest, rstudioapi (>= 0.2.0), jsonlite, stats, git2r\n(>= 0.11.0), withr
-    ## dichromat                                                                                                                                                                                                                                                                     <NA>
-    ## digest                                                                                                                                                                                                                                                                        <NA>
-    ## doParallel                                                                                                                                                                                                                                                                    <NA>
-    ## downloader                                                                                                                                                                                                                                                           utils, digest
-    ## dplyr                                                                                                                                                                             assertthat, utils, R6, Rcpp (>= 0.12.3), tibble, magrittr,\nlazyeval (>= 0.1.10), DBI (>= 0.4.1)
-    ## evaluate                                                                                                                                                                                                                                               methods, stringr (>= 0.6.2)
-    ## filehash                                                                                                                                                                                                                                                                      <NA>
-    ## forcats                                                                                                                                                                                                                                                           tibble, magrittr
-    ## foreach                                                                                                                                                                                                                                                codetools, utils, iterators
-    ## foreign                                                                                                                                                                                                                                                      methods, utils, stats
-    ## formatR                                                                                                                                                                                                                                                                       <NA>
-    ## futile.logger                                                                                                                                                                                                                           utils, lambda.r (>= 1.1.0), futile.options
-    ## futile.options                                                                                                                                                                                                                                                                <NA>
-    ## gdata                                                                                                                                                                                                                                                gtools, stats, methods, utils
-    ## GenomeInfoDb                                                                                                                                                                                                                                                 stats, stats4, utils,
-    ## GenomicAlignments                                                                                                                                                     methods, utils, stats, BiocGenerics, S4Vectors, IRanges,\nGenomicRanges, Biostrings, Rsamtools, BiocParallel
-    ## GenomicFeatures                                                                                                           methods, utils, stats, tools, DBI, RSQLite, RCurl, XVector,\nBiostrings (>= 2.23.3), rtracklayer (>= 1.29.24), biomaRt (>=\n2.17.1), Biobase (>= 2.15.1)
-    ## GenomicRanges                                                                                                                                                                                                                                                utils, stats, XVector
-    ## ggplot2                                                                                                                                                              digest, grid, gtable (>= 0.1.1), MASS, plyr (>= 1.7.1),\nreshape2, scales (>= 0.4.1), stats, tibble, lazyeval
-    ## git2r                                                                                                                                                                                                                                                              graphics, utils
-    ## GlobalOptions                                                                                                                                                                                                                                                                 <NA>
-    ## gplots                                                                                                                                                                                                                                   gtools, gdata, stats, caTools, KernSmooth
-    ## graphics                                                                                                                                                                                                                                                                 grDevices
-    ## grDevices                                                                                                                                                                                                                                                                     <NA>
-    ## grid                                                                                                                                                                                                                                                              grDevices, utils
-    ## gridBase                                                                                                                                                                                                                                                            graphics, grid
-    ## gridExtra                                                                                                                                                                                                                                 gtable, grid, grDevices, graphics, utils
-    ## gtable                                                                                                                                                                                                                                                                        grid
-    ## gtools                                                                                                                                                                                                                                                                        <NA>
-    ## haven                                                                                                                                                                                                                              Rcpp (>= 0.11.4), readr (>= 0.1.0), hms, tibble
-    ## highr                                                                                                                                                                                                                                                                         <NA>
-    ## hms                                                                                                                                                                                                                                                                        methods
-    ## htmltools                                                                                                                                                                                                                                                      utils, digest, Rcpp
-    ## htmlwidgets                                                                                                                                                                                                                         htmltools (>= 0.3), jsonlite (>= 0.9.16), yaml
-    ## httpuv                                                                                                                                                                                                                                                     Rcpp (>= 0.11.0), utils
-    ## httr                                                                                                                                                                                                                         jsonlite, mime, curl (>= 0.9.1), openssl (>= 0.8), R6
-    ## hunspell                                                                                                                                                                                                                                                              Rcpp, digest
-    ## hwriter                                                                                                                                                                                                                                                                       <NA>
-    ## igraph                                                                                                                                                                                                                                                Matrix, magrittr, NMF, irlba
-    ## interactiveDisplayBase                                                                                                                                                                                                                                                       shiny
-    ## IRanges                                                                                                                                                                                                                                                                     stats4
-    ## irlba                                                                                                                                                                                                                                                               stats, methods
-    ## iterators                                                                                                                                                                                                                                                                     <NA>
-    ## jsonlite                                                                                                                                                                                                                                                                      <NA>
-    ## KernSmooth                                                                                                                                                                                                                                                                    <NA>
-    ## knitcitations                                                                                                                                                                                                         RefManageR (>= 0.8.2), digest, httr (>= 0.3), methods, utils
-    ## knitr                                                                                                                                                                                         evaluate (>= 0.10), digest, highr, markdown, stringr (>= 0.6),\nyaml, methods, tools
-    ## labeling                                                                                                                                                                                                                                                                      <NA>
-    ## lambda.r                                                                                                                                                                                                                                                                      <NA>
-    ## lattice                                                                                                                                                                                                                                    grid, grDevices, graphics, stats, utils
-    ## latticeExtra                                                                                                                                                                                                                                         grid, stats, utils, grDevices
-    ## lazyeval                                                                                                                                                                                                                                                                      <NA>
-    ## lme4                                                                                                                                                             graphics, grid, splines, utils, parallel, MASS, lattice, nlme\n(>= 3.1-123), minqa (>= 1.1.15), nloptr (>= 1.0.4)
-    ## lubridate                                                                                                                                                                                                                                                                  stringr
-    ## magrittr                                                                                                                                                                                                                                                                      <NA>
-    ## maps                                                                                                                                                                                                                                                               graphics, utils
-    ## markdown                                                                                                                                                                                                                                                             mime (>= 0.3)
-    ## MASS                                                                                                                                                                                                                                                                       methods
-    ## Matrix                                                                                                                                                                                                                              methods, graphics, grid, stats, utils, lattice
-    ## MatrixModels                                                                                                                                                                                                                                     stats, methods, Matrix (>= 1.1-5)
-    ## memoise                                                                                                                                                                                                                                                          digest (>= 0.6.3)
-    ## methods                                                                                                                                                                                                                                                               utils, stats
-    ## mgcv                                                                                                                                                                                                                                              methods, stats, graphics, Matrix
-    ## mime                                                                                                                                                                                                                                                                         tools
-    ## minqa                                                                                                                                                                                                                                                             Rcpp (>= 0.9.10)
-    ## mnormt                                                                                                                                                                                                                                                                        <NA>
-    ## modelr                                                                                                                                                                                    magrittr, purrr (>= 0.2.2), lazyeval (>= 0.2.0), tibble,\nbroom, dplyr, tidyr (>= 0.6.0)
-    ## munsell                                                                                                                                                                                                                                                        colorspace, methods
-    ## nlme                                                                                                                                                                                                                                               graphics, stats, utils, lattice
-    ## nloptr                                                                                                                                                                                                                                                                        <NA>
-    ## NMF                                                                                                                                     graphics, stats, stringr (>= 1.0.0), digest, grid, grDevices,\ngridBase, colorspace, RColorBrewer, foreach, doParallel,\nggplot2, reshape2
-    ## nnet                                                                                                                                                                                                                                                                          <NA>
-    ## openssl                                                                                                                                                                                                                                                                       <NA>
-    ## pacman                                                                                                                                                                                                                                             devtools, methods, stats, utils
-    ## parallel                                                                                                                                                                                                                                                                     tools
-    ## pbkrtest                                                                                                                                                                                                                                Matrix (>= 1.2.3), parallel, MASS, methods
-    ## pkgmaker                                                                                                                                                                                                             methods, tools, codetools, digest, stringr, xtable, grDevices
-    ## plogr                                                                                                                                                                                                                                                                         <NA>
-    ## plyr                                                                                                                                                                                                                                                              Rcpp (>= 0.11.0)
-    ## praise                                                                                                                                                                                                                                                                        <NA>
-    ## psych                                                                                                                                                                                                                     mnormt,parallel,stats,graphics,grDevices,methods,foreign
-    ## purrr                                                                                                                                                                                                               magrittr (>= 1.5), dplyr (>= 0.4.3), Rcpp, lazyeval (>= 0.2.0)
-    ## quantreg                                                                                                                                                                                                                                   methods, graphics, Matrix, MatrixModels
-    ## R6                                                                                                                                                                                                                                                                            <NA>
-    ## RColorBrewer                                                                                                                                                                                                                                                                  <NA>
-    ## Rcpp                                                                                                                                                                                                                                                                methods, utils
-    ## RcppEigen                                                                                                                                                                                                                        Matrix (>= 1.1-0), Rcpp (>= 0.11.0), stats, utils
-    ## RCurl                                                                                                                                                                                                                                                                         <NA>
-    ## readr                                                                                                                                                                                                                                      Rcpp (>= 0.11.5), curl, tibble, hms, R6
-    ## readxl                                                                                                                                                                                                                                                            Rcpp (>= 0.11.5)
-    ## RefManageR                                                                                                                                                                          XML, RCurl, RJSONIO, utils, plyr, tools, httr, bibtex,\nlubridate (>= 1.5.0), stringr, methods
-    ## registry                                                                                                                                                                                                                                                                     utils
-    ## reshape2                                                                                                                                                                                                                                            plyr (>= 1.8.1), stringr, Rcpp
-    ## rex                                                                                                                                                                                                                                                             magrittr, lazyeval
-    ## RJSONIO                                                                                                                                                                                                                                                                    methods
-    ## rmarkdown                                                                                                                              tools, utils, knitr (>= 1.14), yaml (>= 2.1.5), htmltools (>=\n0.3.5), caTools, evaluate (>= 0.8), base64enc, jsonlite,\nrprojroot, methods
-    ## RNAseqData.HNRNPC.bam.chr14                                                                                                                                                                                                                                                   <NA>
-    ## rngtools                                                                                                                                                                                                                                                           stringr, digest
-    ## roxygen2                                                                                                                                                                                                       stringr (>= 0.5), stringi, brew, digest, methods, Rcpp (>=\n0.11.0)
-    ## rpart                                                                                                                                                                                                                                                                         <NA>
-    ## rprojroot                                                                                                                                                                                                                                                                backports
-    ## Rsamtools                                                                                                                                           utils, BiocGenerics (>= 0.1.3), S4Vectors (>= 0.7.11), IRanges\n(>= 2.3.7), XVector (>= 0.9.1), zlibbioc, bitops, BiocParallel
-    ## RSQLite                                                                                                                                                                                                                         DBI (>= 0.4-9), memoise, methods, Rcpp (>= 0.12.7)
-    ## rstudioapi                                                                                                                                                                                                                                                                    <NA>
-    ## rtracklayer                 XML (>= 1.98-0), BiocGenerics (>= 0.13.8), S4Vectors (>=\n0.9.33), IRanges (>= 2.3.7), XVector (>= 0.9.4), GenomeInfoDb\n(>= 1.3.14), Biostrings (>= 2.37.1), zlibbioc, RCurl (>=\n1.4-2), Rsamtools (>= 1.17.8), GenomicAlignments (>= 1.5.4),\ntools
-    ## rvest                                                                                                                                                                                                                                             httr (>= 0.5), selectr, magrittr
-    ## S4Vectors                                                                                                                                                                                                                                                                     <NA>
-    ## scales                                                                                                                                                                                                   RColorBrewer, dichromat, plyr, munsell (>= 0.2), labeling,\nmethods, Rcpp
-    ## selectr                                                                                                                                                                                                                                                           methods, stringr
-    ## sequencing                                                                            GenomicRanges, GenomicAlignments, Biostrings, Rsamtools,\nShortRead, BiocParallel, rtracklayer, VariantAnnotation,\nAnnotationHub, BSgenome.Hsapiens.UCSC.hg19,\nRNAseqData.HNRNPC.bam.chr14
-    ## shape                                                                                                                                                                                                                                                                         <NA>
-    ## shiny                                                                                                                                               utils, httpuv (>= 1.3.3), mime (>= 0.3), jsonlite (>= 0.9.16),\nxtable, digest, htmltools (>= 0.3.5), R6 (>= 2.0), sourcetools
-    ## ShortRead                                                                                                             Biobase, S4Vectors (>= 0.7.1), IRanges (>= 2.3.7),\nGenomeInfoDb (>= 1.1.19), GenomicRanges (>= 1.21.6), hwriter,\nmethods, zlibbioc, lattice, latticeExtra,
-    ## snow                                                                                                                                                                                                                                                                          <NA>
-    ## sourcetools                                                                                                                                                                                                                                                                   <NA>
-    ## SparseM                                                                                                                                                                                                                                                     graphics, stats, utils
-    ## spatial                                                                                                                                                                                                                                                                       <NA>
-    ## splines                                                                                                                                                                                                                                                            graphics, stats
-    ## stats                                                                                                                                                                                                                                                   utils, grDevices, graphics
-    ## stats4                                                                                                                                                                                                                                                    graphics, methods, stats
-    ## stringdist                                                                                                                                                                                                                                                                parallel
-    ## stringi                                                                                                                                                                                                                                                        tools, utils, stats
-    ## stringr                                                                                                                                                                                                                                               stringi (>= 0.4.1), magrittr
-    ## SummarizedExperiment                                                                                                                                                      utils, stats, Matrix, BiocGenerics (>= 0.15.3), S4Vectors (>=\n0.11.7), IRanges (>= 2.7.2), GenomeInfoDb
-    ## survival                                                                                                                                                                                                                          graphics, Matrix, methods, splines, stats, utils
-    ## tcltk                                                                                                                                                                                                                                                                        utils
-    ## testit                                                                                                                                                                                                                                                                        <NA>
-    ## testthat                                                                                                                                                                                                                             digest, crayon, praise, magrittr, R6, methods
-    ## tibble                                                                                                                                                                                                                      methods, assertthat, utils, lazyeval (>= 0.1.10), Rcpp
-    ## tidyr                                                                                                                                                                                                                    tibble, dplyr (>= 0.4), stringi, lazyeval, magrittr, Rcpp
-    ## tidyverse                                                                                                                broom, DBI, dplyr, forcats, ggplot2, haven, httr, hms,\njsonlite, lubridate, magrittr, modelr, purrr, readr, readxl,\nstringr, tibble, rvest, tidyr, xml2
-    ## tools                                                                                                                                                                                                                                                                         <NA>
-    ## utils                                                                                                                                                                                                                                                                         <NA>
-    ## VariantAnnotation                                utils, DBI, zlibbioc, Biobase, S4Vectors (>= 0.9.47), IRanges\n(>= 2.3.25), XVector (>= 0.5.6), Biostrings (>= 2.33.5),\nAnnotationDbi (>= 1.27.9), BSgenome (>= 1.37.6), rtracklayer\n(>= 1.25.16), GenomicFeatures (>= 1.19.17)
-    ## webshot                                                                                                                                                                                                                                                                   magrittr
-    ## whisker                                                                                                                                                                                                                                                                       <NA>
-    ## withr                                                                                                                                                                                                                                                              stats, graphics
-    ## XML                                                                                                                                                                                                                                                                           <NA>
-    ## xml2                                                                                                                                                                                                                                                                          Rcpp
-    ## xtable                                                                                                                                                                                                                                                                stats, utils
-    ## XVector                                                                                                                                                                                                                        methods, zlibbioc, BiocGenerics, S4Vectors, IRanges
-    ## yaml                                                                                                                                                                                                                                                                          <NA>
-    ## zlibbioc                                                                                                                                                                                                                                                                      <NA>
-    ##                                                                      LinkingTo
-    ## deSolve                                                                   <NA>
-    ## ggvis                                                                     <NA>
-    ## scatterplot3d                                                             <NA>
-    ## shinythemes                                                               <NA>
-    ## teachR                                                                    <NA>
-    ## AnnotationDbi                                                             <NA>
-    ## AnnotationHub                                                             <NA>
-    ## assertthat                                                                <NA>
-    ## backports                                                                 <NA>
-    ## base                                                                      <NA>
-    ## base64enc                                                                 <NA>
-    ## BH                                                                        <NA>
-    ## bibtex                                                                    <NA>
-    ## Biobase                                                                   <NA>
-    ## BiocGenerics                                                              <NA>
-    ## BiocInstaller                                                             <NA>
-    ## BiocParallel                                                              <NA>
-    ## biomaRt                                                                   <NA>
-    ## Biostrings                                         S4Vectors, IRanges, XVector
-    ## bitops                                                                    <NA>
-    ## boot                                                                      <NA>
-    ## brew                                                                      <NA>
-    ## broom                                                                     <NA>
-    ## BSgenome                                                                  <NA>
-    ## BSgenome.Hsapiens.UCSC.hg19                                               <NA>
-    ## car                                                                       <NA>
-    ## caTools                                                                   <NA>
-    ## circlize                                                                  <NA>
-    ## class                                                                     <NA>
-    ## cluster                                                                   <NA>
-    ## codetools                                                                 <NA>
-    ## colorspace                                                                <NA>
-    ## compiler                                                                  <NA>
-    ## cowplot                                                                   <NA>
-    ## crayon                                                                    <NA>
-    ## curl                                                                      <NA>
-    ## datasets                                                                  <NA>
-    ## DBI                                                                       <NA>
-    ## devtools                                                                  <NA>
-    ## dichromat                                                                 <NA>
-    ## digest                                                                    <NA>
-    ## doParallel                                                                <NA>
-    ## downloader                                                                <NA>
-    ## dplyr                                       Rcpp (>= 0.12.0), BH (>= 1.58.0-1)
-    ## evaluate                                                                  <NA>
-    ## filehash                                                                  <NA>
-    ## forcats                                                                   <NA>
-    ## foreach                                                                   <NA>
-    ## foreign                                                                   <NA>
-    ## formatR                                                                   <NA>
-    ## futile.logger                                                             <NA>
-    ## futile.options                                                            <NA>
-    ## gdata                                                                     <NA>
-    ## GenomeInfoDb                                                              <NA>
-    ## GenomicAlignments                                           S4Vectors, IRanges
-    ## GenomicFeatures                                                           <NA>
-    ## GenomicRanges                                               S4Vectors, IRanges
-    ## ggplot2                                                                   <NA>
-    ## git2r                                                                     <NA>
-    ## GlobalOptions                                                             <NA>
-    ## gplots                                                                    <NA>
-    ## graphics                                                                  <NA>
-    ## grDevices                                                                 <NA>
-    ## grid                                                                      <NA>
-    ## gridBase                                                                  <NA>
-    ## gridExtra                                                                 <NA>
-    ## gtable                                                                    <NA>
-    ## gtools                                                                    <NA>
-    ## haven                                                                 Rcpp, BH
-    ## highr                                                                     <NA>
-    ## hms                                                                       <NA>
-    ## htmltools                                                                 Rcpp
-    ## htmlwidgets                                                               <NA>
-    ## httpuv                                                                    Rcpp
-    ## httr                                                                      <NA>
-    ## hunspell                                                                  Rcpp
-    ## hwriter                                                                   <NA>
-    ## igraph                                                                    <NA>
-    ## interactiveDisplayBase                                                    <NA>
-    ## IRanges                                                              S4Vectors
-    ## irlba                                                                   Matrix
-    ## iterators                                                                 <NA>
-    ## jsonlite                                                                  <NA>
-    ## KernSmooth                                                                <NA>
-    ## knitcitations                                                             <NA>
-    ## knitr                                                                     <NA>
-    ## labeling                                                                  <NA>
-    ## lambda.r                                                                  <NA>
-    ## lattice                                                                   <NA>
-    ## latticeExtra                                                              <NA>
-    ## lazyeval                                                                  <NA>
-    ## lme4                                               Rcpp (>= 0.10.5), RcppEigen
-    ## lubridate                                                                 <NA>
-    ## magrittr                                                                  <NA>
-    ## maps                                                                      <NA>
-    ## markdown                                                                  <NA>
-    ## MASS                                                                      <NA>
-    ## Matrix                                                                    <NA>
-    ## MatrixModels                                                              <NA>
-    ## memoise                                                                   <NA>
-    ## methods                                                                   <NA>
-    ## mgcv                                                                      <NA>
-    ## mime                                                                      <NA>
-    ## minqa                                                                     Rcpp
-    ## mnormt                                                                    <NA>
-    ## modelr                                                                    <NA>
-    ## munsell                                                                   <NA>
-    ## nlme                                                                      <NA>
-    ## nloptr                                                                    <NA>
-    ## NMF                                                                       <NA>
-    ## nnet                                                                      <NA>
-    ## openssl                                                                   <NA>
-    ## pacman                                                                    <NA>
-    ## parallel                                                                  <NA>
-    ## pbkrtest                                                                  <NA>
-    ## pkgmaker                                                                  <NA>
-    ## plogr                                                                     <NA>
-    ## plyr                                                                      Rcpp
-    ## praise                                                                    <NA>
-    ## psych                                                                     <NA>
-    ## purrr                                                          Rcpp, dplyr, BH
-    ## quantreg                                                                  <NA>
-    ## R6                                                                        <NA>
-    ## RColorBrewer                                                              <NA>
-    ## Rcpp                                                                      <NA>
-    ## RcppEigen                                                                 Rcpp
-    ## RCurl                                                                     <NA>
-    ## readr                                                                 Rcpp, BH
-    ## readxl                                                                    Rcpp
-    ## RefManageR                                                                <NA>
-    ## registry                                                                  <NA>
-    ## reshape2                                                                  Rcpp
-    ## rex                                                                       <NA>
-    ## RJSONIO                                                                   <NA>
-    ## rmarkdown                                                                 <NA>
-    ## RNAseqData.HNRNPC.bam.chr14                                               <NA>
-    ## rngtools                                                                  <NA>
-    ## roxygen2                                                                  Rcpp
-    ## rpart                                                                     <NA>
-    ## rprojroot                                                                 <NA>
-    ## Rsamtools                              S4Vectors, IRanges, XVector, Biostrings
-    ## RSQLite                                                        Rcpp, BH, plogr
-    ## rstudioapi                                                                <NA>
-    ## rtracklayer                                        S4Vectors, IRanges, XVector
-    ## rvest                                                                     <NA>
-    ## S4Vectors                                                                 <NA>
-    ## scales                                                                    Rcpp
-    ## selectr                                                                   <NA>
-    ## sequencing                                                                <NA>
-    ## shape                                                                     <NA>
-    ## shiny                                                                     <NA>
-    ## ShortRead                              S4Vectors, IRanges, XVector, Biostrings
-    ## snow                                                                      <NA>
-    ## sourcetools                                                               <NA>
-    ## SparseM                                                                   <NA>
-    ## spatial                                                                   <NA>
-    ## splines                                                                   <NA>
-    ## stats                                                                     <NA>
-    ## stats4                                                                    <NA>
-    ## stringdist                                                                <NA>
-    ## stringi                                                                   <NA>
-    ## stringr                                                                   <NA>
-    ## SummarizedExperiment                                                      <NA>
-    ## survival                                                                  <NA>
-    ## tcltk                                                                     <NA>
-    ## testit                                                                    <NA>
-    ## testthat                                                                  <NA>
-    ## tibble                                                                    Rcpp
-    ## tidyr                                                                     Rcpp
-    ## tidyverse                                                                 <NA>
-    ## tools                                                                     <NA>
-    ## utils                                                                     <NA>
-    ## VariantAnnotation           S4Vectors, IRanges, XVector, Biostrings, Rsamtools
-    ## webshot                                                                   <NA>
-    ## whisker                                                                   <NA>
-    ## withr                                                                     <NA>
-    ## XML                                                                       <NA>
-    ## xml2                                                    Rcpp (>= 0.11.4.6), BH
-    ## xtable                                                                    <NA>
-    ## XVector                                                     S4Vectors, IRanges
-    ## yaml                                                                      <NA>
-    ## zlibbioc                                                                  <NA>
-    ##                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             Suggests
-    ## deSolve                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                scatterplot3d
-    ## ggvis                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         MASS, mgcv, lubridate, testthat (>= 0.8.1), knitr (>= 1.6),\nrmarkdown
-    ## scatterplot3d                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   <NA>
-    ## shinythemes                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     <NA>
-    ## teachR                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <NA>
-    ## AnnotationDbi                                                                                                                                                                                                                                                                                                                                                                                                                                                                   DBI (>= 0.2-4), RSQLite (>= 0.6-4), hgu95av2.db, GO.db,\norg.Sc.sgd.db, org.At.tair.db, KEGG.db, RUnit,\nTxDb.Hsapiens.UCSC.hg19.knownGene, hom.Hs.inp.db, org.Hs.eg.db,\nreactome.db, AnnotationForge, graph, EnsDb.Hsapiens.v75,\nBiocStyle, knitr
-    ## AnnotationHub                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           IRanges, GenomicRanges, GenomeInfoDb, VariantAnnotation,\nRsamtools, rtracklayer, BiocStyle, knitr, AnnotationForge,\nrBiopaxParser, RUnit, GenomicFeatures, MSnbase, mzR,\nBiostrings, SummarizedExperiment
-    ## assertthat                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  testthat
-    ## backports                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  checkmate
-    ## base                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         methods
-    ## base64enc                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       <NA>
-    ## BH                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <NA>
-    ## bibtex                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <NA>
-    ## Biobase                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     tools, tkWidgets, ALL, RUnit, golubEsets
-    ## BiocGenerics                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            Biobase, S4Vectors, IRanges, GenomicRanges, AnnotationDbi,\noligoClasses, oligo, affyPLM, flowClust, affy, DESeq2, MSnbase,\nannotate, RUnit
-    ## BiocInstaller                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          devtools, RUnit, BiocGenerics
-    ## BiocParallel                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           BiocGenerics, tools, foreach, BatchJobs, BBmisc, doParallel,\nRmpi, GenomicRanges, RNAseqData.HNRNPC.bam.chr14, Rsamtools,\nGenomicAlignments, ShortRead, codetools, RUnit, BiocStyle,\nknitr
-    ## biomaRt                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        annotate, BiocStyle, knitr, rmarkdown
-    ## Biostrings                                                                                                                                                                                                                                                                                                                                                                                                                                       BSgenome (>= 1.13.14), BSgenome.Celegans.UCSC.ce2 (>=\n1.3.11), BSgenome.Dmelanogaster.UCSC.dm3 (>= 1.3.11),\nBSgenome.Hsapiens.UCSC.hg18, drosophila2probe, hgu95av2probe,\nhgu133aprobe, GenomicFeatures (>= 1.3.14), hgu95av2cdf, affy\n(>= 1.41.3), affydata (>= 1.11.5), RUnit
-    ## bitops                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <NA>
-    ## boot                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  MASS, survival
-    ## brew                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <NA>
-    ## broom                                                                                                                                                                                                                                                                                                                                                                                        knitr, boot, survival, gam, glmnet, lfe, Lahman, MASS, sp,\nmaps, maptools, multcomp, testthat, lme4, zoo, lmtest, plm,\nbiglm, ggplot2, nnet, geepack, AUC, ergm, network,\nstatnet.common, xergm, btergm, binGroup, Hmisc, bbmle, gamlss,\nrstan, rstanarm, coda, gmm, Matrix, ks, purrr, orcutt, mgcv,\nlmodel2, poLCA, mclust, covr
-    ## BSgenome                                                                                                                                                                                                                                                                                                                                                                BiocInstaller, Biobase, BSgenome.Celegans.UCSC.ce2,\nBSgenome.Hsapiens.UCSC.hg38,\nBSgenome.Hsapiens.UCSC.hg38.masked,\nBSgenome.Mmusculus.UCSC.mm10, BSgenome.Rnorvegicus.UCSC.rn5,\nTxDb.Hsapiens.UCSC.hg38.knownGene,\nTxDb.Mmusculus.UCSC.mm10.knownGene,\nSNPlocs.Hsapiens.dbSNP141.GRCh38,\nXtraSNPlocs.Hsapiens.dbSNP141.GRCh38, hgu95av2probe, RUnit
-    ## BSgenome.Hsapiens.UCSC.hg19                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        TxDb.Hsapiens.UCSC.hg19.knownGene
-    ## car                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             alr4, boot, coxme, leaps, lme4, lmtest, Matrix, MatrixModels,\nnlme, rgl (>= 0.93.960), sandwich, SparseM, survival, survey,\nnloptr
-    ## caTools                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  MASS, rpart
-    ## circlize                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                knitr, dendextend (>= 1.0.1)
-    ## class                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           <NA>
-    ## cluster                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         MASS
-    ## codetools                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       <NA>
-    ## colorspace                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        datasets, stats, utils, KernSmooth, MASS, kernlab, mvtnorm,\nvcd, dichromat, tcltk, shiny, shinyjs
-    ## compiler                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <NA>
-    ## cowplot                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        knitr
-    ## crayon                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      testthat
-    ## curl                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       testthat (>= 1.0.0), knitr, jsonlite, rmarkdown, magrittr
-    ## datasets                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <NA>
-    ## DBI                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        testthat, RSQLite, knitr, rmarkdown, covr
-    ## devtools                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         curl (>= 0.9), crayon, testthat (>= 0.7), BiocInstaller, Rcpp\n(>= 0.10.0), MASS, rmarkdown, knitr, hunspell (>= 1.2), lintr\n(>= 0.2.1), bitops, roxygen2 (>= 5.0.0), evaluate, rversions,\ncovr, gmailr (> 0.7.0)
-    ## dichromat                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       <NA>
-    ## digest                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              knitr, rmarkdown
-    ## doParallel                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     caret, mlbench, rpart
-    ## downloader                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  testthat
-    ## dplyr                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   RSQLite (>= 1.0.0), RMySQL, RPostgreSQL, testthat, knitr,\nmicrobenchmark, ggplot2, mgcv, Lahman (>= 3.0-1), nycflights13,\nmethods, rmarkdown, covr, dtplyr
-    ## evaluate                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  testthat, lattice, ggplot2
-    ## filehash                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <NA>
-    ## forcats                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ggplot2, testthat, covr
-    ## foreach                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 randomForest
-    ## foreign                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <NA>
-    ## formatR                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              codetools, shiny, testit, knitr
-    ## futile.logger                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     testthat, jsonlite
-    ## futile.options                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <NA>
-    ## gdata                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          RUnit
-    ## GenomeInfoDb                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   GenomicRanges, Rsamtools, GenomicAlignments, BSgenome,\nGenomicFeatures, BSgenome.Scerevisiae.UCSC.sacCer2,\nBSgenome.Celegans.UCSC.ce2, BSgenome.Hsapiens.NCBI.GRCh38,\nTxDb.Dmelanogaster.UCSC.dm3.ensGene, RUnit, BiocStyle, knitr
-    ## GenomicAlignments                                                                                                                                                                                                                                                                                                                                                                                                                                       ShortRead, rtracklayer, BSgenome, GenomicFeatures,\nRNAseqData.HNRNPC.bam.chr14, pasillaBamSubset,\nTxDb.Hsapiens.UCSC.hg19.knownGene,\nTxDb.Dmelanogaster.UCSC.dm3.ensGene,\nBSgenome.Dmelanogaster.UCSC.dm3, BSgenome.Hsapiens.UCSC.hg19,\nDESeq2, edgeR, RUnit, BiocStyle
-    ## GenomicFeatures                                                                                                                                                                                            org.Mm.eg.db, org.Hs.eg.db, BSgenome,\nBSgenome.Hsapiens.UCSC.hg19 (>= 1.3.17),\nBSgenome.Celegans.UCSC.ce2, BSgenome.Dmelanogaster.UCSC.dm3 (>=\n1.3.17), mirbase.db, FDb.UCSC.tRNAs,\nTxDb.Hsapiens.UCSC.hg19.knownGene,\nTxDb.Dmelanogaster.UCSC.dm3.ensGene (>= 2.7.1),\nTxDb.Mmusculus.UCSC.mm10.knownGene,\nTxDb.Hsapiens.UCSC.hg19.lincRNAsTranscripts,\nTxDb.Hsapiens.UCSC.hg38.knownGene,\nSNPlocs.Hsapiens.dbSNP141.GRCh38, Rsamtools, pasillaBamSubset\n(>= 0.0.5), GenomicAlignments, RUnit, BiocStyle, knitr
-    ## GenomicRanges               Biobase, AnnotationDbi (>= 1.21.1), annotate, Biostrings (>=\n2.25.3), Rsamtools (>= 1.13.53), SummarizedExperiment (>=\n0.1.5), Matrix, GenomicAlignments, rtracklayer, BSgenome,\nGenomicFeatures, Gviz, VariantAnnotation, AnnotationHub,\nDESeq2, DEXSeq, edgeR, KEGGgraph, BiocStyle, digest, RUnit,\nBSgenome.Hsapiens.UCSC.hg19, BSgenome.Scerevisiae.UCSC.sacCer2,\nKEGG.db, hgu95av2.db, org.Hs.eg.db, org.Mm.eg.db,\norg.Sc.sgd.db, pasilla, pasillaBamSubset,\nTxDb.Athaliana.BioMart.plantsmart22,\nTxDb.Dmelanogaster.UCSC.dm3.ensGene,\nTxDb.Hsapiens.UCSC.hg19.knownGene,\nBSgenome.Mmusculus.UCSC.mm10,\nTxDb.Mmusculus.UCSC.mm10.knownGene,\nRNAseqData.HNRNPC.bam.chr14, hgu95av2probe
-    ## ggplot2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               covr, ggplot2movies, hexbin, Hmisc, lattice, mapproj, maps,\nmaptools, mgcv, multcomp, nlme, testthat (>= 0.11.0), quantreg,\nknitr, rpart, rmarkdown, svglite
-    ## git2r                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        getPass
-    ## GlobalOptions                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   testthat (>= 1.0.0), knitr, markdown
-    ## gplots                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    grid, MASS
-    ## graphics                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <NA>
-    ## grDevices                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 KernSmooth
-    ## grid                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         lattice
-    ## gridBase                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     lattice
-    ## gridExtra                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          ggplot2, lattice, knitr, testthat
-    ## gtable                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                testthat, covr
-    ## gtools                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <NA>
-    ## haven                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               testthat, knitr, rmarkdown, covr
-    ## highr                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  knitr, testit
-    ## hms                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              testthat, lubridate
-    ## htmltools                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         markdown, testthat
-    ## htmlwidgets                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           knitr (>= 1.8)
-    ## httpuv                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <NA>
-    ## httr                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          httpuv, jpeg, knitr, png, testthat (>= 0.8.0), readr, xml2,\nrmarkdown
-    ## hunspell                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    testthat, devtools, pdftools, janeaustenr, wordcloud2, knitr,\nrmarkdown
-    ## hwriter                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <NA>
-    ## igraph                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            igraphdata, stats4, rgl, tcltk, graph, ape, scales
-    ## interactiveDisplayBase                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         knitr
-    ## IRanges                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               XVector, GenomicRanges, GenomicFeatures, GenomicAlignments,\nBSgenome.Celegans.UCSC.ce2, RUnit
-    ## irlba                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           <NA>
-    ## iterators                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      RUnit
-    ## jsonlite                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         httr, curl, plyr, testthat, knitr, rmarkdown, R.rsp
-    ## KernSmooth                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      MASS
-    ## knitcitations                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               testthat, knitr (>= 1.6)
-    ## knitr                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                formatR, testit, rgl (>= 0.95.1201), codetools, rmarkdown,\nhtmlwidgets (>= 0.7), webshot, tikzDevice (>= 0.10), png, jpeg,\nXML, RCurl, DBI (>= 0.4-1), tibble
-    ## labeling                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <NA>
-    ## lambda.r                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       RUnit
-    ## lattice                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             KernSmooth, MASS
-    ## latticeExtra                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               maps, mapproj, deldir, tripack, zoo, MASS, quantreg, mgcv
-    ## lazyeval                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                knitr, rmarkdown (>= 0.2.65), testthat, covr
-    ## lme4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  knitr, boot, PKPDmodels, MEMSS, testthat (>= 0.8.1), ggplot2,\nmlmRev, optimx (>= 2013.8.6), gamm4, pbkrtest, HSAUR2, numDeriv
-    ## lubridate                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      testthat, knitr, covr
-    ## magrittr                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             testthat, knitr
-    ## maps                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            mapproj (>= 1.2-0), mapdata (>= 2.2-4), sp, maptools
-    ## markdown                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                knitr, RCurl
-    ## MASS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   lattice, nlme, nnet, survival
-    ## Matrix                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    expm, MASS
-    ## MatrixModels                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <NA>
-    ## memoise                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     testthat
-    ## methods                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    codetools
-    ## mgcv                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               splines, parallel, survival, MASS
-    ## mime                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <NA>
-    ## minqa                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           <NA>
-    ## mnormt                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <NA>
-    ## modelr                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       testthat, ggplot2, covr
-    ## munsell                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ggplot2, testthat
-    ## nlme                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     Hmisc, MASS
-    ## nloptr                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           testthat (>= 0.8.1)
-    ## NMF                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        RcppOctave (>= 0.11), fastICA, doMPI, bigmemory (>= 4.2),\nsynchronicity, corpcor, xtable, devtools, knitr, bibtex, RUnit,\nmail, Biobase
-    ## nnet                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            MASS
-    ## openssl                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           testthat, digest, knitr, rmarkdown, jsonlite, jose
-    ## pacman                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      knitr, lattice, testthat (>= 0.9.0), XML
-    ## parallel                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     methods
-    ## pbkrtest                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      gplots
-    ## pkgmaker                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       devtools (>= 0.8), bibtex, RUnit, testthat, knitr,\nReportingTools, hwriter, argparse
-    ## plogr                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           Rcpp
-    ## plyr                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        abind, testthat, tcltk, foreach, doParallel, itertools,\niterators, covr
-    ## praise                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      testthat
-    ## psych                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              GPArotation, sem, lavaan, Rcsdp, graph, Rgraphviz
-    ## purrr                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 testthat, covr
-    ## quantreg                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      tripack, akima, MASS, survival, rgl, logspline, nor1mix,\nFormula, zoo
-    ## R6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            knitr, microbenchmark, pryr, testthat, ggplot2, scales
-    ## RColorBrewer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <NA>
-    ## Rcpp                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      RUnit, inline, rbenchmark, highlight, pkgKitten (>= 0.1.2)
-    ## RcppEigen                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   inline, RUnit, pkgKitten
-    ## RCurl                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Rcompression, XML
-    ## readr                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      testthat, knitr, rmarkdown, stringi, covr
-    ## readxl                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      testthat
-    ## RefManageR                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           knitr, testthat
-    ## registry                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <NA>
-    ## reshape2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                testthat (>= 0.8.0), lattice
-    ## rex                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              testthat, knitr, rmarkdown, dplyr, ggplot2, lintr, Hmisc,\nstringr, rvest, roxygen2
-    ## RJSONIO                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <NA>
-    ## rmarkdown                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           shiny (>= 0.11), tufte, testthat, digest, tibble
-    ## RNAseqData.HNRNPC.bam.chr14                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         GenomicAlignments, BiocInstaller
-    ## rngtools                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      parallel, RUnit, knitr
-    ## roxygen2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             testthat (>= 0.8.0), knitr, devtools, rmarkdown
-    ## rpart                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       survival
-    ## rprojroot                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          testthat, knitr, withr, rmarkdown
-    ## Rsamtools                                                                                                                                                                                                                                                                                                                                                                                                                                                                               GenomicAlignments, ShortRead (>= 1.19.10), GenomicFeatures,\nTxDb.Dmelanogaster.UCSC.dm3.ensGene, KEGG.db,\nTxDb.Hsapiens.UCSC.hg18.knownGene, RNAseqData.HNRNPC.bam.chr14,\nBSgenome.Hsapiens.UCSC.hg19, pasillaBamSubset, RUnit, BiocStyle
-    ## RSQLite                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          DBItest, knitr, rmarkdown, testthat
-    ## rstudioapi                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  testthat
-    ## rtracklayer                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              BSgenome (>= 1.33.4), humanStemCell, microRNA (>= 1.1.1),\ngenefilter, limma, org.Hs.eg.db, hgu133plus2.db,\nBSgenome.Hsapiens.UCSC.hg19, TxDb.Hsapiens.UCSC.hg19.knownGene
-    ## rvest                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      testthat, knitr, png, stringi (>= 0.3.1), rmarkdown, covr
-    ## S4Vectors                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       IRanges, GenomicRanges, Matrix, ShortRead, graph, data.table,\nRUnit
-    ## scales                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  testthat (>= 0.8), covr, hms
-    ## selectr                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          testthat, XML, xml2
-    ## sequencing                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      knitr, knitcitations
-    ## shape                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           <NA>
-    ## shiny                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            datasets, Cairo (>= 1.5-5), testthat, knitr (>= 1.6),\nmarkdown, rmarkdown, ggplot2
-    ## ShortRead                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               BiocStyle, RUnit, biomaRt, GenomicFeatures, yeastNagalakshmi
-    ## snow                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               Rmpi,rlecuyer,nws
-    ## sourcetools                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 testthat
-    ## SparseM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <NA>
-    ## spatial                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         MASS
-    ## splines                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Matrix, methods
-    ## stats                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       MASS, Matrix, SuppDists, methods, stats4
-    ## stats4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <NA>
-    ## stringdist                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  testthat
-    ## stringi                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <NA>
-    ## stringr                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     testthat, knitr, htmltools, htmlwidgets, rmarkdown, covr
-    ## SummarizedExperiment                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 annotate, AnnotationDbi, hgu95av2.db, GenomicFeatures,\nTxDb.Hsapiens.UCSC.hg19.knownGene, BiocStyle, knitr, rmarkdown,\ndigest, jsonlite, rhdf5, airway, RUnit
-    ## survival                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <NA>
-    ## tcltk                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           <NA>
-    ## testit                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    rstudioapi
-    ## testthat                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       devtools, withr, covr
-    ## tibble                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  testthat, withr, knitr (>= 1.5.32), rmarkdown, nycflights13,\nmicrobenchmark
-    ## tidyr                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    knitr, testthat, covr, gapminder, rmarkdown
-    ## tidyverse                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           knitr, rmarkdown
-    ## tools                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       codetools, methods, xml2
-    ## utils                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   methods, XML
-    ## VariantAnnotation                                                                                                                                                                                                                                                                                                                                                                                                                                              RUnit, AnnotationHub, BSgenome.Hsapiens.UCSC.hg19,\nTxDb.Hsapiens.UCSC.hg19.knownGene,\nSNPlocs.Hsapiens.dbSNP.20110815,\nSNPlocs.Hsapiens.dbSNP.20101109, SIFT.Hsapiens.dbSNP132,\nSIFT.Hsapiens.dbSNP137, PolyPhen.Hsapiens.dbSNP131, snpStats,\nggplot2, BiocStyle
-    ## webshot                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              httpuv, knitr, rmarkdown, shiny
-    ## whisker                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     markdown
-    ## withr                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       testthat
-    ## XML                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    bitops, RCurl
-    ## xml2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          testthat, curl, covr, knitr, rmarkdown, magrittr, httr
-    ## xtable                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        knitr, lsmeans, spdep, splm, sphet, plm, zoo, survival
-    ## XVector                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          Biostrings, drosophila2probe, RUnit
-    ## yaml                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        testthat
-    ## zlibbioc                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <NA>
-    ##                                                                                  Enhances
-    ## deSolve                                                                              <NA>
-    ## ggvis                                                                                <NA>
-    ## scatterplot3d                                                                        <NA>
-    ## shinythemes                                                                          <NA>
-    ## teachR                                                                               <NA>
-    ## AnnotationDbi                                                                        <NA>
-    ## AnnotationHub                                                           AnnotationHubData
-    ## assertthat                                                                           <NA>
-    ## backports                                                                            <NA>
-    ## base                                                                                 <NA>
-    ## base64enc                                                                             png
-    ## BH                                                                                   <NA>
-    ## bibtex                                                                               <NA>
-    ## Biobase                                                                              <NA>
-    ## BiocGenerics                                                                         <NA>
-    ## BiocInstaller                                                                        <NA>
-    ## BiocParallel                                                                         <NA>
-    ## biomaRt                                                                              <NA>
-    ## Biostrings                                                                           Rmpi
-    ## bitops                                                                               <NA>
-    ## boot                                                                                 <NA>
-    ## brew                                                                                 <NA>
-    ## broom                                                                                <NA>
-    ## BSgenome                                                                             <NA>
-    ## BSgenome.Hsapiens.UCSC.hg19                                                          <NA>
-    ## car                                                                                  <NA>
-    ## caTools                                                                              <NA>
-    ## circlize                                                                             <NA>
-    ## class                                                                                <NA>
-    ## cluster                                                                              <NA>
-    ## codetools                                                                            <NA>
-    ## colorspace                                                                           <NA>
-    ## compiler                                                                             <NA>
-    ## cowplot                                                                              <NA>
-    ## crayon                                                                               <NA>
-    ## curl                                                                                 <NA>
-    ## datasets                                                                             <NA>
-    ## DBI                                                                                  <NA>
-    ## devtools                                                                             <NA>
-    ## dichromat                                                                            <NA>
-    ## digest                                                                               <NA>
-    ## doParallel                                                                compiler, RUnit
-    ## downloader                                                                           <NA>
-    ## dplyr                                                                                <NA>
-    ## evaluate                                                                             <NA>
-    ## filehash                                                                             <NA>
-    ## forcats                                                                              <NA>
-    ## foreach                                                 compiler, doMC, RUnit, doParallel
-    ## foreign                                                                              <NA>
-    ## formatR                                                                              <NA>
-    ## futile.logger                                                                        <NA>
-    ## futile.options                                                                       <NA>
-    ## gdata                                                                                <NA>
-    ## GenomeInfoDb                                                                         <NA>
-    ## GenomicAlignments                                                                    <NA>
-    ## GenomicFeatures                                                                      <NA>
-    ## GenomicRanges                                                                        <NA>
-    ## ggplot2                                                                                sp
-    ## git2r                                                                                <NA>
-    ## GlobalOptions                                                                        <NA>
-    ## gplots                                                                               <NA>
-    ## graphics                                                                             <NA>
-    ## grDevices                                                                            <NA>
-    ## grid                                                                                 <NA>
-    ## gridBase                                                                             <NA>
-    ## gridExtra                                                                            <NA>
-    ## gtable                                                                               <NA>
-    ## gtools                                                                               <NA>
-    ## haven                                                                                <NA>
-    ## highr                                                                                <NA>
-    ## hms                                                                                  <NA>
-    ## htmltools                                                                           knitr
-    ## htmlwidgets                                                               shiny (>= 0.12)
-    ## httpuv                                                                               <NA>
-    ## httr                                                                                 <NA>
-    ## hunspell                                                                             <NA>
-    ## hwriter                                                                              <NA>
-    ## igraph                                                                               <NA>
-    ## interactiveDisplayBase                                                         rstudioapi
-    ## IRanges                                                                              <NA>
-    ## irlba                                                                                <NA>
-    ## iterators                                                                            <NA>
-    ## jsonlite                                                                             <NA>
-    ## KernSmooth                                                                           <NA>
-    ## knitcitations                                                                        <NA>
-    ## knitr                                                                                <NA>
-    ## labeling                                                                             <NA>
-    ## lambda.r                                                                             <NA>
-    ## lattice                                                                             chron
-    ## latticeExtra                                                                         <NA>
-    ## lazyeval                                                                             <NA>
-    ## lme4                                                                                 <NA>
-    ## lubridate                   chron, timeDate, zoo, xts, its, tis, timeSeries, fts, tseries
-    ## magrittr                                                                             <NA>
-    ## maps                                                                                 <NA>
-    ## markdown                                                                             <NA>
-    ## MASS                                                                                 <NA>
-    ## Matrix                                              MatrixModels, graph, SparseM, sfsmisc
-    ## MatrixModels                                                                         <NA>
-    ## memoise                                                                              <NA>
-    ## methods                                                                              <NA>
-    ## mgcv                                                                                 <NA>
-    ## mime                                                                                 <NA>
-    ## minqa                                                                                <NA>
-    ## mnormt                                                                               <NA>
-    ## modelr                                                                               <NA>
-    ## munsell                                                                              <NA>
-    ## nlme                                                                                 <NA>
-    ## nloptr                                                                               <NA>
-    ## NMF                                                                                  <NA>
-    ## nnet                                                                                 <NA>
-    ## openssl                                                                              <NA>
-    ## pacman                                                                               <NA>
-    ## parallel                                                                  snow, nws, Rmpi
-    ## pbkrtest                                                                             <NA>
-    ## pkgmaker                                                                             <NA>
-    ## plogr                                                                                <NA>
-    ## plyr                                                                                 <NA>
-    ## praise                                                                               <NA>
-    ## psych                                                                                <NA>
-    ## purrr                                                                                <NA>
-    ## quantreg                                                                             <NA>
-    ## R6                                                                                   <NA>
-    ## RColorBrewer                                                                         <NA>
-    ## Rcpp                                                                                 <NA>
-    ## RcppEigen                                                                            <NA>
-    ## RCurl                                                                                <NA>
-    ## readr                                                                                <NA>
-    ## readxl                                                                               <NA>
-    ## RefManageR                                                                           <NA>
-    ## registry                                                                             <NA>
-    ## reshape2                                                                             <NA>
-    ## rex                                                                                  <NA>
-    ## RJSONIO                                                                              <NA>
-    ## rmarkdown                                                                            <NA>
-    ## RNAseqData.HNRNPC.bam.chr14                                                          <NA>
-    ## rngtools                                                                             <NA>
-    ## roxygen2                                                                             <NA>
-    ## rpart                                                                                <NA>
-    ## rprojroot                                                                            <NA>
-    ## Rsamtools                                                                            <NA>
-    ## RSQLite                                                                              <NA>
-    ## rstudioapi                                                                           <NA>
-    ## rtracklayer                                                                          <NA>
-    ## rvest                                                                                <NA>
-    ## S4Vectors                                                                            <NA>
-    ## scales                                                                               <NA>
-    ## selectr                                                                              <NA>
-    ## sequencing                                                                           <NA>
-    ## shape                                                                                <NA>
-    ## shiny                                                                                <NA>
-    ## ShortRead                                                                            <NA>
-    ## snow                                                                                 <NA>
-    ## sourcetools                                                                          <NA>
-    ## SparseM                                                                              <NA>
-    ## spatial                                                                              <NA>
-    ## splines                                                                              <NA>
-    ## stats                                                                                <NA>
-    ## stats4                                                                               <NA>
-    ## stringdist                                                                           <NA>
-    ## stringi                                                                              <NA>
-    ## stringr                                                                              <NA>
-    ## SummarizedExperiment                                                                 <NA>
-    ## survival                                                                             <NA>
-    ## tcltk                                                                                <NA>
-    ## testit                                                                               <NA>
-    ## testthat                                                                             <NA>
-    ## tibble                                                                               <NA>
-    ## tidyr                                                                                <NA>
-    ## tidyverse                                                                            <NA>
-    ## tools                                                                                <NA>
-    ## utils                                                                                <NA>
-    ## VariantAnnotation                                                                    <NA>
-    ## webshot                                                                              <NA>
-    ## whisker                                                                              <NA>
-    ## withr                                                                                <NA>
-    ## XML                                                                                  <NA>
-    ## xml2                                                                                 <NA>
-    ## xtable                                                                               <NA>
-    ## XVector                                                                              <NA>
-    ## yaml                                                                                 <NA>
-    ## zlibbioc                                                                             <NA>
-    ##                                                                 License
-    ## deSolve                                                      GPL (>= 2)
-    ## ggvis                                              GPL-2 | file LICENSE
-    ## scatterplot3d                                                     GPL-2
-    ## shinythemes                                        GPL-3 | file LICENSE
-    ## teachR                                                       GPL (>= 3)
-    ## AnnotationDbi                                              Artistic-2.0
-    ## AnnotationHub                                              Artistic-2.0
-    ## assertthat                                                        GPL-3
-    ## backports                                                         GPL-2
-    ## base                                                    Part of R 3.3.2
-    ## base64enc                                                 GPL-2 | GPL-3
-    ## BH                                                              BSL-1.0
-    ## bibtex                                                       GPL (>= 2)
-    ## Biobase                                                    Artistic-2.0
-    ## BiocGenerics                                               Artistic-2.0
-    ## BiocInstaller                                              Artistic-2.0
-    ## BiocParallel                                              GPL-2 | GPL-3
-    ## biomaRt                                                    Artistic-2.0
-    ## Biostrings                                                 Artistic-2.0
-    ## bitops                                                       GPL (>= 2)
-    ## boot                                                          Unlimited
-    ## brew                                                              GPL-2
-    ## broom                                                MIT + file LICENSE
-    ## BSgenome                                                   Artistic-2.0
-    ## BSgenome.Hsapiens.UCSC.hg19                                Artistic-2.0
-    ## car                                                          GPL (>= 2)
-    ## caTools                                                           GPL-3
-    ## circlize                                                     GPL (>= 2)
-    ## class                                                     GPL-2 | GPL-3
-    ## cluster                                                      GPL (>= 2)
-    ## codetools                                                           GPL
-    ## colorspace                                  BSD_3_clause + file LICENSE
-    ## compiler                                                Part of R 3.3.2
-    ## cowplot                                                           GPL-2
-    ## crayon                                               MIT + file LICENSE
-    ## curl                                                 MIT + file LICENSE
-    ## datasets                                                Part of R 3.3.2
-    ## DBI                                                         LGPL (>= 2)
-    ## devtools                                                     GPL (>= 2)
-    ## dichromat                                                         GPL-2
-    ## digest                                                            GPL-2
-    ## doParallel                                                        GPL-2
-    ## downloader                                                        GPL-2
-    ## dplyr                                                MIT + file LICENSE
-    ## evaluate                                             MIT + file LICENSE
-    ## filehash                                                     GPL (>= 2)
-    ## forcats                                                           GPL-3
-    ## foreach                                         Apache License (== 2.0)
-    ## foreign                                                      GPL (>= 2)
-    ## formatR                                                             GPL
-    ## futile.logger                                                    LGPL-3
-    ## futile.options                                                   LGPL-3
-    ## gdata                                                             GPL-2
-    ## GenomeInfoDb                                               Artistic-2.0
-    ## GenomicAlignments                                          Artistic-2.0
-    ## GenomicFeatures                                            Artistic-2.0
-    ## GenomicRanges                                              Artistic-2.0
-    ## ggplot2                                            GPL-2 | file LICENSE
-    ## git2r                                                             GPL-2
-    ## GlobalOptions                                                GPL (>= 2)
-    ## gplots                                                            GPL-2
-    ## graphics                                                Part of R 3.3.2
-    ## grDevices                                               Part of R 3.3.2
-    ## grid                                                    Part of R 3.3.2
-    ## gridBase                                                            GPL
-    ## gridExtra                                                    GPL (>= 2)
-    ## gtable                                                            GPL-2
-    ## gtools                                                            GPL-2
-    ## haven                                                MIT + file LICENSE
-    ## highr                                                               GPL
-    ## hms                                                               GPL-3
-    ## htmltools                                                    GPL (>= 2)
-    ## htmlwidgets                                          MIT + file LICENSE
-    ## httpuv                                             GPL-3 | file LICENSE
-    ## httr                                                 MIT + file LICENSE
-    ## hunspell                                     GPL-2 | LGPL-2.1 | MPL-1.1
-    ## hwriter                                                        LGPL-2.1
-    ## igraph                                                       GPL (>= 2)
-    ## interactiveDisplayBase                                     Artistic-2.0
-    ## IRanges                                                    Artistic-2.0
-    ## irlba                                                             GPL-3
-    ## iterators                                       Apache License (== 2.0)
-    ## jsonlite                                             MIT + file LICENSE
-    ## KernSmooth                                                    Unlimited
-    ## knitcitations                                        MIT + file LICENSE
-    ## knitr                                                               GPL
-    ## labeling                                 MIT + file LICENSE | Unlimited
-    ## lambda.r                                                         LGPL-3
-    ## lattice                                                      GPL (>= 2)
-    ## latticeExtra                                                 GPL (>= 2)
-    ## lazyeval                                                          GPL-3
-    ## lme4                                                         GPL (>= 2)
-    ## lubridate                                                         GPL-2
-    ## magrittr                                             MIT + file LICENSE
-    ## maps                                                              GPL-2
-    ## markdown                                                          GPL-2
-    ## MASS                                                      GPL-2 | GPL-3
-    ## Matrix                                        GPL (>= 2) | file LICENCE
-    ## MatrixModels                                                 GPL (>= 2)
-    ## memoise                                              MIT + file LICENSE
-    ## methods                                                 Part of R 3.3.2
-    ## mgcv                                                         GPL (>= 2)
-    ## mime                                                                GPL
-    ## minqa                                                             GPL-2
-    ## mnormt                                                    GPL-2 | GPL-3
-    ## modelr                                                            GPL-3
-    ## munsell                                              MIT + file LICENSE
-    ## nlme                                          GPL (>= 2) | file LICENCE
-    ## nloptr                                                           LGPL-3
-    ## NMF                                                          GPL (>= 2)
-    ## nnet                                                      GPL-2 | GPL-3
-    ## openssl                                              MIT + file LICENSE
-    ## pacman                                                            GPL-2
-    ## parallel                                                Part of R 3.3.2
-    ## pbkrtest                                                     GPL (>= 2)
-    ## pkgmaker                                                     GPL (>= 2)
-    ## plogr                                                MIT + file LICENSE
-    ## plyr                                                 MIT + file LICENSE
-    ## praise                                               MIT + file LICENSE
-    ## psych                                                        GPL (>= 2)
-    ## purrr                                              GPL-3 | file LICENSE
-    ## quantreg                                                     GPL (>= 2)
-    ## R6                                                   MIT + file LICENSE
-    ## RColorBrewer                                         Apache License 2.0
-    ## Rcpp                                                         GPL (>= 2)
-    ## RcppEigen                                     GPL (>= 2) | file LICENSE
-    ## RCurl                                                               BSD
-    ## readr                                         GPL (>= 2) | file LICENSE
-    ## readxl                                             GPL-3 + file LICENSE
-    ## RefManageR                  GPL-2 | GPL-3 | BSD_3_clause + file LICENSE
-    ## registry                                                          GPL-2
-    ## reshape2                                             MIT + file LICENSE
-    ## rex                                                  MIT + file LICENSE
-    ## RJSONIO                                     BSD_3_clause + file LICENSE
-    ## rmarkdown                                                         GPL-3
-    ## RNAseqData.HNRNPC.bam.chr14                                        LGPL
-    ## rngtools                                                          GPL-3
-    ## roxygen2                                                     GPL (>= 2)
-    ## rpart                                                     GPL-2 | GPL-3
-    ## rprojroot                                                         GPL-3
-    ## Rsamtools                                   Artistic-2.0 | file LICENSE
-    ## RSQLite                                                     LGPL (>= 2)
-    ## rstudioapi                                           MIT + file LICENSE
-    ## rtracklayer                                 Artistic-2.0 + file LICENSE
-    ## rvest                                                             GPL-3
-    ## S4Vectors                                                  Artistic-2.0
-    ## scales                                               MIT + file LICENSE
-    ## selectr                                     BSD_3_clause + file LICENCE
-    ## sequencing                                                 Artistic-2.0
-    ## shape                                                        GPL (>= 3)
-    ## shiny                                              GPL-3 | file LICENSE
-    ## ShortRead                                                  Artistic-2.0
-    ## snow                                                                GPL
-    ## sourcetools                                          MIT + file LICENSE
-    ## SparseM                                                      GPL (>= 2)
-    ## spatial                                                   GPL-2 | GPL-3
-    ## splines                                                 Part of R 3.3.2
-    ## stats                                                   Part of R 3.3.2
-    ## stats4                                                  Part of R 3.3.2
-    ## stringdist                                                        GPL-3
-    ## stringi                                                    file LICENSE
-    ## stringr                                                           GPL-2
-    ## SummarizedExperiment                                       Artistic-2.0
-    ## survival                                                    LGPL (>= 2)
-    ## tcltk                                                   Part of R 3.3.2
-    ## testit                                                              GPL
-    ## testthat                                             MIT + file LICENSE
-    ## tibble                                               MIT + file LICENSE
-    ## tidyr                                                MIT + file LICENSE
-    ## tidyverse                                                         GPL-3
-    ## tools                                                   Part of R 3.3.2
-    ## utils                                                   Part of R 3.3.2
-    ## VariantAnnotation                                          Artistic-2.0
-    ## webshot                                                           GPL-2
-    ## whisker                                                           GPL-3
-    ## withr                                                        GPL (>= 2)
-    ## XML                                         BSD_2_clause + file LICENSE
-    ## xml2                                                         GPL (>= 2)
-    ## xtable                                                       GPL (>= 2)
-    ## XVector                                                    Artistic-2.0
-    ## yaml                                        BSD_3_clause + file LICENSE
-    ## zlibbioc                                    Artistic-2.0 + file LICENSE
-    ##                             License_is_FOSS License_restricts_use OS_type
-    ## deSolve                                <NA>                  <NA>    <NA>
-    ## ggvis                                  <NA>                  <NA>    <NA>
-    ## scatterplot3d                          <NA>                  <NA>    <NA>
-    ## shinythemes                            <NA>                  <NA>    <NA>
-    ## teachR                                 <NA>                  <NA>    <NA>
-    ## AnnotationDbi                          <NA>                  <NA>    <NA>
-    ## AnnotationHub                          <NA>                  <NA>    <NA>
-    ## assertthat                             <NA>                  <NA>    <NA>
-    ## backports                              <NA>                  <NA>    <NA>
-    ## base                                   <NA>                  <NA>    <NA>
-    ## base64enc                              <NA>                  <NA>    <NA>
-    ## BH                                     <NA>                  <NA>    <NA>
-    ## bibtex                                 <NA>                  <NA>    <NA>
-    ## Biobase                                <NA>                  <NA>    <NA>
-    ## BiocGenerics                           <NA>                  <NA>    <NA>
-    ## BiocInstaller                          <NA>                  <NA>    <NA>
-    ## BiocParallel                           <NA>                  <NA>    <NA>
-    ## biomaRt                                <NA>                  <NA>    <NA>
-    ## Biostrings                             <NA>                  <NA>    <NA>
-    ## bitops                                 <NA>                  <NA>    <NA>
-    ## boot                                   <NA>                  <NA>    <NA>
-    ## brew                                   <NA>                  <NA>    <NA>
-    ## broom                                  <NA>                  <NA>    <NA>
-    ## BSgenome                               <NA>                  <NA>    <NA>
-    ## BSgenome.Hsapiens.UCSC.hg19            <NA>                  <NA>    <NA>
-    ## car                                    <NA>                  <NA>    <NA>
-    ## caTools                                <NA>                  <NA>    <NA>
-    ## circlize                               <NA>                  <NA>    <NA>
-    ## class                                  <NA>                  <NA>    <NA>
-    ## cluster                                <NA>                  <NA>    <NA>
-    ## codetools                              <NA>                  <NA>    <NA>
-    ## colorspace                             <NA>                  <NA>    <NA>
-    ## compiler                               <NA>                  <NA>    <NA>
-    ## cowplot                                <NA>                  <NA>    <NA>
-    ## crayon                                 <NA>                  <NA>    <NA>
-    ## curl                                   <NA>                  <NA>    <NA>
-    ## datasets                               <NA>                  <NA>    <NA>
-    ## DBI                                    <NA>                  <NA>    <NA>
-    ## devtools                               <NA>                  <NA>    <NA>
-    ## dichromat                              <NA>                  <NA>    <NA>
-    ## digest                                 <NA>                  <NA>    <NA>
-    ## doParallel                             <NA>                  <NA>    <NA>
-    ## downloader                             <NA>                  <NA>    <NA>
-    ## dplyr                                  <NA>                  <NA>    <NA>
-    ## evaluate                               <NA>                  <NA>    <NA>
-    ## filehash                               <NA>                  <NA>    <NA>
-    ## forcats                                <NA>                  <NA>    <NA>
-    ## foreach                                <NA>                  <NA>    <NA>
-    ## foreign                                <NA>                  <NA>    <NA>
-    ## formatR                                <NA>                  <NA>    <NA>
-    ## futile.logger                          <NA>                  <NA>    <NA>
-    ## futile.options                         <NA>                  <NA>    <NA>
-    ## gdata                                  <NA>                  <NA>    <NA>
-    ## GenomeInfoDb                           <NA>                  <NA>    <NA>
-    ## GenomicAlignments                      <NA>                  <NA>    <NA>
-    ## GenomicFeatures                        <NA>                  <NA>    <NA>
-    ## GenomicRanges                          <NA>                  <NA>    <NA>
-    ## ggplot2                                <NA>                  <NA>    <NA>
-    ## git2r                                  <NA>                  <NA>    <NA>
-    ## GlobalOptions                          <NA>                  <NA>    <NA>
-    ## gplots                                 <NA>                  <NA>    <NA>
-    ## graphics                               <NA>                  <NA>    <NA>
-    ## grDevices                              <NA>                  <NA>    <NA>
-    ## grid                                   <NA>                  <NA>    <NA>
-    ## gridBase                               <NA>                  <NA>    <NA>
-    ## gridExtra                              <NA>                  <NA>    <NA>
-    ## gtable                                 <NA>                  <NA>    <NA>
-    ## gtools                                 <NA>                  <NA>    <NA>
-    ## haven                                  <NA>                  <NA>    <NA>
-    ## highr                                  <NA>                  <NA>    <NA>
-    ## hms                                    <NA>                  <NA>    <NA>
-    ## htmltools                              <NA>                  <NA>    <NA>
-    ## htmlwidgets                            <NA>                  <NA>    <NA>
-    ## httpuv                                 <NA>                  <NA>    <NA>
-    ## httr                                   <NA>                  <NA>    <NA>
-    ## hunspell                               <NA>                  <NA>    <NA>
-    ## hwriter                                <NA>                  <NA>    <NA>
-    ## igraph                                 <NA>                  <NA>    <NA>
-    ## interactiveDisplayBase                 <NA>                  <NA>    <NA>
-    ## IRanges                                <NA>                  <NA>    <NA>
-    ## irlba                                  <NA>                  <NA>    <NA>
-    ## iterators                              <NA>                  <NA>    <NA>
-    ## jsonlite                               <NA>                  <NA>    <NA>
-    ## KernSmooth                             <NA>                  <NA>    <NA>
-    ## knitcitations                          <NA>                  <NA>    <NA>
-    ## knitr                                  <NA>                  <NA>    <NA>
-    ## labeling                               <NA>                  <NA>    <NA>
-    ## lambda.r                               <NA>                  <NA>    <NA>
-    ## lattice                                <NA>                  <NA>    <NA>
-    ## latticeExtra                           <NA>                  <NA>    <NA>
-    ## lazyeval                               <NA>                  <NA>    <NA>
-    ## lme4                                   <NA>                  <NA>    <NA>
-    ## lubridate                              <NA>                  <NA>    <NA>
-    ## magrittr                               <NA>                  <NA>    <NA>
-    ## maps                                   <NA>                  <NA>    <NA>
-    ## markdown                               <NA>                  <NA>    <NA>
-    ## MASS                                   <NA>                  <NA>    <NA>
-    ## Matrix                                 <NA>                  <NA>    <NA>
-    ## MatrixModels                           <NA>                  <NA>    <NA>
-    ## memoise                                <NA>                  <NA>    <NA>
-    ## methods                                <NA>                  <NA>    <NA>
-    ## mgcv                                   <NA>                  <NA>    <NA>
-    ## mime                                   <NA>                  <NA>    <NA>
-    ## minqa                                  <NA>                  <NA>    <NA>
-    ## mnormt                                 <NA>                  <NA>    <NA>
-    ## modelr                                 <NA>                  <NA>    <NA>
-    ## munsell                                <NA>                  <NA>    <NA>
-    ## nlme                                   <NA>                  <NA>    <NA>
-    ## nloptr                                 <NA>                  <NA>    <NA>
-    ## NMF                                    <NA>                  <NA>    <NA>
-    ## nnet                                   <NA>                  <NA>    <NA>
-    ## openssl                                <NA>                  <NA>    <NA>
-    ## pacman                                 <NA>                  <NA>    <NA>
-    ## parallel                               <NA>                  <NA>    <NA>
-    ## pbkrtest                               <NA>                  <NA>    <NA>
-    ## pkgmaker                               <NA>                  <NA>    <NA>
-    ## plogr                                  <NA>                  <NA>    <NA>
-    ## plyr                                   <NA>                  <NA>    <NA>
-    ## praise                                 <NA>                  <NA>    <NA>
-    ## psych                                  <NA>                  <NA>    <NA>
-    ## purrr                                  <NA>                  <NA>    <NA>
-    ## quantreg                               <NA>                  <NA>    <NA>
-    ## R6                                     <NA>                  <NA>    <NA>
-    ## RColorBrewer                           <NA>                  <NA>    <NA>
-    ## Rcpp                                   <NA>                  <NA>    <NA>
-    ## RcppEigen                              <NA>                  <NA>    <NA>
-    ## RCurl                                  <NA>                  <NA>    <NA>
-    ## readr                                  <NA>                  <NA>    <NA>
-    ## readxl                                 <NA>                  <NA>    <NA>
-    ## RefManageR                             <NA>                  <NA>    <NA>
-    ## registry                               <NA>                  <NA>    <NA>
-    ## reshape2                               <NA>                  <NA>    <NA>
-    ## rex                                    <NA>                  <NA>    <NA>
-    ## RJSONIO                                <NA>                  <NA>    <NA>
-    ## rmarkdown                              <NA>                  <NA>    <NA>
-    ## RNAseqData.HNRNPC.bam.chr14            <NA>                  <NA>    <NA>
-    ## rngtools                               <NA>                  <NA>    <NA>
-    ## roxygen2                               <NA>                  <NA>    <NA>
-    ## rpart                                  <NA>                  <NA>    <NA>
-    ## rprojroot                              <NA>                  <NA>    <NA>
-    ## Rsamtools                              <NA>                  <NA>    <NA>
-    ## RSQLite                                <NA>                  <NA>    <NA>
-    ## rstudioapi                             <NA>                  <NA>    <NA>
-    ## rtracklayer                            <NA>                  <NA>    <NA>
-    ## rvest                                  <NA>                  <NA>    <NA>
-    ## S4Vectors                              <NA>                  <NA>    <NA>
-    ## scales                                 <NA>                  <NA>    <NA>
-    ## selectr                                <NA>                  <NA>    <NA>
-    ## sequencing                             <NA>                  <NA>    <NA>
-    ## shape                                  <NA>                  <NA>    <NA>
-    ## shiny                                  <NA>                  <NA>    <NA>
-    ## ShortRead                              <NA>                  <NA>    <NA>
-    ## snow                                   <NA>                  <NA>    <NA>
-    ## sourcetools                            <NA>                  <NA>    <NA>
-    ## SparseM                                <NA>                  <NA>    <NA>
-    ## spatial                                <NA>                  <NA>    <NA>
-    ## splines                                <NA>                  <NA>    <NA>
-    ## stats                                  <NA>                  <NA>    <NA>
-    ## stats4                                 <NA>                  <NA>    <NA>
-    ## stringdist                             <NA>                  <NA>    <NA>
-    ## stringi                                 yes                  <NA>    <NA>
-    ## stringr                                <NA>                  <NA>    <NA>
-    ## SummarizedExperiment                   <NA>                  <NA>    <NA>
-    ## survival                               <NA>                  <NA>    <NA>
-    ## tcltk                                  <NA>                  <NA>    <NA>
-    ## testit                                 <NA>                  <NA>    <NA>
-    ## testthat                               <NA>                  <NA>    <NA>
-    ## tibble                                 <NA>                  <NA>    <NA>
-    ## tidyr                                  <NA>                  <NA>    <NA>
-    ## tidyverse                              <NA>                  <NA>    <NA>
-    ## tools                                  <NA>                  <NA>    <NA>
-    ## utils                                  <NA>                  <NA>    <NA>
-    ## VariantAnnotation                      <NA>                  <NA>    <NA>
-    ## webshot                                <NA>                  <NA>    <NA>
-    ## whisker                                <NA>                  <NA>    <NA>
-    ## withr                                  <NA>                  <NA>    <NA>
-    ## XML                                    <NA>                  <NA>    <NA>
-    ## xml2                                   <NA>                  <NA>    <NA>
-    ## xtable                                 <NA>                  <NA>    <NA>
-    ## XVector                                <NA>                  <NA>    <NA>
-    ## yaml                                   <NA>                  <NA>    <NA>
-    ## zlibbioc                               <NA>                  <NA>    <NA>
-    ##                             MD5sum NeedsCompilation Built
-    ## deSolve                       <NA>              yes 3.3.2
-    ## ggvis                         <NA>               no 3.3.2
-    ## scatterplot3d                 <NA>               no 3.3.2
-    ## shinythemes                   <NA>               no 3.3.2
-    ## teachR                        <NA>             <NA> 3.3.2
-    ## AnnotationDbi                 <NA>               no 3.3.2
-    ## AnnotationHub                 <NA>              yes 3.3.2
-    ## assertthat                    <NA>               no 3.3.2
-    ## backports                     <NA>               no 3.3.2
-    ## base                          <NA>             <NA> 3.3.2
-    ## base64enc                     <NA>              yes 3.3.2
-    ## BH                            <NA>               no 3.3.2
-    ## bibtex                        <NA>              yes 3.3.2
-    ## Biobase                       <NA>              yes 3.3.2
-    ## BiocGenerics                  <NA>               no 3.3.2
-    ## BiocInstaller                 <NA>               no 3.3.2
-    ## BiocParallel                  <NA>               no 3.3.2
-    ## biomaRt                       <NA>               no 3.3.2
-    ## Biostrings                    <NA>              yes 3.3.2
-    ## bitops                        <NA>              yes 3.3.2
-    ## boot                          <NA>               no 3.3.2
-    ## brew                          <NA>             <NA> 3.3.2
-    ## broom                         <NA>               no 3.3.2
-    ## BSgenome                      <NA>               no 3.3.2
-    ## BSgenome.Hsapiens.UCSC.hg19   <NA>             <NA> 3.3.2
-    ## car                           <NA>               no 3.3.2
-    ## caTools                       <NA>              yes 3.3.2
-    ## circlize                      <NA>               no 3.3.2
-    ## class                         <NA>              yes 3.3.2
-    ## cluster                       <NA>              yes 3.3.2
-    ## codetools                     <NA>               no 3.3.2
-    ## colorspace                    <NA>              yes 3.3.2
-    ## compiler                      <NA>             <NA> 3.3.2
-    ## cowplot                       <NA>               no 3.3.2
-    ## crayon                        <NA>               no 3.3.2
-    ## curl                          <NA>              yes 3.3.2
-    ## datasets                      <NA>             <NA> 3.3.2
-    ## DBI                           <NA>               no 3.3.2
-    ## devtools                      <NA>              yes 3.3.2
-    ## dichromat                     <NA>             <NA> 3.3.2
-    ## digest                        <NA>              yes 3.3.2
-    ## doParallel                    <NA>               no 3.3.2
-    ## downloader                    <NA>               no 3.3.2
-    ## dplyr                         <NA>              yes 3.3.2
-    ## evaluate                      <NA>               no 3.3.2
-    ## filehash                      <NA>              yes 3.3.2
-    ## forcats                       <NA>               no 3.3.2
-    ## foreach                       <NA>               no 3.3.2
-    ## foreign                       <NA>              yes 3.3.2
-    ## formatR                       <NA>               no 3.3.2
-    ## futile.logger                 <NA>               no 3.3.2
-    ## futile.options                <NA>             <NA> 3.3.2
-    ## gdata                         <NA>               no 3.3.2
-    ## GenomeInfoDb                  <NA>               no 3.3.2
-    ## GenomicAlignments             <NA>              yes 3.3.2
-    ## GenomicFeatures               <NA>               no 3.3.2
-    ## GenomicRanges                 <NA>              yes 3.3.2
-    ## ggplot2                       <NA>               no 3.3.2
-    ## git2r                         <NA>              yes 3.3.2
-    ## GlobalOptions                 <NA>               no 3.3.2
-    ## gplots                        <NA>               no 3.3.2
-    ## graphics                      <NA>              yes 3.3.2
-    ## grDevices                     <NA>              yes 3.3.2
-    ## grid                          <NA>              yes 3.3.2
-    ## gridBase                      <NA>               no 3.3.2
-    ## gridExtra                     <NA>               no 3.3.2
-    ## gtable                        <NA>               no 3.3.2
-    ## gtools                        <NA>              yes 3.3.2
-    ## haven                         <NA>              yes 3.3.2
-    ## highr                         <NA>               no 3.3.2
-    ## hms                           <NA>               no 3.3.2
-    ## htmltools                     <NA>              yes 3.3.2
-    ## htmlwidgets                   <NA>               no 3.3.2
-    ## httpuv                        <NA>              yes 3.3.2
-    ## httr                          <NA>               no 3.3.2
-    ## hunspell                      <NA>              yes 3.3.2
-    ## hwriter                       <NA>               no 3.3.2
-    ## igraph                        <NA>              yes 3.3.2
-    ## interactiveDisplayBase        <NA>               no 3.3.2
-    ## IRanges                       <NA>              yes 3.3.2
-    ## irlba                         <NA>              yes 3.3.2
-    ## iterators                     <NA>               no 3.3.2
-    ## jsonlite                      <NA>              yes 3.3.2
-    ## KernSmooth                    <NA>              yes 3.3.2
-    ## knitcitations                 <NA>               no 3.3.2
-    ## knitr                         <NA>               no 3.3.2
-    ## labeling                      <NA>               no 3.3.2
-    ## lambda.r                      <NA>               no 3.3.2
-    ## lattice                       <NA>              yes 3.3.2
-    ## latticeExtra                  <NA>               no 3.3.2
-    ## lazyeval                      <NA>              yes 3.3.2
-    ## lme4                          <NA>              yes 3.3.2
-    ## lubridate                     <NA>              yes 3.3.2
-    ## magrittr                      <NA>               no 3.3.2
-    ## maps                          <NA>              yes 3.3.2
-    ## markdown                      <NA>              yes 3.3.2
-    ## MASS                          <NA>              yes 3.3.2
-    ## Matrix                        <NA>              yes 3.3.2
-    ## MatrixModels                  <NA>               no 3.3.2
-    ## memoise                       <NA>               no 3.3.2
-    ## methods                       <NA>              yes 3.3.2
-    ## mgcv                          <NA>              yes 3.3.2
-    ## mime                          <NA>              yes 3.3.2
-    ## minqa                         <NA>              yes 3.3.2
-    ## mnormt                        <NA>              yes 3.3.2
-    ## modelr                        <NA>               no 3.3.2
-    ## munsell                       <NA>               no 3.3.2
-    ## nlme                          <NA>              yes 3.3.2
-    ## nloptr                        <NA>              yes 3.3.2
-    ## NMF                           <NA>              yes 3.3.2
-    ## nnet                          <NA>              yes 3.3.2
-    ## openssl                       <NA>              yes 3.3.2
-    ## pacman                        <NA>               no 3.3.2
-    ## parallel                      <NA>              yes 3.3.2
-    ## pbkrtest                      <NA>               no 3.3.2
-    ## pkgmaker                      <NA>               no 3.3.2
-    ## plogr                         <NA>               no 3.3.2
-    ## plyr                          <NA>              yes 3.3.2
-    ## praise                        <NA>               no 3.3.2
-    ## psych                         <NA>               no 3.3.2
-    ## purrr                         <NA>              yes 3.3.2
-    ## quantreg                      <NA>              yes 3.3.2
-    ## R6                            <NA>               no 3.3.2
-    ## RColorBrewer                  <NA>               no 3.3.2
-    ## Rcpp                          <NA>              yes 3.3.2
-    ## RcppEigen                     <NA>              yes 3.3.2
-    ## RCurl                         <NA>              yes 3.3.2
-    ## readr                         <NA>              yes 3.3.2
-    ## readxl                        <NA>              yes 3.3.2
-    ## RefManageR                    <NA>               no 3.3.2
-    ## registry                      <NA>               no 3.3.2
-    ## reshape2                      <NA>              yes 3.3.2
-    ## rex                           <NA>               no 3.3.2
-    ## RJSONIO                       <NA>              yes 3.3.2
-    ## rmarkdown                     <NA>               no 3.3.2
-    ## RNAseqData.HNRNPC.bam.chr14   <NA>               no 3.3.2
-    ## rngtools                      <NA>               no 3.3.2
-    ## roxygen2                      <NA>              yes 3.3.2
-    ## rpart                         <NA>              yes 3.3.2
-    ## rprojroot                     <NA>               no 3.3.2
-    ## Rsamtools                     <NA>              yes 3.3.2
-    ## RSQLite                       <NA>              yes 3.3.2
-    ## rstudioapi                    <NA>               no 3.3.2
-    ## rtracklayer                   <NA>              yes 3.3.2
-    ## rvest                         <NA>               no 3.3.2
-    ## S4Vectors                     <NA>              yes 3.3.2
-    ## scales                        <NA>              yes 3.3.2
-    ## selectr                       <NA>               no 3.3.2
-    ## sequencing                    <NA>               no 3.3.2
-    ## shape                         <NA>               no 3.3.2
-    ## shiny                         <NA>               no 3.3.2
-    ## ShortRead                     <NA>              yes 3.3.2
-    ## snow                          <NA>               no 3.3.2
-    ## sourcetools                   <NA>              yes 3.3.2
-    ## SparseM                       <NA>              yes 3.3.2
-    ## spatial                       <NA>              yes 3.3.2
-    ## splines                       <NA>              yes 3.3.2
-    ## stats                         <NA>              yes 3.3.2
-    ## stats4                        <NA>             <NA> 3.3.2
-    ## stringdist                    <NA>              yes 3.3.2
-    ## stringi                       <NA>              yes 3.3.2
-    ## stringr                       <NA>               no 3.3.2
-    ## SummarizedExperiment          <NA>               no 3.3.2
-    ## survival                      <NA>              yes 3.3.2
-    ## tcltk                         <NA>              yes 3.3.2
-    ## testit                        <NA>               no 3.3.2
-    ## testthat                      <NA>              yes 3.3.2
-    ## tibble                        <NA>              yes 3.3.2
-    ## tidyr                         <NA>              yes 3.3.2
-    ## tidyverse                     <NA>               no 3.3.2
-    ## tools                         <NA>              yes 3.3.2
-    ## utils                         <NA>              yes 3.3.2
-    ## VariantAnnotation             <NA>              yes 3.3.2
-    ## webshot                       <NA>               no 3.3.2
-    ## whisker                       <NA>               no 3.3.2
-    ## withr                         <NA>               no 3.3.2
-    ## XML                           <NA>              yes 3.3.2
-    ## xml2                          <NA>              yes 3.3.2
-    ## xtable                        <NA>               no 3.3.2
-    ## XVector                       <NA>              yes 3.3.2
-    ## yaml                          <NA>              yes 3.3.2
-    ## zlibbioc                      <NA>              yes 3.3.2
+    ## # A tibble: 185 × 16
+    ##          Package                                                LibPath
+    ##            <chr>                                                  <chr>
+    ## 1        deSolve /home/FNT_ond_01/R/x86_64-redhat-linux-gnu-library/3.3
+    ## 2          ggvis /home/FNT_ond_01/R/x86_64-redhat-linux-gnu-library/3.3
+    ## 3        packrat /home/FNT_ond_01/R/x86_64-redhat-linux-gnu-library/3.3
+    ## 4  scatterplot3d /home/FNT_ond_01/R/x86_64-redhat-linux-gnu-library/3.3
+    ## 5    shinythemes /home/FNT_ond_01/R/x86_64-redhat-linux-gnu-library/3.3
+    ## 6         teachR /home/FNT_ond_01/R/x86_64-redhat-linux-gnu-library/3.3
+    ## 7  AnnotationDbi                                   /usr/lib64/R/library
+    ## 8  AnnotationHub                                   /usr/lib64/R/library
+    ## 9     assertthat                                   /usr/lib64/R/library
+    ## 10     backports                                   /usr/lib64/R/library
+    ## # ... with 175 more rows, and 14 more variables: Version <chr>,
+    ## #   Priority <chr>, Depends <chr>, Imports <chr>, LinkingTo <chr>,
+    ## #   Suggests <chr>, Enhances <chr>, License <chr>, License_is_FOSS <chr>,
+    ## #   License_restricts_use <chr>, OS_type <chr>, MD5sum <chr>,
+    ## #   NeedsCompilation <chr>, Built <chr>
 
 Installing and loading additional packages
 ------------------------------------------
 
 If you want to install a package manually, run:
 
-`install.packages("package-name")`
+`install.packages("package_name")`
 
 To load a package manually:
 
-`library(package-name)` or `library("package_name")`
+`library(package_name)` or `library("package_name")`
 
 Please note the difference in use of *"double-quotes"* above.
 
-########################################### 
+R Graphics
+==========
 
-Start Tutorial
-==============
+Histograms and normal distributions
+-----------------------------------
 
-############################################ 
+Run the code below.
+
+-   See what happens if you increase the number of datapoints from 1000 to 100000 in the function `normal <- rnorm(1000, ...)`. What happens to the plot?
+-   What does changing the `sd` argument do?
+-   What does changing the `binwidth = 1` parameter in the call for the plot do? Try setting it to a higher or lower number
+-   Can you guess what `set.seed` does?
+
+``` r
+set.seed(seed = 10)
+normal <- rnorm(1000, mean = 10, sd = 2)
+
+normal <- as.data.frame(normal)
+
+## create histogram of object "numbers"
+library(ggplot2)
+g <-ggplot(normal, aes(x=normal)) 
+
+# Histogram with density instead of count on y-axis
+plot <- g + 
+    geom_histogram(aes(y=..density..),      
+                   binwidth = 1,
+                   colour = "black", fill = "white") +
+    geom_density(alpha = .2, fill = "#FF6666") + xlab("value")  
+# Overlay with transparent density plot 
+plot
+```
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-3-1.png)
+
+Other distributions examples
+----------------------------
+
+There are other distributions that the normal distribution.
+
+``` r
+distributions <- data.frame(std.normal=rnorm(10000, m=0, sd=1),
+                     wide.normal=rnorm(10000, m=0, sd=2),
+                     exponent=rexp(10000, rate=2),
+                     uniform=runif(10000, min=-3, max=3)
+                     )
+```
+
+The plots depict two additional distributions. Can you think of one or two other distrubutions, not included?
+
+``` r
+# Exponential decay distribution plot
+plot_exp <- ggplot(distributions, aes(x= exponent)) +
+  geom_histogram(aes(y=..density..),      
+                   binwidth=1,
+                   colour="black", fill="white") +
+    geom_density(alpha=.2, fill="blue") + xlab("value")  
+
+# Uniform distribution density plot 
+plot_uniform <- ggplot(distributions, aes(x= uniform)) +
+  geom_histogram(aes(y=..density..),      
+                   binwidth=1,
+                   colour="black", fill="white") +
+    geom_density(alpha=.2, fill="green") + xlab("value")  
+
+# Panel with both plots 
+
+cowplot::plot_grid(plot_exp, plot_uniform, labels = c("Exponential", "Uniform"), hjust = -1)
+```
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-5-1.png)
+
+Bimodal distributions
+---------------------
+
+There is one other distribution that I want to show. We will look at this distribution using one of R's build-in datasets: the eruptions of the Yellowstone Geyser "Old Faithful". Information on the dataset can be found running the command `?faithful` in the console.
+
+``` r
+ library(mixtools)
+data(faithful)
+faithful <- as_tibble(faithful)
+faithful
+```
+
+    ## # A tibble: 272 × 2
+    ##    eruptions waiting
+    ## *      <dbl>   <dbl>
+    ## 1      3.600      79
+    ## 2      1.800      54
+    ## 3      3.333      74
+    ## 4      2.283      62
+    ## 5      4.533      85
+    ## 6      2.883      55
+    ## 7      4.700      88
+    ## 8      3.600      85
+    ## 9      1.950      51
+    ## 10     4.350      85
+    ## # ... with 262 more rows
+
+``` r
+### distribution plot
+plot_faithful <- ggplot(faithful, aes(x= waiting)) +
+  geom_histogram(aes(y=..density..),      
+                   binwidth=1,
+                   colour="black", fill="white") +
+    geom_density(alpha=.2, fill="darkgreen") + xlab("Minutes") + 
+  ggtitle("Waiting time between eruptions")  
+
+plot_faithful
+```
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-6-1.png)
+
+Which conclusion can you derive from this plot about the waiting time?
 
 Shiny apps
-----------
+==========
 
 Shiny is an open source application that can powerfully illustrate the use of R to generate visualizations.
 
 There are many, many examples on nice shiny apps that can illustrate e.g. complex mathematical or statistical models. See <HTTP://shiny.rstudio.com/> See e.g. the example on different chemical educational shiny apps: <HTTP://dpuadweb.depauw.edu/harvey_web/shiny.html>
 
 Visual respresentations
------------------------
+=======================
+
+**The text below was partly reproduced and adapted from "R for Data Science" by Garrett Grolemund and Hadley Wickam, 2016**
+
+To view the book: <http://r4ds.had.co.nz/>
 
 Build in datasets in R
 ----------------------
 
-#### Cars - "mpg"
+For this exercise we will use the "mpg" (miles per gallon) dataset, available in R.
+
+To get info on the dataset: `?mpg`
+
+To load the dataset:
+
+``` r
+library(tidyverse)
+mpg
+```
+
+    ## # A tibble: 234 × 11
+    ##    manufacturer      model displ  year   cyl      trans   drv   cty   hwy
+    ##           <chr>      <chr> <dbl> <int> <int>      <chr> <chr> <int> <int>
+    ## 1          audi         a4   1.8  1999     4   auto(l5)     f    18    29
+    ## 2          audi         a4   1.8  1999     4 manual(m5)     f    21    29
+    ## 3          audi         a4   2.0  2008     4 manual(m6)     f    20    31
+    ## 4          audi         a4   2.0  2008     4   auto(av)     f    21    30
+    ## 5          audi         a4   2.8  1999     6   auto(l5)     f    16    26
+    ## 6          audi         a4   2.8  1999     6 manual(m5)     f    18    26
+    ## 7          audi         a4   3.1  2008     6   auto(av)     f    18    27
+    ## 8          audi a4 quattro   1.8  1999     4 manual(m5)     4    18    26
+    ## 9          audi a4 quattro   1.8  1999     4   auto(l5)     4    16    25
+    ## 10         audi a4 quattro   2.0  2008     4 manual(m6)     4    20    28
+    ## # ... with 224 more rows, and 2 more variables: fl <chr>, class <chr>
+
+Fuel consumption vs engine size
+-------------------------------
+
+Let's use our first graph to answer a question: Do cars with big engines use more fuel than cars with small engines? You probably already have an answer, but try to make your answer precise. What does the relationship between engine size and fuel efficiency look like? Is it positive? Negative? Linear? Nonlinear?
+
+Among the variables in `mpg` are:
+
+1.  `displ`, a car's engine size (**displacement**), in litres.
+
+2.  `hwy`, a car's fuel efficiency on the highway, in miles per gallon (mpg).
+
+A car with a low fuel efficiency consumes more fuel than a car with a high fuel efficiency when they travel the same distance.
+
+### Creating a ggplot
+
+To plot `mpg`, run this code to put `displ` on the x-axis and `hwy` on the y-axis:
 
 ``` r
 ggplot(data = mpg) + 
   geom_point(mapping = aes(x = displ, y = hwy))
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-4-1.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-8-1.png)
+
+The plot shows a negative relationship between engine size (`displ`) and fuel efficiency (`hwy`).
+
+With ggplot2, you begin a plot with the function `ggplot()`. The first argument of `ggplot()` is the dataset to use in the graph.
+
+You complete your graph by adding one or more layers to `ggplot()`. The function `geom_point()` adds a layer of points to your plot, which creates a scatterplot. ggplot2 comes with many geom functions that each add a different type of layer to a plot.
+
+Each geom function in ggplot2 takes a `mapping` argument. This defines how variables in your dataset are mapped to visual properties. The `mapping` argument is always paired with `aes()`, and the `x` and `y` arguments of `aes()` specify which variables to map to the x and y axes. ggplot2 looks for the mapped variable in the `data` argument, in this case, `mpg`.
+
+Aesthetic mappings
+------------------
+
+In the plot below, one group of points (highlighted in red) seems to fall outside of the linear trend. These cars have a higher mileage than you might expect. How can you explain these cars?
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-9-1.png)
+
+Let's hypothesize that the cars are hybrids. One way to test this hypothesis is to look at the `class` value for each car. The `class` variable of the `mpg` dataset classifies cars into groups such as compact, midsize, and SUV. If the outlying points are hybrids, they should be classified as compact cars or, perhaps, subcompact cars (keep in mind that this data was collected before hybrid trucks and SUVs became popular).
+
+You can add a third variable, like `class`, to a two dimensional scatterplot by mapping it to an **aesthetic**. An aesthetic is a visual property of the objects in your plot. Aesthetics include things like the size, the shape, or the color of your points.
+
+You can convey information about your data by mapping the aesthetics in your plot to the variables in your dataset. For example, you can map the colors of your points to the `class` variable to reveal the class of each car.
+
+``` r
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, color = class))
+```
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-10-1.png)
+
+To map an aesthetic to a variable, associate the name of the aesthetic to the name of the variable inside `aes()`. ggplot2 will automatically assign a unique level of the aesthetic (here a unique color) to each unique value of the variable, a process known as **scaling**. ggplot2 will also add a legend that explains which levels correspond to which values.
+
+The colors reveal that many of the unusual points are two-seater cars. These cars don't seem like hybrids, and are, in fact, sports cars! Sports cars have large engines like SUVs and pickup trucks, but small bodies like midsize and compact cars, which improves their gas mileage. In hindsight, these cars were unlikely to be hybrids since hybrids have smaller engine sizes.
+
+Or we could have mapped `class` to the *alpha* aesthetic, which controls the transparency of the points, or the shape of the points.
+
+``` r
+# class as colour shades with setting alpha 
+alpha <- ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, alpha = class))
+
+# class as shapes
+shape <- ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, shape = class))
+
+library(cowplot)
+
+cowplot::plot_grid(alpha, shape, labels = c("alpha", "shape"), 
+                   hjust = -3.0)
+```
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-11-1.png)
+
+What happened to the SUVs? ggplot2 will only use six shapes at a time. By default, additional groups will go unplotted when you use the shape aesthetic.
+
+You can also *set* the aesthetic properties of your geom manually. For example, we can make all of the points in our plot blue and an open triangle (see shapes below):
+
+``` r
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), color = "blue", shape = 24)
+```
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-12-1.png)
+
+Here, the color doesn't convey information about a variable, but only changes the appearance of the plot.
+
+-   What happens if you change 24 to 21?
+-   why are certain blue point darker than others?
+
+You'll need to pick a value that makes sense for that aesthetic:
+
+-   The name of a color as a character string.
+
+-   The size of a point in mm.
+
+-   The shape of a point as a number, as shown below:
+
+<img src="fnt_r_workshop_files/figure-markdown_github/shapes-1.png" alt="R has 25 built in shapes that are identified by numbers. There are some seeming duplicates: for example, 0, 15, and 22 are all squares. The difference comes from the interaction of the `colour` and `fill` aesthetics. The hollow shapes (0--14) have a border determined by `colour`; the solid shapes (15--18) are filled with `colour`; the filled shapes (21--24) have a border of `colour` and are filled with `fill`." width="75%" />
+<p class="caption">
+R has 25 built in shapes that are identified by numbers. There are some seeming duplicates: for example, 0, 15, and 22 are all squares. The difference comes from the interaction of the `colour` and `fill` aesthetics. The hollow shapes (0--14) have a border determined by `colour`; the solid shapes (15--18) are filled with `colour`; the filled shapes (21--24) have a border of `colour` and are filled with `fill`.
+</p>
+
+Problems writing R code and getting help
+----------------------------------------
+
+Writing R code can be challenging and espacially in the beginning you will get mind-boggling errors. R is extremely picky about capitals and every opening `(` must be matched by a closing `)`. Mind that `.` is the decimal placeholder!
+
+If you're stuck, try the help. You can get help about any R function by running `?function_name` and `?package_name` or `??package_name` , skip down to the examples and look for code that matches what you're trying to do.
+
+Another great tool is Google: trying googling the error message, as it's likely someone else has had the same problem, and has gotten help online.
+
+Facets
+------
+
+One way to add additional variables is with aesthetics. Another way, particularly useful for categorical variables, is to split your plot into **facets**, subplots that each display one subset of the data.
+
+To facet your plot by a single variable, use `facet_wrap()`. The first argument of `facet_wrap()` should be a formula, which you create with `~` followed by a variable name (here "formula" is the name of a data structure in R, not a synonym for "equation"). The variable that you pass to `facet_wrap()` should be discrete.
+
+``` r
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_wrap(~ class, nrow = 2)
+```
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-13-1.png)
+
+To facet your plot on the combination of two variables, add `facet_grid()` to your plot call. The first argument of `facet_grid()` is also a formula. This time the formula should contain two variable names separated by a `~`.
+
+``` r
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_grid(drv ~ cyl)
+```
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-14-1.png)
+
+Geometric objects
+-----------------
+
+How are these two plots similar?
+
+<img src="fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-15-1.png" width="50%" />
+
+Grammar of Graphics
+-------------------
+
+Both plots contain the same x variable, the same y variable, and both describe the same data. But the plots are not identical. Each plot uses a different visual object to represent the data. In ggplot2 syntax, we say that they use different **geoms**.
+
+A **geom** is the geometrical object that a plot uses to represent data. People often describe plots by the type of geom that the plot uses. For example, bar charts use bar geoms, line charts use line geoms, boxplots use boxplot geoms, and so on. Scatterplots break the trend; they use the point geom. As we see above, you can use different geoms to plot the same data. The plot on the left uses the point geom, and the plot on the right uses the smooth geom, a smooth line fitted to the data.
+
+Every geom function in ggplot2 takes a `mapping` argument. However, not every aesthetic works with every geom. You could set the shape of a point, but you couldn't set the "shape" of a line. On the other hand, you *could* set the linetype of a line. `geom_smooth()` will draw a different line, with a different linetype, for each unique value of the variable that you map to linetype.
+
+``` r
+ggplot(data = mpg) + 
+  geom_smooth(mapping = aes(x = displ, y = hwy, linetype = drv))
+```
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-16-1.png)
+
+Here `geom_smooth()` separates the cars into three lines based on their `drv` value, which describes a car's drivetrain. One line describes all of the points with a `4` value, one line describes all of the points with an `f` value, and one line describes all of the points with an `r` value. Here, `4` stands for four-wheel drive, `f` for front-wheel drive, and `r` for rear-wheel drive.
+
+If this sounds strange, we can make it more clear by overlaying the lines on top of the raw data and then coloring everything according to `drv`.
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-17-1.png)
+
+Notice that this plot contains three geoms in the same graph!
+
+ggplot2 provides over 30 geoms, and extension packages provide even more (see <https://www.ggplot2-exts.org> for a sampling). The best way to get a comprehensive overview is the ggplot2 cheatsheet, which you can find at <http://rstudio.com/cheatsheets>. To learn more about any single geom, use help: `?geom_smooth`.
+
+To display multiple geoms in the same plot, add multiple geom functions to `ggplot()`:
+
+``` r
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point() + 
+  geom_smooth()
+
+# note the mapping of the aes in ggplot here. We can do individual mapping to the geoms seperately but in this way we save typing and increase readibility of the code.
+```
+
+If you place mappings in a geom function, ggplot2 will treat them as local mappings for the layer. It will use these mappings to extend or overwrite the global mappings *for that layer only*. This makes it possible to display different aesthetics in different layers.
+
+``` r
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point(mapping = aes(color = class)) + 
+  geom_smooth()
+```
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-19-1.png)
+
+You can use the same idea to specify different `data` for each layer. Here, our smooth line displays just a subset of the `mpg` dataset, the subcompact cars. The local data argument in `geom_smooth()` overrides the global data argument in `ggplot()` for that layer only.
+
+``` r
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point(mapping = aes(color = class)) + 
+  geom_smooth(data = filter(mpg, class == "subcompact"), se = FALSE)
+```
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-20-1.png)
+
+(You'll learn how `filter()` works in the next section: for now, just know that this command selects only the subcompact cars.)
+
+Statistical transformations
+---------------------------
+
+Next, let's take a look at a bar chart. Bar charts seem simple, but they are interesting because they reveal something subtle about plots. Consider a basic bar chart, as drawn with `geom_bar()`. The following chart displays the total number of diamonds in the `diamonds` dataset, grouped by `cut`. The `diamonds` dataset comes in ggplot2 and contains information about ~54,000 diamonds, including the `price`, `carat`, `color`, `clarity`, and `cut` of each diamond. The chart shows that more diamonds are available with high quality cuts than with low quality cuts.
+
+``` r
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut))
+```
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-21-1.png)
+
+On the x-axis, the chart displays `cut`, a variable from `diamonds`. On the y-axis, it displays count, but count is not a variable in `diamonds`! Where does count come from? Many graphs, like scatterplots, plot the raw values of your dataset. Other graphs, like bar charts, calculate new values to plot:
+
+-   bar charts, histograms, and frequency polygons bin your data and then plot bin counts, the number of points that fall in each bin.
+
+-   smoothers fit a model to your data and then plot predictions from the model.
+
+-   boxplots compute a robust summary of the distribution and then display a specially formatted box.
+
+ggplot2 provides over 20 stats for you to use. Each stat is a function, so you can get help in usual way, e.g. `?stat_bin`. To see a complete list of stats, try the ggplot2 cheatsheet.
+
+Position adjustments
+--------------------
+
+There's one more piece of magic associated with bar charts. You can colour a bar chart using either the `colour` aesthetic, or more usefully, `fill`:
+
+``` r
+colours <- ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, colour = cut))+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+more_colours <- ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = cut)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+panel3 <- cowplot::plot_grid(colours, more_colours, labels = c("colours", 
+"even more colours"), hjust = -1) 
+  
+panel3
+```
+
+<img src="fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-22-1.png" width="50%" />
+
+Note what happens if you map the fill aesthetic to another variable, like `clarity`: the bars are automatically stacked. Each colored rectangle represents a combination of `cut` and `clarity`.
+
+``` r
+ggplot(data = diamonds) + 
+  geom_bar(mapping = aes(x = cut, fill = clarity))
+```
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-23-1.png)
+
+The stacking is performed automatically by the **position adjustment** specified by the `position` argument. If you don't want a stacked bar chart, you can use one of three other options: `"identity"`, `"dodge"` or `"fill"`.
+
+-   `position = "identity"` will place each object exactly where it falls in the context of the graph. This is not very useful for bars, because it overlaps them. To see that overlapping we either need to make the bars slightly transparent by setting `alpha` to a small value, or completely transparent by setting `fill = NA`.
+
+``` r
+  stacked <- ggplot(data = diamonds, mapping = aes(x = cut, fill = clarity)) + 
+      geom_bar(alpha = 1/5, position = "identity")
+  
+  stacked_not_filled <- ggplot(data = diamonds, mapping = aes(x = cut, colour = clarity)) + 
+      geom_bar(fill = NA, position = "identity")
+    
+cowplot::plot_grid(stacked, stacked_not_filled)    
+```
+
+<img src="fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-24-1.png" width="50%" />
+
+    The identity position adjustment is more useful for 2d geoms, like points,
+    where it is the default.
+
+-   `position = "fill"` works like stacking, but makes each set of stacked bars the same height. This makes it easier to compare proportions across groups.
+
+``` r
+    ggplot(data = diamonds) + 
+      geom_bar(mapping = aes(x = cut, fill = clarity), position = "fill")
+```
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-25-1.png)
+
+-   `position = "dodge"` places overlapping objects directly *beside* one another. This makes it easier to compare individual values.
+
+``` r
+    ggplot(data = diamonds) + 
+      geom_bar(mapping = aes(x = cut, fill = clarity), position = "dodge")
+```
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-26-1.png)
+
+There's one other type of adjustment that's not useful for bar charts, but it can be very useful for scatterplots. Recall our first scatterplot. Did you notice that the plot displays only 126 points, even though there are 234 observations in the dataset?
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-27-1.png)
+
+The values of `hwy` and `displ` are rounded so the points appear on a grid and many points overlap each other. This problem is known as **overplotting**. This arrangement makes it hard to see where the mass of the data is. Are the data points spread equally throughout the graph, or is there one special combination of `hwy` and `displ` that contains 109 values?
+
+You can avoid this gridding by setting the position adjustment to "jitter". `position = "jitter"` adds a small amount of random noise to each point. This spreads the points out because no two points are likely to receive the same amount of random noise.
+
+``` r
+ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy), position = "jitter")
+```
+
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-28-1.png)
+
+Adding randomness seems like a strange way to improve your plot, but while it makes your graph less accurate at small scales, it makes your graph *more* revealing at large scales. Because this is such a useful operation, ggplot2 comes with a shorthand for `geom_point(position = "jitter")`: `geom_jitter()`.
+
+To learn more about a position adjustment, look up the help page associated with each adjustment: `?position_dodge`, `?position_fill`, `?position_identity`, `?position_jitter`, and `?position_stack`.
+
+The layered grammar of graphics
+-------------------------------
+
+In the previous sections, you learned much more than how to make scatterplots, bar charts, and boxplots. You learned a foundation that you can use to make *any* type of plot with ggplot2. To see this, let's add position adjustments, stats, coordinate systems, and faceting to our code template:
+
+    ggplot(data = <DATA>) + 
+      <GEOM_FUNCTION>(
+         mapping = aes(<MAPPINGS>),
+         stat = <STAT>, 
+         position = <POSITION>
+      ) +
+      <COORDINATE_FUNCTION> +
+      <FACET_FUNCTION>
+
+Our new template takes seven parameters, the bracketed words that appear in the template. In practice, you rarely need to supply all seven parameters to make a graph because ggplot2 will provide useful defaults for everything except the data, the mappings, and the geom function.
+
+The seven parameters in the template compose the grammar of graphics, a formal system for building plots. The grammar of graphics is based on the insight that you can uniquely describe *any* plot as a combination of a dataset, a geom, a set of mappings, a stat, a position adjustment, a coordinate system, and a faceting scheme.
+
+########################################################################## 
+
+########################################################################## 
 
 Reproducible research.
 ======================
@@ -2577,13 +1057,13 @@ summary(m1)
 plot(c, d, ylim=c(0,13))
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-14-1.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-38-1.png)
 
 ``` r
 plot(c, d, ylim=c(0,13), abline(m1))  #abline plots the correaltion model in the graph
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-14-2.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-38-2.png)
 
 ``` r
 m1$coefficients
@@ -3354,37 +1834,37 @@ head(faithful)
 hist(faithful$eruptions,breaks = 15)
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-31-1.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-55-1.png)
 
 ``` r
 hist(faithful$waiting, breaks = 15)
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-31-2.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-55-2.png)
 
 ``` r
 boxplot(faithful$eruptions)
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-31-3.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-55-3.png)
 
 ``` r
 qqnorm(faithful$eruptions);qqline(faithful$eruptions)
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-31-4.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-55-4.png)
 
 ``` r
 plot(faithful$eruptions,type="l")
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-31-5.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-55-5.png)
 
 ``` r
 plot(faithful$eruptions, faithful$waiting)
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-31-6.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-55-6.png)
 
 Grammar of Graphics (ggplot2 package)
 -------------------------------------
@@ -3421,7 +1901,7 @@ g <- ggplot(data = tg, aes(len))
 g + geom_histogram(bins = 25) 
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-32-1.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-56-1.png)
 
 The graph shows a histogram of the Toothgrowth data (len = length teeth of Guinea pigs, treated with two different vitamine C food-sources).
 
@@ -3434,7 +1914,7 @@ g <- ggplot(data = tg, aes(len))
 g + geom_histogram(bins = 30) + ggtitle("ToothGrowth")
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-33-1.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-57-1.png)
 
 Let's see if we can make a more meaningfull graph, that shows something about the result of the treatment, on teeth growth.
 
@@ -3443,7 +1923,7 @@ g <- ggplot(data = tg, aes(x = dose, y = len, group = supp, colour = supp))
 g + geom_point() + ggtitle("ToothGrowth")
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-34-1.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-58-1.png)
 
 Now we get a scatterplot with colours indicating the different supplement. Already more informative, but not very pretty.
 
@@ -3465,7 +1945,7 @@ g + geom_point() +
   geom_smooth() + ggtitle("ToothGrowth")
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-35-1.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-59-1.png)
 
 ``` r
 ## ignore the warnings if you get them...
@@ -3561,7 +2041,7 @@ hist(data_twoDays$global_active_power, col = "red",
      xlab = "Global Active Power", ylab = "Frequency", main = "Global Active Power")
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-37-1.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-61-1.png)
 
 ### Plot 2: ggplot2 example
 
@@ -3598,7 +2078,7 @@ theme_bw() +
 plot2
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-38-1.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-62-1.png)
 
 ### Plot 3: ggplot2 example
 
@@ -3644,7 +2124,7 @@ theme(panel.grid.major = element_blank(),
 plot3
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-39-1.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-63-1.png)
 
 ### Plot 4: ggplot2 example
 
@@ -3707,13 +2187,13 @@ theme(panel.grid.major = element_blank(),
 plot5
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-40-1.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-64-1.png)
 
 ``` r
 plot6
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-40-2.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-64-2.png)
 
 CREATING A PANEL PLOT
 ---------------------
@@ -3726,7 +2206,7 @@ panel <- plot_grid(plot2, plot5, plot3, plot6,
 panel
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-41-1.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-65-1.png)
 
 The above is meant as a demo for the strength of the Grammar of Graphics lingo. There is a lot more to ggplot2 than can be shown in this short demo. As mentioned above, a good place to start learning ggplot2 is:
 
@@ -4284,7 +2764,7 @@ plot_iranges <- IRanges_plot(unlist(ir_list))
 plot_iranges
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-57-1.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-81-1.png)
 
 A coverage plot indicates the depth of coverage of sequence and a number of patterns. Look at the plot to understand how coverage works.
 ----------------------------------------------------------------------------------------------------------------------------------------
@@ -4329,7 +2809,7 @@ coverplot <- coverage_plot(cx = cov3R,
                            min.depth = 0, max.depth = 5)
 ```
 
-![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-58-1.png)
+![](fnt_r_workshop_files/figure-markdown_github/unnamed-chunk-82-1.png)
 
 The above matching, Views, plotting an IRangesList and coverage are cocepts that play an important role in understanding the methodology of sequencing and how sequence data can be interpreted. If you want to learn more about analysis of sequence data in R, take a look at the BIOCONDUCTOR workflow below.
 
@@ -4438,9 +2918,105 @@ Citations
 
 ``` r
 citation("base")
+```
+
+    ## 
+    ## To cite R in publications use:
+    ## 
+    ##   R Core Team (2016). R: A language and environment for
+    ##   statistical computing. R Foundation for Statistical Computing,
+    ##   Vienna, Austria. URL https://www.R-project.org/.
+    ## 
+    ## A BibTeX entry for LaTeX users is
+    ## 
+    ##   @Manual{,
+    ##     title = {R: A Language and Environment for Statistical Computing},
+    ##     author = {{R Core Team}},
+    ##     organization = {R Foundation for Statistical Computing},
+    ##     address = {Vienna, Austria},
+    ##     year = {2016},
+    ##     url = {https://www.R-project.org/},
+    ##   }
+    ## 
+    ## We have invested a lot of time and effort in creating R, please
+    ## cite it when using it for data analysis. See also
+    ## 'citation("pkgname")' for citing R packages.
+
+``` r
 citation("ggplot2")
-citation("seqinr")
-citation("dplyr")
+```
+
+    ## 
+    ## To cite ggplot2 in publications, please use:
+    ## 
+    ##   H. Wickham. ggplot2: Elegant Graphics for Data Analysis.
+    ##   Springer-Verlag New York, 2009.
+    ## 
+    ## A BibTeX entry for LaTeX users is
+    ## 
+    ##   @Book{,
+    ##     author = {Hadley Wickham},
+    ##     title = {ggplot2: Elegant Graphics for Data Analysis},
+    ##     publisher = {Springer-Verlag New York},
+    ##     year = {2009},
+    ##     isbn = {978-0-387-98140-6},
+    ##     url = {http://ggplot2.org},
+    ##   }
+
+``` r
+citation("tidyverse")
+```
+
+    ## 
+    ## To cite package 'tidyverse' in publications use:
+    ## 
+    ##   Hadley Wickham (2016). tidyverse: Easily Install and Load
+    ##   'Tidyverse' Packages. R package version 1.0.0.
+    ##   https://CRAN.R-project.org/package=tidyverse
+    ## 
+    ## A BibTeX entry for LaTeX users is
+    ## 
+    ##   @Manual{,
+    ##     title = {tidyverse: Easily Install and Load 'Tidyverse' Packages},
+    ##     author = {Hadley Wickham},
+    ##     year = {2016},
+    ##     note = {R package version 1.0.0},
+    ##     url = {https://CRAN.R-project.org/package=tidyverse},
+    ##   }
+
+``` r
 citation("knitr")
+```
+
+    ## 
+    ## To cite the 'knitr' package in publications use:
+    ## 
+    ##   Yihui Xie (2016). knitr: A General-Purpose Package for Dynamic
+    ##   Report Generation in R. R package version 1.15.1.
+    ## 
+    ##   Yihui Xie (2015) Dynamic Documents with R and knitr. 2nd
+    ##   edition. Chapman and Hall/CRC. ISBN 978-1498716963
+    ## 
+    ##   Yihui Xie (2014) knitr: A Comprehensive Tool for Reproducible
+    ##   Research in R. In Victoria Stodden, Friedrich Leisch and Roger
+    ##   D. Peng, editors, Implementing Reproducible Computational
+    ##   Research. Chapman and Hall/CRC. ISBN 978-1466561595
+
+``` r
 citation("sequencing")
 ```
+
+    ## 
+    ## To cite package 'sequencing' in publications use:
+    ## 
+    ##   Bioconductor Package Maintainer (2016). sequencing: Dummy
+    ##   Package. R package version 0.99.120890.
+    ## 
+    ## A BibTeX entry for LaTeX users is
+    ## 
+    ##   @Manual{,
+    ##     title = {sequencing: Dummy Package},
+    ##     author = {Bioconductor Package Maintainer},
+    ##     year = {2016},
+    ##     note = {R package version 0.99.120890},
+    ##   }
