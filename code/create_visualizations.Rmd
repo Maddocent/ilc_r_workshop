@@ -1,7 +1,7 @@
 ---
 title: "Create visualizations with R"
 author: "Marc A.T.eunis, adapted from R for Data Science by Hadley Wickam"
-date: "2-1-2017"
+date: "`r Sys.Date()""
 output: github_document
 ---
 
@@ -9,7 +9,7 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-*_This text was reproduced and adapted from "R for Data Science" by Hadley Wickam, 2016_*
+*_This text was reproduced and adapted from "R for Data Science" by Hadley Wickam, 2016, ebook for Kindle_*
 
 To view the book: http://r4ds.had.co.nz/ 
 
