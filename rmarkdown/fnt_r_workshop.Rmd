@@ -3,8 +3,9 @@ title: "Data analysis using R and Cloud Computing"
 author: "Marc A.T. Teunis"
 date: '`r Sys.Date()`'
 output:
-  github_document: default
   html_document: default
+  github_document: default
+  pdf_document: default
 ---
 ```{r, root_1, include=FALSE}
 ## defines the root of the project for later use
@@ -112,6 +113,7 @@ There will be no need to install aditonional R add-ons. everything has already b
 ## Installed packages
 To see all packages that are already installed:
 ```{r}
+library(tidyverse)
 installed_packages <- installed.packages()
 print(as_tibble(installed_packages))
 ```
@@ -573,33 +575,6 @@ ggplot(data = <DATA>) +
 Our new template takes seven parameters, the bracketed words that appear in the template. In practice, you rarely need to supply all seven parameters to make a graph because ggplot2 will provide useful defaults for everything except the data, the mappings, and the geom function.
 
 The seven parameters in the template compose the grammar of graphics, a formal system for building plots. The grammar of graphics is based on the insight that you can uniquely describe _any_ plot as a combination of a dataset, a geom, a set of mappings, a stat, a position adjustment, a coordinate system, and a faceting scheme. 
-
-To see how this works, consider how you could build a basic plot from scratch: you could start with a dataset and then transform it into the information that you want to display (with a stat).
-
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
-
-
-
-
 
 # Reproducible research. 
 I do not think it is necessary to explain the literal meaning of reproducible research. All of you can grasp what is about. But, from a data scientists' point of view the term it is probable slightly more complex. 
