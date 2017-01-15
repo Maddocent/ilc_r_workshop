@@ -1,0 +1,37 @@
+LaTeX example; slide demo
+========================================================
+author: Marc A.T. Teunis 
+date: `r Sys.Date()`
+autosize: false
+
+
+LaTeX
+========================================================
+
+- Is a way to markup documents using code
+- Is much used in technical fields
+- Is great for writing math formulas
+
+Example dummy math function
+========================================================
+
+*
+*
+
+FNT_conference = $\sqrt[](absolute(\frac{FNT\;employees}
+{many\;contributions}))$
+
+Slide demo
+========================================================
+```{r}
+summary(cars)
+```
+
+Slide With Plot
+========================================================
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+For more details on authoring R presentations please visit <https://support.rstudio.com/hc/en-us/articles/200486468>.
