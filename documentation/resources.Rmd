@@ -3,10 +3,13 @@ title: "Resources"
 author: "Marc A.T. Teunis"
 date: "1/10/2017"
 output:
-  word_document: default
-  pdf_document: default
   html_document: default
+  pdf_document: default
+  word_document: default
 ---
+
+# Walkthrough: 
+https://github.com/Maddocent/ilc_r_workshop/blob/master/rmarkdown/fnt_r_workshop.md 
 
 # Tidy Data article and demo
 ftp://cran.r-project.org/pub/R/web/packages/tidyr/vignettes/tidy-data.html
