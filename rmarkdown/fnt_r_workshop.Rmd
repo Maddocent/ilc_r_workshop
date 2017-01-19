@@ -3,8 +3,8 @@ title: "Data analysis using R and Cloud Computing"
 author: "Marc A.T. Teunis"
 date: '`r Sys.Date()`'
 output:
-  github_document: default
   html_document: default
+  github_document: default
 ---
 <style type="text/css">
 
